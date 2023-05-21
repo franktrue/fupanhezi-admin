@@ -244,7 +244,7 @@
             },
             {
                 "label": "否",
-                "value": "2",
+                "value": "0",
                 "parent": 10,
                 "type": 1,
                 "color": null,
