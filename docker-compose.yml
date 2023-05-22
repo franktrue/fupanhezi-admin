@@ -69,27 +69,27 @@ services:
 #        ipv4_address: 177.8.0.13
 
 
-# 如果使用celery 插件，请自行打开此注释
-#  dvadmin-celery:
-#    build:
-#      context: .
-#      dockerfile: ./docker_env/celery/Dockerfile
-#    # image: django:2.2
-#    container_name: dvadmin-celery
-#    working_dir: /backend
-#    depends_on:
-#      - dvadmin-mysql
-#    environment:
-#      PYTHONUNBUFFERED: 1
-#      DATABASE_HOST: dvadmin-mysql
-#      TZ: Asia/Shanghai
-#    volumes:
-#      - ./backend:/backend
-#      - ./logs/log:/var/log
-#    restart: always
-#    networks:
-#      network:
-#        ipv4_address: 177.8.0.14
+  # 如果使用celery 插件，请自行打开此注释
+  dvadmin-celery:
+    build:
+      context: .
+      dockerfile: ./docker_env/celery/Dockerfile
+    # image: django:2.2
+    container_name: dvadmin-celery
+    working_dir: /backend
+    # depends_on:
+    #   - dvadmin-mysql
+    environment:
+      PYTHONUNBUFFERED: 1
+      DATABASE_HOST: dvadmin-mysql
+      TZ: Asia/Shanghai
+    volumes:
+      - ./backend:/backend
+      - ./logs/log:/var/log
+    restart: always
+    networks:
+      network:
+        ipv4_address: 177.8.0.14
 
 
 # dvadmin-redis:

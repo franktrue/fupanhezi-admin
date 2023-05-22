@@ -1,5 +1,4 @@
 from rest_framework.routers import SimpleRouter
-
 from stock.views.zt_history import StockZtHistoryViewSet
 from stock.views.history import StockHistoryViewSet
 from stock.views.trade_date import StockTradeDateViewSet

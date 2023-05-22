@@ -1,10 +1,11 @@
 from stock.models import StockHistory
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from dvadmin.utils.json_response import SuccessResponse
 from stock.services.history import StockHistoryService
+from stock.services.fenshi import StockFenshiService
 import datetime
 
 class StockHistorySerializer(CustomModelSerializer):
@@ -61,3 +62,11 @@ class StockHistoryViewSet(CustomModelViewSet):
         service = StockHistoryService()
         service.update_latest()
         return SuccessResponse(data=[], msg="更新成功")
+
+    @action(methods=["POST"], detail=False, permission_classes=[AllowAny])
+    def fenshi(self, request, *args, **kwargs):
+        stock_code = request.data.get('stock_code')
+        date = request.data.get('date')
+        service = StockFenshiService()
+        data = service.data(stock_code=stock_code, date_str=date)
+        return SuccessResponse(data=data, msg="更新成功")

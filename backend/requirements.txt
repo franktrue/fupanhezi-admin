@@ -50,5 +50,5 @@ gunicorn==20.1.0
 gevent==22.10.2
 websockets==10.4
 akshare==1.9.2
-dvadmin_celery==1.0.4
 panda==0.3.1
+pywencai==0.5.3

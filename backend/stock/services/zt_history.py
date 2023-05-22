@@ -4,7 +4,6 @@ from stock.utils.date import is_trade_date
 import akshare as ak
 import pywencai
 import pandas as pd
-import datetime
 
 class StockZtHistoryService():
     def __init__(self):
