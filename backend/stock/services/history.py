@@ -27,7 +27,7 @@ class StockHistoryService():
     def update_latest(self):
         now = datetime.datetime.now()
         today = now.date()
-        if is_trade_date(today) and now.hour > 15:
+        if is_trade_date(today) and now.hour >= 15:
             count = StockHistory.objects.filter(date=today.strftime("%Y-%m-%d")).count()
             if count > 0:
                 raise Exception("今日数据已更新")

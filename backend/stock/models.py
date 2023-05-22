@@ -104,3 +104,29 @@ class StockBoardMap(models.Model):
         verbose_name = '板块成分股'
         verbose_name_plural = verbose_name
         unique_together = ('code', 'stock_code')
+
+class StockLhb(models.Model):
+    date = models.DateField(null=True)
+    serial = models.SmallIntegerField(null=True)
+    stock_code = models.CharField(max_length=10, null=True)
+    stock_name = models.CharField(max_length=32, null=True)
+    interpretation = models.CharField(max_length=256, null=True)
+    close = models.FloatField(null=True)
+    close_pe = models.FloatField(null=True)
+    lhb_net_buy_amo = models.BigIntegerField(null=True)
+    lhb_buy_amo = models.BigIntegerField(null=True)
+    lhb_sell_amo = models.BigIntegerField(null=True)
+    lhb_amo = models.BigIntegerField(null=True)
+    market_total_amo = models.BigIntegerField(null=True)
+    net_buy_amo_pe = models.BigIntegerField(null=True)
+    amo_pe = models.FloatField(null=True)
+    hs_rate = models.FloatField(null=True)
+    circulate_market_value = models.BigIntegerField(null=True)
+    rank_reson = models.CharField(max_length=200, null=True)
+
+    class Meta:
+        db_table = 'stock_lhb'
+        verbose_name = '龙虎榜'
+        verbose_name_plural = verbose_name
+        unique_together = ('date', 'stock_code')
+        ordering = ('-date',)
