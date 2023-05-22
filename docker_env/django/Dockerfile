@@ -1,4 +1,6 @@
-FROM registry.cn-zhangjiakou.aliyuncs.com/dvadmin-pro/python39-base-backend:latest
+FROM python:3.10.9
+#定义时区参数
+ENV TZ=Asia/Shanghai
 WORKDIR /backend
 COPY ./backend/ .
 COPY ./docker_env/dvadmin_celery-1.0.3-py3-none-any.whl .
