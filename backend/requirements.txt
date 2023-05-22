@@ -53,3 +53,4 @@ akshare==1.9.2
 panda==0.3.1
 pywencai==0.5.3
 sqlalchemy==2.0.4
+pymysql==0.9.3
