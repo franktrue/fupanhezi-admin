@@ -3,7 +3,7 @@ services:
   dvadmin-web:
     container_name: dvadmin-web
     ports:
-      - "8001:8080"
+      - "8082:8080"
     build:
       context: ./
       dockerfile: ./docker_env/web/Dockerfile

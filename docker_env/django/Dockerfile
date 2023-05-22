@@ -1,4 +1,4 @@
-FROM registry.cn-zhangjiakou.aliyuncs.com/dvadmin-pro/python38-base-backend:latest
+FROM registry.cn-zhangjiakou.aliyuncs.com/dvadmin-pro/python39-base-backend:latest
 WORKDIR /backend
 COPY ./backend/ .
 COPY ./docker_env/dvadmin_celery-1.0.3-py3-none-any.whl .
