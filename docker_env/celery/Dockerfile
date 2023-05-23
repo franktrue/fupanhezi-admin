@@ -1,4 +1,5 @@
-FROM python:3.10.9
+# 第一阶段：安装依赖和构建Python应用
+FROM python:3.10.9 AS build 
 #定义时区参数
 ENV TZ=Asia/Shanghai
 WORKDIR /backend
@@ -7,4 +8,13 @@ COPY ./docker_env/dvadmin_celery-1.0.3-py3-none-any.whl .
 RUN awk 'BEGIN { cmd="cp -i ./conf/env.example.py   ./conf/env.py "; print "n" |cmd; }'
 RUN python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ -r requirements.txt \
     && python3 -m pip install  /backend/dvadmin_celery-1.0.3-py3-none-any.whl
-CMD ["celery", "-A", "application", "worker", "-B", "--loglevel=info"]
+
+# 第二阶段：安装Node.js
+FROM build AS nodejs
+RUN apt-get update && apt-get install -y curl gnupg
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
+
+# 第三阶段：运行Python应用
+FROM nodejs AS final
+CMD ["/backend/docker_start.sh"]
