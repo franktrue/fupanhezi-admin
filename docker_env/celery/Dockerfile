@@ -17,4 +17,4 @@ RUN apt-get install -y nodejs
 
 # 第三阶段：运行Python应用
 FROM nodejs AS final
-CMD ["/backend/docker_start.sh"]
+CMD ["celery", "-A", "application", "worker", "-B", "--loglevel=info"]
