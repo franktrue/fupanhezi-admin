@@ -5,6 +5,9 @@ ENV TZ=Asia/Shanghai
 WORKDIR /backend
 COPY ./backend/ .
 COPY ./docker_env/dvadmin_celery-1.0.3-py3-none-any.whl .
+RUN apt-get update \
+    && apt-get install -y  curl gnupg \
+    && apt-get install libmysqlclient-dev
 RUN awk 'BEGIN { cmd="cp -i ./conf/env.example.py   ./conf/env.py "; print "n" |cmd; }'
 RUN python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ -r requirements.txt \
     && python3 -m pip install  /backend/dvadmin_celery-1.0.3-py3-none-any.whl 
@@ -12,9 +15,7 @@ RUN python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ -r requi
 
 # 第二阶段：安装Node.js
 FROM build AS nodejs
-RUN apt-get update \
-    && apt-get install -y  curl gnupg \
-    && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     && apt-get install -y  nodejs
 
 # 第三阶段：运行Python应用
