@@ -1,0 +1,58 @@
+version: "3"
+services:
+  dvadmin-web:
+    image: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-web
+    container_name: dvadmin-web
+    ports:
+      - "8082:8080"
+    build:
+      context: ./
+      dockerfile: ./docker_env/web/Dockerfile
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./nginx/my.conf:/etc/nginx/conf.d/my.conf
+    networks:
+      network:
+        ipv4_address: 177.8.0.11
+
+  dvadmin-django:
+    image: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-api
+    container_name: dvadmin-django
+    working_dir: /backend
+    environment:
+      PYTHONUNBUFFERED: 1
+      DATABASE_HOST: dvadmin-mysql
+      TZ: Asia/Shanghai
+    volumes:
+      - ./env.py:/backend/env.py
+      - ./logs/log:/var/log
+    restart: always
+    networks:
+      network:
+        ipv4_address: 177.8.0.12
+
+  # 如果使用celery 插件，请自行打开此注释
+  dvadmin-celery:
+    image: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-celery
+    container_name: dvadmin-celery
+    working_dir: /backend
+    environment:
+      PYTHONUNBUFFERED: 1
+      DATABASE_HOST: dvadmin-mysql
+      TZ: Asia/Shanghai
+    volumes:
+      - ./env.py:/backend/env.py
+      - ./logs/log:/var/log
+    restart: always
+    networks:
+      network:
+        ipv4_address: 177.8.0.14
+
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: '177.8.0.0/16'
+

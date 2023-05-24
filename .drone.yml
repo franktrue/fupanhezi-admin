@@ -1,6 +1,7 @@
+---
 kind: pipeline
 type: docker
-name: fupanhezi-admin
+name: backend
 
 volumes:
 - name: docker
@@ -23,7 +24,7 @@ steps:
       dockerfile: docker_env/django/Dockerfile
       tags:
       - latest
-      - dev
+      dry_run: false
 
   - name: publish-celery
     image: plugins/docker
@@ -40,8 +41,19 @@ steps:
       dockerfile: docker_env/celery/Dockerfile
       tags:
       - latest
-      - dev
+      dry_run: false
   
+---
+kind: pipeline
+type: docker
+name: frontend
+
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock
+
+steps:
   - name: publish-web
     image: plugins/docker
     volumes:
@@ -57,4 +69,19 @@ steps:
       dockerfile: docker_env/web/Dockerfile
       tags:
       - latest
-      - dev
+      dry_run: false
+
+  - name: sync-file
+    image: drillster/drone-rsync
+    settings:
+      user: root
+      key:
+        from_secret: ssh_key
+      hosts: # 多个ip使用,隔开
+        from_secret: ssh_host
+      # 来源目录
+      source: docker_env/deploy
+      # 目标服务器目录
+      target: /mnt/data/wwwroot/fupanhezi/admin
+      script:
+        - echo "Deploy Success"
