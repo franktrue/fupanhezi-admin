@@ -9,7 +9,7 @@ volumes:
     path: /var/run/docker.sock
 
 steps:
-  - name: docker
+  - name: publish-api
     image: plugins/docker
     volumes:
     - name: docker
