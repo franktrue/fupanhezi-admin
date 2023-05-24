@@ -4,11 +4,26 @@ type: docker
 name: backend
 
 volumes:
+- name: cache
+  host:
+    path: /tmp/cache
 - name: docker
   host:
     path: /var/run/docker.sock
 
 steps:
+  - name: cache
+    image: drillster/drone-volume-cache
+    volumes:
+    - name: cache
+      path: /cache
+    settings:
+      restore: true
+      mount:
+      - ./venv:/venv
+      key:
+      - $CI_COMMIT_REF_SLUG
+
   - name: publish-api
     image: plugins/docker
     volumes:
@@ -59,11 +74,26 @@ type: docker
 name: frontend
 
 volumes:
+- name: cache
+  host:
+    path: /tmp/cache
 - name: docker
   host:
     path: /var/run/docker.sock
 
 steps:
+  - name: cache
+    image: drillster/drone-volume-cache
+    volumes:
+    - name: cache
+      path: /cache
+    settings:
+      restore: true
+      mount:
+      - ./venv:/venv
+      key:
+      - $CI_COMMIT_REF_SLUG
+      
   - name: publish-web
     image: plugins/docker
     volumes:
@@ -91,26 +121,26 @@ trigger:
   branch:
     - main
 
----
-kind: pipeline
-type: docker
-name: deploy
-depends_on: ["backend", "frontend"]
+# ---
+# kind: pipeline
+# type: docker
+# name: deploy
+# depends_on: ["backend", "frontend"]
 
-steps:
-  - name: sync-file
-    image: drillster/drone-rsync
-    settings:
-      user: root
-      key:
-        from_secret: ssh_key
-      hosts: # 多个ip使用,隔开
-        from_secret: ssh_host
-      # 来源目录
-      source: docker_env/deploy
-      # 目标服务器目录
-      target: /mnt/data/wwwroot/fupanhezi/admin
-      script:
-        - cd /mnt/data/wwwroot/fupanhezi/admin
-        - docker-compose restart
-        - echo "Deploy Success"
+# steps:
+#   - name: sync-file
+#     image: drillster/drone-rsync
+#     settings:
+#       user: root
+#       key:
+#         from_secret: ssh_key
+#       hosts: # 多个ip使用,隔开
+#         from_secret: ssh_host
+#       # 来源目录
+#       source: docker_env/deploy
+#       # 目标服务器目录
+#       target: /mnt/data/wwwroot/fupanhezi/admin
+#       script:
+#         - cd /mnt/data/wwwroot/fupanhezi/admin
+#         - docker-compose restart
+#         - echo "Deploy Success"
