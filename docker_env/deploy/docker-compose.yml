@@ -21,9 +21,9 @@ services:
     container_name: dvadmin-django
     working_dir: /backend
     environment:
-      PYTHONUNBUFFERED: 1
-      DATABASE_HOST: dvadmin-mysql
       TZ: Asia/Shanghai
+    ports:
+      - "8000:8000"
     volumes:
       - ./env.py:/backend/env.py
       - ./logs/log:/var/log
@@ -38,8 +38,6 @@ services:
     container_name: dvadmin-celery
     working_dir: /backend
     environment:
-      PYTHONUNBUFFERED: 1
-      DATABASE_HOST: dvadmin-mysql
       TZ: Asia/Shanghai
     volumes:
       - ./env.py:/backend/env.py

@@ -42,6 +42,16 @@ steps:
       tags:
       - latest
       dry_run: false
+
+trigger:
+  path:
+    include:
+      - backend/**
+  event:
+    - push
+    - pull_request
+  branch:
+    - main
   
 ---
 kind: pipeline
@@ -71,6 +81,23 @@ steps:
       - latest
       dry_run: false
 
+trigger:
+  path:
+    include:
+      - web/**
+  event:
+    - push
+    - pull_request
+  branch:
+    - main
+
+---
+kind: pipeline
+type: docker
+name: deploy
+depends_on: ["backend", "frontend"]
+
+steps:
   - name: sync-file
     image: drillster/drone-rsync
     settings:
@@ -84,4 +111,6 @@ steps:
       # 目标服务器目录
       target: /mnt/data/wwwroot/fupanhezi/admin
       script:
+        - cd /mnt/data/wwwroot/fupanhezi/admin
+        - docker-compose restart
         - echo "Deploy Success"
