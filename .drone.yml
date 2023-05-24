@@ -3,8 +3,8 @@ type: docker
 name: fupanhezi-admin
 
 steps:
-  - name: publish-api
-    image: plugins/buildah-docker
+  - name: docker
+    image: plugins/docker
     settings:
       repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-api
       registry: ccr.ccs.tencentyun.com
@@ -13,10 +13,12 @@ steps:
       username: 
         from_secret: tencent_id
       dockerfile: docker_env/django/Dockerfile
-      tags: dev
+      tags:
+      - latest
+      - dev
 
   - name: publish-celery
-    image: plugins/buildah-docker
+    image: plugins/docker
     settings:
       repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-celery
       registry: ccr.ccs.tencentyun.com
@@ -25,10 +27,12 @@ steps:
       username: 
         from_secret: tencent_id
       dockerfile: docker_env/celery/Dockerfile
-      tags: dev
+      tags:
+      - latest
+      - dev
   
   - name: publish-web
-    image: plugins/buildah-docker
+    image: plugins/docker
     settings:
       repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-web
       registry: ccr.ccs.tencentyun.com
@@ -37,4 +41,6 @@ steps:
       username: 
         from_secret: tencent_id
       dockerfile: docker_env/web/Dockerfile
-      tags: dev
+      tags:
+      - latest
+      - dev
