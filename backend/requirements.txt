@@ -35,7 +35,7 @@ ruamel.yaml.clib==0.2.4
 six==1.16.0
 smmap==4.0.0
 sqlparse==0.4.1
-typing-extensions==3.10.0.0
+typing-extensions==4.5.0
 tzlocal==2.1
 ua-parser==0.10.0
 uritemplate==3.0.1
