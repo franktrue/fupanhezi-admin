@@ -6,4 +6,5 @@ RUN npm run build
 
 FROM nginx:alpine
 COPY ./docker_env/nginx/my.conf /etc/nginx/conf.d/my.conf
+COPY /web/node_modules /web/node_modules
 COPY --from=0 /web/dist /usr/share/nginx/html
