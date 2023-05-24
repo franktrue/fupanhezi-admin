@@ -6,8 +6,8 @@ WORKDIR /backend
 COPY ./backend/ .
 COPY ./docker_env/dvadmin_celery-1.0.3-py3-none-any.whl .
 RUN awk 'BEGIN { cmd="cp -i ./conf/env.example.py   ./conf/env.py "; print "n" |cmd; }'
-RUN python3 -m pip install --no-cache-dir --disable-pip-version-check --no-python-version-warning -i https://pypi.tuna.tsinghua.edu.cn/simple/ -r requirements.txt \
-    && python3 -m pip install  /backend/dvadmin_celery-1.0.3-py3-none-any.whl --no-cache-dir --disable-pip-version-check --no-python-version-warning
+RUN python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ -r requirements.txt \
+    && python3 -m pip install  /backend/dvadmin_celery-1.0.3-py3-none-any.whl 
         
 
 # 第二阶段：安装Node.js
