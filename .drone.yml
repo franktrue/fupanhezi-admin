@@ -9,9 +9,6 @@ volumes:
 - name: npm
   host:
     path: /tmp/cache/.npm
-- name: docker
-  host:
-    path: /var/run/docker.sock
 
 steps:
   - name: docker
