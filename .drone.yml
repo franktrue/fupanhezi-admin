@@ -12,17 +12,15 @@ volumes:
     path: /var/run/docker.sock
 
 steps:
-  - name: cache
+  - name: restore-cache
     image: drillster/drone-volume-cache
     volumes:
-    - name: cache
-      path: /cache
+      - name: cache
+        path: /cache
     settings:
       restore: true
       mount:
-      - ./venv:/venv
-      key:
-      - $CI_COMMIT_REF_SLUG
+        - /usr/local/lib/python3.10/site-packages
 
   - name: publish-api
     image: plugins/docker
@@ -57,6 +55,16 @@ steps:
       tags:
       - latest
       dry_run: false
+  
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      rebuild: true
+      mount:
+        - /usr/local/lib/python3.10/site-packages
 
 trigger:
   path:
@@ -82,18 +90,16 @@ volumes:
     path: /var/run/docker.sock
 
 steps:
-  - name: cache
+  - name: restore-cache
     image: drillster/drone-volume-cache
     volumes:
-    - name: cache
-      path: /cache
+      - name: cache
+        path: /cache
     settings:
       restore: true
       mount:
-      - ./venv:/venv
-      key:
-      - $CI_COMMIT_REF_SLUG
-      
+        - ./node_modules
+
   - name: publish-web
     image: plugins/docker
     volumes:
@@ -111,10 +117,17 @@ steps:
       - latest
       dry_run: false
 
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      rebuild: true
+      mount:
+        - ./node_modules
+
 trigger:
-  path:
-    include:
-      - web/**
   event:
     - push
     - pull_request
