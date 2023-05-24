@@ -9,7 +9,6 @@ RUN python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/ -r requi
     && python3 -m pip install  /backend/dvadmin_celery-1.0.3-py3-none-any.whl \
     && apt-get update \
     && apt-get install -y  curl gnupg \
-    && apt-get install libmysqlclient-dev \
     && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     && apt-get install -y  nodejs
 CMD ["celery", "-A", "application", "worker", "-B", "--loglevel=info"]
