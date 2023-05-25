@@ -3,20 +3,24 @@ kind: pipeline
 type: docker
 name: backend
 
-workspace:
-  path: /drone/src
-
 volumes:
-- name: site-packages # 数据卷名称
-  host: # Host Volume
-    path: /tmp/drone/cache/site-packages # 宿主机目录    #绝对路径
+- name: cache
+  host:
+    path: /tmp/cache
 
 steps:
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      restore: true
+      mount:
+        - /usr/local/lib/python3.10/site-packages
+
   - name: publish-api
     image: plugins/docker
-    volumes:
-    - name: site-packages
-      path: /usr/local/lib/python3.10/site-packages
     settings:
       repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-api
       registry: ccr.ccs.tencentyun.com
@@ -31,9 +35,6 @@ steps:
 
   - name: publish-celery
     image: plugins/docker
-    volumes:
-    - name: site-packages
-      path: /usr/local/lib/python3.10/site-packages
     settings:
       repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-celery
       registry: ccr.ccs.tencentyun.com
@@ -45,6 +46,16 @@ steps:
       tags:
       - latest
       dry_run: false
+  
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      rebuild: true
+      mount:
+        - /usr/local/lib/python3.10/site-packages
 
 trigger:
   event:
