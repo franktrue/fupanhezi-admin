@@ -4,23 +4,21 @@ type: docker
 name: backend
 
 volumes:
-- name: cache
+- name: docker
   host:
-    path: /tmp/cache
-
+    path: /var/run/docker.sock
+- name: site-packages
+  host:
+    path: /tmp/drone/cache/site-packages
+    
 steps:
-  - name: restore-cache
-    image: drillster/drone-volume-cache
-    volumes:
-      - name: cache
-        path: /cache
-    settings:
-      restore: true
-      mount:
-        - /usr/local/lib/python3.10/site-packages
-
   - name: publish-api
     image: plugins/docker
+    volumes:
+    - name: docker
+      path: /var/run/docker.sock
+    - name: site-packages
+      path: /usr/local/lib/python3.10/site-packages
     settings:
       repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-api
       registry: ccr.ccs.tencentyun.com
@@ -35,6 +33,11 @@ steps:
 
   - name: publish-celery
     image: plugins/docker
+    volumes:
+    - name: docker
+      path: /var/run/docker.sock
+    - name: site-packages
+      path: /usr/local/lib/python3.10/site-packages
     settings:
       repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-celery
       registry: ccr.ccs.tencentyun.com
@@ -46,16 +49,6 @@ steps:
       tags:
       - latest
       dry_run: false
-  
-  - name: rebuild-cache
-    image: drillster/drone-volume-cache
-    volumes:
-      - name: cache
-        path: /cache
-    settings:
-      rebuild: true
-      mount:
-        - /usr/local/lib/python3.10/site-packages
 
 trigger:
   event:
