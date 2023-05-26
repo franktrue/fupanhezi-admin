@@ -80,19 +80,20 @@ steps:
       - cd web
       - npm install --registry=https://registry.npm.taobao.org
       - npm run build
-  - name: publish-web
-    image: plugins/docker
+  - name: deploy
+    image: drillster/drone-rsync
     settings:
-      repo: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-web
-      registry: ccr.ccs.tencentyun.com
-      password: 
-        from_secret: tencent_tcr_password
-      username: 
-        from_secret: tencent_id
-      dockerfile: docker_env/web/DockerfileBuild
-      tags:
-      - latest
-      dry_run: false
+      user: root
+      key:
+        from_secret: ssh_key
+      hosts: 
+        from_secret: ssh_host
+      # 来源目录
+      source: ./dist/*
+      # 目标服务器目录
+      target: /mnt/data/wwwroot/fupanhezi/admin/web
+      script:
+        - echo "Deploy Success"
 
 trigger:
   event:
@@ -101,26 +102,26 @@ trigger:
   branch:
     - main
 
-# ---
-# kind: pipeline
-# type: docker
-# name: deploy
-# depends_on: ["backend", "frontend"]
+---
+kind: pipeline
+type: docker
+name: deploy
+depends_on: ["backend", "frontend"]
 
-# steps:
-#   - name: sync-file
-#     image: drillster/drone-rsync
-#     settings:
-#       user: root
-#       key:
-#         from_secret: ssh_key
-#       hosts: # 多个ip使用,隔开
-#         from_secret: ssh_host
-#       # 来源目录
-#       source: docker_env/deploy
-#       # 目标服务器目录
-#       target: /mnt/data/wwwroot/fupanhezi/admin
-#       script:
-#         - cd /mnt/data/wwwroot/fupanhezi/admin
-#         - docker-compose restart
-#         - echo "Deploy Success"
+steps:
+  - name: sync-file
+    image: drillster/drone-rsync
+    settings:
+      user: root
+      key:
+        from_secret: ssh_key
+      hosts: # 多个ip使用,隔开
+        from_secret: ssh_host
+      # 来源目录
+      source: docker_env/deploy
+      # 目标服务器目录
+      target: /mnt/data/wwwroot/fupanhezi/admin
+      script:
+        - cd /mnt/data/wwwroot/fupanhezi/admin
+        - docker-compose restart
+        - echo "Deploy Success"

@@ -1,21 +1,5 @@
 version: "3"
 services:
-  dvadmin-web:
-    image: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-web
-    container_name: dvadmin-web
-    ports:
-      - "8082:8080"
-    build:
-      context: ./
-      dockerfile: ./docker_env/web/Dockerfile
-    environment:
-      TZ: Asia/Shanghai
-    volumes:
-      - ./nginx/my.conf:/etc/nginx/conf.d/my.conf
-    networks:
-      network:
-        ipv4_address: 177.8.0.11
-
   dvadmin-django:
     image: ccr.ccs.tencentyun.com/franktrue/fupanhezi-admin-api
     container_name: dvadmin-django
@@ -25,7 +9,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./env.py:/backend/env.py
+      - ./env.py:/backend/conf/env.py
       - ./logs/log:/var/log
     restart: always
     networks:
@@ -40,7 +24,7 @@ services:
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - ./env.py:/backend/env.py
+      - ./env.py:/backend/conf/env.py
       - ./logs/log:/var/log
     restart: always
     networks:
