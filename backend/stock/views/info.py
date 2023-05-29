@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import AllowAny
-from dvadmin.utils.json_response import SuccessResponse
+from dvadmin.utils.json_response import DetailResponse
 from stock.services.info import StockInfoService
 
 class StockInfoAPI(APIView):
@@ -17,4 +17,4 @@ class StockInfoAPI(APIView):
         gdfx_free_top = service.gdfx_free_top(symbol = stock_code)
         news = service.news(symbol = stock_code)
         data = {"info": info, "zyjs": zyjs, "gdfx_top": gdfx_top, "gdfx_free_top": gdfx_free_top, "news": news}
-        return SuccessResponse(data=data, msg="更新成功")
+        return DetailResponse(data=data, msg="更新成功")

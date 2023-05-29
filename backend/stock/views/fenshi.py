@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import AllowAny
-from dvadmin.utils.json_response import SuccessResponse
+from dvadmin.utils.json_response import DetailResponse
 from stock.services.fenshi import StockFenshiService
 
 class StockFenshiAPI(APIView):
@@ -13,4 +13,4 @@ class StockFenshiAPI(APIView):
         date = request.data.get('date')
         service = StockFenshiService()
         data = service.data(stock_code=stock_code, date_str=date)
-        return SuccessResponse(data=data, msg="更新成功")
+        return DetailResponse(data=data, msg="更新成功")
