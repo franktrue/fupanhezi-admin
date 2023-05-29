@@ -62,11 +62,4 @@ class StockHistoryViewSet(CustomModelViewSet):
         service = StockHistoryService()
         service.update_latest()
         return SuccessResponse(data=[], msg="更新成功")
-
-    @action(methods=["POST"], detail=False, permission_classes=[AllowAny])
-    def fenshi(self, request, *args, **kwargs):
-        stock_code = request.data.get('stock_code')
-        date = request.data.get('date')
-        service = StockFenshiService()
-        data = service.data(stock_code=stock_code, date_str=date)
-        return SuccessResponse(data=data, msg="更新成功")
+    

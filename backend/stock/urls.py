@@ -1,3 +1,4 @@
+from django.urls import path
 from rest_framework.routers import SimpleRouter
 from stock.views.zt_history import StockZtHistoryViewSet
 from stock.views.history import StockHistoryViewSet
@@ -6,6 +7,7 @@ from stock.views.board_industry import StockBoardIndustryViewSet
 from stock.views.board_concept import StockBoardConceptViewSet
 from stock.views.board_map import StockBoardMapViewSet
 from stock.views.lhb import StockLhbViewSet
+from stock.views.fenshi import StockFenshiAPI
 
 
 router = SimpleRouter()
@@ -18,5 +20,6 @@ router.register("api/stock/board/concept", StockBoardConceptViewSet)
 router.register("api/stock/board/map", StockBoardMapViewSet)
 
 urlpatterns = [
+    path("app/stock/fenshi", StockFenshiAPI.as_view())
 ]
 urlpatterns += router.urls
