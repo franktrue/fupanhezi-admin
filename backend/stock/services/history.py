@@ -1,6 +1,7 @@
 from stock.models import StockHistory
 from stock.utils.db import get_engine
 from stock.utils.date import is_trade_date
+import pywencai
 import akshare as ak
 import datetime
 
@@ -27,7 +28,7 @@ class StockHistoryService():
     def update_latest(self):
         now = datetime.datetime.now()
         today = now.date()
-        if is_trade_date(today) and now.hour >= 15:
+        if True:
             count = StockHistory.objects.filter(date=today.strftime("%Y-%m-%d")).count()
             if count > 0:
                 raise Exception("今日数据已更新")
@@ -40,7 +41,26 @@ class StockHistoryService():
             stock_history['open_pe'] = ((stock_history['open']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
             stock_history['high_pe'] = ((stock_history['high']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
             stock_history['low_pe'] = ((stock_history['open']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
+            auction = self.get_auction(date=today)
+            # 合并集合竞价数据
+            stock_history = stock_history.set_index('stock_code').join(auction).reset_index()
             StockHistory.objects.filter(date=today.strftime("%Y-%m-%d")).delete()
             stock_history.to_sql(name=self.table_name, con=self.engine, if_exists="append", index=False)
         else:
             raise Exception("请在交易日15点后更新数据")
+        
+    def get_auction(self, date):
+        trade_date_str = date.strftime('%Y%m%d')
+        col_name = [
+            "code", 
+            "竞价金额[{0}]".format(trade_date_str), 
+            "竞价量[{0}]".format(trade_date_str),
+            "竞价未匹配金额[{0}]".format(trade_date_str),
+            "竞价未匹配量[{0}]".format(trade_date_str),
+            "竞价异动类型[{0}]".format(trade_date_str),
+            "竞价异动说明[{0}]".format(trade_date_str),
+        ]
+        auction = pywencai.get(question="{0}竞价金额".format(trade_date_str), loop=True)
+        auction = auction[col_name]
+        auction.columns = ['stock_code', 'auction_amo', 'auction_vol', 'auction_no_match_amo', 'auction_no_match_vol', 'auction_type', 'auction_explain']
+        return auction.set_index('stock_code')

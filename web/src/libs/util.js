@@ -196,7 +196,7 @@ util.num2human = function (num) {
   }
 
   if (num > 10000) {
-    return (num/10000).toFixed(0) + "万"
+    return (num/10000).toFixed(2) + "万"
   }
   return num
 }

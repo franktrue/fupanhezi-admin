@@ -50,6 +50,12 @@ class StockHistory(models.Model):
     is_lhb = models.SmallIntegerField(null=False, default=0)
     lhb_reson = models.CharField(max_length=255, null=False, default='')
     lhb_parse = models.CharField(max_length=128, null=False, default='')
+    auction_vol = models.BigIntegerField(null=False)
+    auction_amo = models.DecimalField(max_digits=20, decimal_places=2, null=False)
+    auction_no_match_vol = models.BigIntegerField(null=False)
+    auction_no_match_amo = models.DecimalField(max_digits=20, decimal_places=2, null=False)
+    auction_type = models.CharField(max_length=32, null=False, default='')
+    auction_explain = models.CharField(max_length=64, null=False, default='')
 
     class Meta:
         db_table = 'stock_history'

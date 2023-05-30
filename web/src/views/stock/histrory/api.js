@@ -44,7 +44,7 @@ export function FetchData(obj) {
 
 export function UpdateLatest() {
   return request({
-    url: urlPrefix + '/latest/',
+    url: urlPrefix + 'latest/',
     method: 'post'
   })
 }

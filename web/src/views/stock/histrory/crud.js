@@ -299,6 +299,92 @@ export const crudOptions = vm => {
             }
           },
           {
+            title: '竞价金额',
+            key: 'auction_amo',
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '竞价量',
+            key: 'auction_vol',
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '竞价未匹配金额',
+            key: 'auction_no_match_amo',
+            show: false,
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '竞价未匹配量',
+            key: 'auction_no_match_vol',
+            show: false,
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '竞价异动类型',
+            key: 'auction_type',
+            show: false,
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '竞价异动说明',
+            key: 'auction_explain',
+            show: false,
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
             title: '是否龙虎榜',
             key: 'is_lhb',
             type: 'radio',
