@@ -21,7 +21,7 @@ router.register("api/stock/board/concept", StockBoardConceptViewSet)
 router.register("api/stock/board/map", StockBoardMapViewSet)
 
 urlpatterns = [
-    path("app/stock/fenshi", StockFenshiAPI.as_view()),
-    path("app/stock/info", StockInfoAPI.as_view()),
+    path("api/stock/fenshi", StockFenshiAPI.as_view()),
+    path("api/stock/info", StockInfoAPI.as_view()),
 ]
 urlpatterns += router.urls
