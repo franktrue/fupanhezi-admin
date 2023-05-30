@@ -1,14 +1,12 @@
 from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-from rest_framework.permissions import AllowAny
 from dvadmin.utils.json_response import DetailResponse
 from stock.services.info import StockInfoService
 
 class StockInfoAPI(APIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [AllowAny]
+    authentication_classes = []
+    permission_classes = []
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         stock_code = request.data.get('stock_code')
         service = StockInfoService()
         info = service.info(symbol = stock_code)
