@@ -17,9 +17,13 @@ class StockLhbService():
             df["date"] = trade_date
             for row in df.itertuples():
                 # 更新数据中的涨停板
+                if row.interpretation is None:
+                    interpretation = ''
+                else:
+                    interpretation = row.interpretation
                 StockHistory.objects.filter(stock_code=row.stock_code, date=trade_date.strftime("%Y-%m-%d")).update(
                     is_lhb=1, 
-                    lhb_parse=row.interpretation,
+                    lhb_parse=interpretation,
                     lhb_reson=row.rank_reson
                 )
             df.to_sql(name=self.table_name, con=self.engine, if_exists="append", index=False)
