@@ -8,7 +8,7 @@ class StockFenshiAPI(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [AllowAny]
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         stock_code = request.data.get('stock_code')
         date = request.data.get('date')
         service = StockFenshiService()
