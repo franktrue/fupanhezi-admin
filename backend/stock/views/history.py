@@ -1,11 +1,11 @@
-from stock.models import StockHistory
+from stock.models import StockHistory, StockTradeDate
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from dvadmin.utils.json_response import SuccessResponse
+from dvadmin.utils.json_response import DetailResponse
 from stock.services.history import StockHistoryService
-from stock.services.fenshi import StockFenshiService
+from stock.tasks import update_auction
 import datetime
 
 class StockHistorySerializer(CustomModelSerializer):
@@ -55,11 +55,18 @@ class StockHistoryViewSet(CustomModelViewSet):
             end=end_date, 
             fq=fq
         )
-        return SuccessResponse(data=[], msg="获取成功")
+        return DetailResponse(data=[], msg="获取成功")
 
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
     def latest(self, request, *args, **kwargs):
         service = StockHistoryService()
         service.update_latest()
-        return SuccessResponse(data=[], msg="更新成功")
+        return DetailResponse(data=[], msg="更新成功")
     
+    @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
+    def update_auction(self, request, *args, **kwargs):
+        between = request.data.get('between')
+        trade_date_range = StockTradeDate.objects.filter(trade_date__gte=between[0], trade_date__lte=between[1]).all()
+        for trade_date in trade_date_range.iterator():
+            update_auction.delay(trade_date.trade_date)
+        return DetailResponse(data=[], msg="更新成功")

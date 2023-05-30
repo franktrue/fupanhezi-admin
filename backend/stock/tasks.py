@@ -10,6 +10,7 @@ from application.celery import app
 from stock.services.zt_history import StockZtHistoryService
 from stock.services.history import StockHistoryService
 from stock.services.lhb import StockLhbService
+from celery import shared_task
 import datetime
 
 # 工作日15:05收盘后运行
@@ -34,3 +35,9 @@ def task__lhb():
     today = datetime.date.today()
     service = StockLhbService()
     service.fetch(today)
+
+@shared_task
+def update_auction(date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S').date()
+    service = StockHistoryService()
+    service.update_auction_by_date(date)

@@ -63,4 +63,18 @@ class StockHistoryService():
         auction = pywencai.get(question="{0}竞价金额".format(trade_date_str), loop=True)
         auction = auction[col_name]
         auction.columns = ['stock_code', 'auction_amo', 'auction_vol', 'auction_no_match_amo', 'auction_no_match_vol', 'auction_type', 'auction_explain']
+        auction.fillna(0, inplace=True)
         return auction.set_index('stock_code')
+
+    def update_auction_by_date(self, date):
+        auction = self.get_auction(date)
+        for row in auction[~auction['auction_amo'].isna()].itertuples():
+            StockHistory.objects.filter(stock_code=row.Index, date=date.strftime("%Y-%m-%d")).update(
+                auction_vol = row.auction_vol,
+                auction_amo = row.auction_amo,
+                auction_no_match_vol = row.auction_no_match_vol,
+                auction_no_match_amo = row.auction_no_match_amo,
+                auction_type = row.auction_type,
+                auction_explain = row.auction_explain
+            )
+        

@@ -48,3 +48,11 @@ export function UpdateLatest() {
     method: 'post'
   })
 }
+
+export function UpdateAuction(obj) {
+  return request({
+    url: urlPrefix + 'update_auction/',
+    method: 'post',
+    data: obj
+  })
+}
