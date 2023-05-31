@@ -60,7 +60,7 @@ class StockHistoryService():
             "竞价异动类型[{0}]".format(trade_date_str),
             "竞价异动说明[{0}]".format(trade_date_str),
         ]
-        auction = pywencai.get(question="{0}竞价金额".format(trade_date_str), loop=True)
+        auction = pywencai.get(question="{0}竞价金额 {0}竞价量".format(trade_date_str), loop=True)
         auction = auction[col_name]
         auction.columns = ['stock_code', 'auction_amo', 'auction_vol', 'auction_no_match_amo', 'auction_no_match_vol', 'auction_type', 'auction_explain']
         auction.fillna(0, inplace=True)
