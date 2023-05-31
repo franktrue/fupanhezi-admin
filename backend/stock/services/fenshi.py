@@ -9,7 +9,7 @@ class StockFenshiService():
 
     def data(self, stock_code, date_str):
         date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-        key = stock_code+date_str
+        key = "stock_fenshi:"+stock_code+date_str
         data = cache.get(key)
         if data is None:
             # 判断是上证还是深证
