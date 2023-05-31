@@ -44,7 +44,8 @@ class StockFenshiService():
                     pre_close = round(open_price/(1+h.open_pe/100), 2)
                     break
             data = {"pre_close": pre_close, "open_price": open_price, "list": list}
-            cache.set(key, data, timeout=24*3600)
+            if len(list)>0:
+                cache.set(key, data, timeout=24*3600)
         return data
         
     def read_csv_by_date(self, full_stock_code, dir):
