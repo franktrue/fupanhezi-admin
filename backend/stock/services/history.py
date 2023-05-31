@@ -20,7 +20,7 @@ class StockHistoryService():
         stock_history['stock_name'] = stock_name
         stock_history['open_pe'] = ((stock_history['open']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
         stock_history['high_pe'] = ((stock_history['high']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
-        stock_history['low_pe'] = ((stock_history['open']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
+        stock_history['low_pe'] = ((stock_history['low']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
         StockHistory.objects.filter(stock_code=stock_code, date__gte=begin, date__lte=end).delete()
         stock_history.to_sql(name=self.table_name, con=self.engine, if_exists="append", index=False)
 
@@ -40,7 +40,7 @@ class StockHistoryService():
             stock_history['date'] = today
             stock_history['open_pe'] = ((stock_history['open']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
             stock_history['high_pe'] = ((stock_history['high']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
-            stock_history['low_pe'] = ((stock_history['open']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
+            stock_history['low_pe'] = ((stock_history['low']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))
             auction = self.get_auction(date=today)
             # 合并集合竞价数据
             stock_history = stock_history.set_index('stock_code').join(auction).reset_index()
