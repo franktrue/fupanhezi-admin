@@ -393,6 +393,17 @@ SYSTEM_CONFIG = {}
 # 字典配置
 DICTIONARY_CONFIG = {}
 
+# 缓存配置
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
 # ================================================= #
 # ******************** 插件配置 ******************** #
 # ================================================= #
