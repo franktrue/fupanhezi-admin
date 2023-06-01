@@ -6,6 +6,7 @@ from stock.views.trade_date import StockTradeDateViewSet
 from stock.views.board_industry import StockBoardIndustryViewSet
 from stock.views.board_concept import StockBoardConceptViewSet
 from stock.views.board_map import StockBoardMapViewSet
+from stock.views.board_history import StockBoardHistoryViewSet
 from stock.views.lhb import StockLhbViewSet
 from stock.views.fenshi import StockFenshiAPI
 from stock.views.info import StockInfoAPI
@@ -19,6 +20,7 @@ router.register("api/stock/lhb", StockLhbViewSet)
 router.register("api/stock/board/industry", StockBoardIndustryViewSet)
 router.register("api/stock/board/concept", StockBoardConceptViewSet)
 router.register("api/stock/board/map", StockBoardMapViewSet)
+router.register("api/stock/board/history", StockBoardHistoryViewSet)
 
 urlpatterns = [
     path("spider/fenshi", StockFenshiAPI.as_view()),

@@ -11,7 +11,7 @@ export const crudOptions = vm => {
           highlightCurrentRow: false
       },
       rowHandle: {
-          width: 240,
+          width: 300,
           view: {
               thin: true,
               text: "",
@@ -44,6 +44,17 @@ export const crudOptions = vm => {
                 return vm.hasPermissions('Fetch')
               },
               emit: 'boardCons'
+            },
+            {
+              thin: true,
+              text: '指数',
+              size: 'small',
+              type: 'success',
+              icon: 'el-icon-data-line',
+              show () {
+                return vm.hasPermissions('Fetch')
+              },
+              emit: 'boardHistory'
             }
           ]
       },

@@ -6,6 +6,7 @@
       v-bind="_crudProps"
       v-on="_crudListeners"
       @boardCons="boardCons"
+      @boardHistory="boardHistory"
     >
       <!-- 自动绑定参数与事件 -->
       <div slot="header">
@@ -34,6 +35,17 @@
       >
       </board-map>
     </el-drawer>
+    <el-drawer :visible.sync="drawerHistory" :size="800">
+      <div slot="title">
+        <span>指数日频率列表</span>
+        <el-tag size="small" style="margin-left: 10px">{{ boardRow.name }}</el-tag>
+      </div>
+      <board-history
+        style="margin-top: 80px; margin-left: 10px"
+        :boardRow="boardRow"
+      >
+      </board-history>
+    </el-drawer>
   </d2-container>
 </template>
 
@@ -42,14 +54,16 @@ import { crudOptions } from './crud' // 上文的crudOptions配置
 import { d2CrudPlus } from 'd2-crud-plus'
 import { AddObj, GetList, UpdateObj, DelObj, FetchData } from './api' // 查询添加修改删除的http请求接口
 import BoardMap from '@/views/stock/board/map'
+import BoardHistory from '@/views/stock/board/history'
 export default {
   name: 'stockBoardConcept',
-  components: { BoardMap },
+  components: { BoardMap, BoardHistory },
   mixins: [d2CrudPlus.crud], // 最核心部分，继承d2CrudPlus.crud
   data() {
     return {
       loading: false,
       drawer: false,
+      drawerHistory: false,
       boardRow: {}
     }
   },
@@ -72,6 +86,11 @@ export default {
     },
     boardCons (scope) {
       this.drawer = true
+      this.boardRow = scope.row
+      this.boardRow.type = 'concept'
+    },
+    boardHistory (scope) {
+      this.drawerHistory = true
       this.boardRow = scope.row
       this.boardRow.type = 'concept'
     },

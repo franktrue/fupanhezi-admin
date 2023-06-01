@@ -1,6 +1,7 @@
-from stock.models import StockBoardConcept, StockBoardIndustry, StockBoardMap
+from stock.models import StockBoardConcept, StockBoardIndustry, StockBoardMap, StockBoardHistory
 from stock.utils.db import get_engine
 from django.db import connections
+import datetime
 import akshare as ak
 
 class StockBoardService():
@@ -34,3 +35,18 @@ class StockBoardService():
         # 先删除旧数据
         StockBoardMap.objects.filter(code=symbol).delete()
         df.to_sql('stock_board_map', con=self.engine, if_exists="append", index=False)
+
+    # 更新板块行情
+    def fetch_history(self, symbol):
+        history = ak.stock_board_concept_hist_ths(start_year="2019", symbol=symbol)
+        history.columns = ['date', 'open', 'high', 'low', 'close', 'vol', 'amo']
+        history['pre_close'] = history['close'].shift(1)
+        history['name'] = symbol
+        history['open_pe'] = ((history['open']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        history['high_pe'] = ((history['high']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        history['low_pe'] = ((history['low']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        history['close_pe'] = ((history['close']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        history = history[history['date']>=datetime.date(2020, 1, 1)]
+        StockBoardHistory.objects.filter(name=symbol).delete()
+        history.to_sql(name=StockBoardHistory._meta.db_table, con=self.engine, if_exists="append", index=False)
+
