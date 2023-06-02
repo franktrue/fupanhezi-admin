@@ -71,7 +71,7 @@ export default {
     // 获取最新概念
     fetchLatest() {
       const that = this
-      this.$confirm('是否确认更新概念信息?', '警告', {
+      this.$confirm('是否确认更新概念信息?会异步更新对应成分股', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

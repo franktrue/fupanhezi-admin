@@ -3,8 +3,9 @@ from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from dvadmin.utils.json_response import SuccessResponse
-from stock.services.board import StockBoardService
+from dvadmin.utils.json_response import DetailResponse
+from stock.tasks import update_board_cons
+import akshare as ak
 
 class StockBoardConceptSerializer(CustomModelSerializer):
     """
@@ -39,7 +40,23 @@ class StockBoardConceptViewSet(CustomModelViewSet):
 
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
     def fetch(self, request, *args, **kwargs):
-        service = StockBoardService()
-        service.fetch_concept()
-        return SuccessResponse(data=[], msg="获取成功")
+        df = ak.stock_board_concept_name_ths()
+        df.columns = ['release_date', 'name', 'include_number', 'show_url', 'code']
+        for row in df.itertuples():
+            board = StockBoardConcept.objects.filter(code=row.code).first()
+            if board is None:
+                board = StockBoardConcept(
+                    name = row.name,
+                    code = row.code,
+                    release_date = row.release_date,
+                    include_number = row.include_number,
+                    show_url = row.show_url
+                )
+            elif board.include_number != row.include_number:
+                board.include_number = row.include_number
+            else:
+                continue
+            board.save()
+            update_board_cons.delay(row.code, row.name, 'concept')
+        return DetailResponse(data=[], msg="获取成功")
     

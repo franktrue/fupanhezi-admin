@@ -50,3 +50,15 @@ class StockBoardService():
         StockBoardHistory.objects.filter(name=symbol).delete()
         history.to_sql(name=StockBoardHistory._meta.db_table, con=self.engine, if_exists="append", index=False)
 
+    def fetch_latest(self, symbol):
+        history = ak.stock_board_concept_hist_ths(start_year="2023", symbol=symbol).tail(2)
+        history.columns = ['date', 'open', 'high', 'low', 'close', 'vol', 'amo']
+        history['pre_close'] = history['close'].shift(1)
+        history['name'] = symbol
+        history['open_pe'] = ((history['open']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        history['high_pe'] = ((history['high']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        history['low_pe'] = ((history['low']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        history['close_pe'] = ((history['close']-history['pre_close'])/history['pre_close']*100).apply(lambda x: round(x, 2))
+        # 将最后插入数据库一条
+        # data = history.to_dict("records")[1]
+        history.tail(1).to_sql(name=StockBoardHistory._meta.db_table, con=self.engine, if_exists="append", index=False)

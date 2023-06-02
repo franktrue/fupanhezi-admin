@@ -11,6 +11,7 @@ from stock.services.zt_history import StockZtHistoryService
 from stock.services.history import StockHistoryService
 from stock.services.trade_date import StockTradeDateService
 from stock.services.lhb import StockLhbService
+from stock.services.board import StockBoardService
 from celery import shared_task
 import datetime
 
@@ -41,3 +42,14 @@ def update_auction(date):
     date = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S').date()
     service = StockHistoryService()
     service.update_auction_by_date(date)
+
+@shared_task
+def update_board_cons(symbol, name, type):
+    service = StockBoardService()
+    service.update_cons(symbol, name, type)
+
+@shared_task
+def update_board_history(symbol):
+    service = StockBoardService()
+    service.fetch_history(symbol)
+    
