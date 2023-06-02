@@ -3,6 +3,7 @@ from stock.utils.db import get_engine
 from django.db import connections
 from stock.utils.cache import delete_cache_by_prefix
 import akshare as ak
+import datetime
 
 class StockTradeDateService():
     def __init__(self):
@@ -17,7 +18,7 @@ class StockTradeDateService():
 
     # 清空前端表格缓存（最近的20个工作日）
     def clearCache(self):
-        today = "2022-03-31"
+        today = datetime.date.today()
         # 获取20天交易日
         trade_date_range = StockTradeDate.objects.filter(trade_date__lte=today).order_by("-trade_date")[:20]
         prefix = "cache:fupanhezi:stockZtHistory:ztRow_"
