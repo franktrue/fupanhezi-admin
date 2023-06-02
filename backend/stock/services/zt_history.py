@@ -44,7 +44,23 @@ class StockZtHistoryService():
                 StockZtHistory.objects.filter(date=head_trade_date.strftime("%Y-%m-%d"),stock_code=zt_stock.stock_code).update(sort=sort)
                 print("更新{0}，日期{1}排序为{2}".format(zt_stock.stock_name, head_trade_date, sort)) 
             StockZtHistory.objects.filter(date=date.strftime("%Y-%m-%d")).delete()
-            zt_pool.fillna(value=0, inplace=True)
+            zt_pool.fillna({
+                'fb_amount': 0,
+                'first_zt_time': '',
+                'last_zt_time': '',
+                'zb_num': 0,
+                'zt_statistics': '',
+                'ztlb_num': 0,
+                'sort': 0,
+                'z_sz': 0,
+                'lt_sz': 0,
+                'zs_sz': 0,
+                'hs_rate': 0,
+                'real_hs_rate': 0,
+                'pe': 0,
+                'zt_type': '',
+                'zt_reson': ''
+            }, inplace=True)
             zt_pool.to_sql(name=self.table_name, con=self.engine, if_exists="append", index=False)
 
     # 获取指定交易日涨停及曾涨停数据

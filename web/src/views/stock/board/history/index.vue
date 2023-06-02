@@ -57,6 +57,8 @@ export default {
         that.$message.success('更新成功')
         that.loading = false
         that.handleSearch()
+      }).catch(e => {
+        that.loading = false
       })
     },
     getCrudOptions () {

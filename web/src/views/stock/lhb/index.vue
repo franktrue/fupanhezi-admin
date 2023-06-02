@@ -79,6 +79,8 @@ export default {
             that.loading = false
             that.$message.success('操作成功')
             that.handleSearch()
+          }).catch(e => {
+            that.loading = false
           })
         } else {
           that.$message.error('表单校验失败，请检查')

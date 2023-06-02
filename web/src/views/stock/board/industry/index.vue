@@ -67,6 +67,8 @@ export default {
           that.loading = false
           that.$message.success('操作成功')
           that.handleSearch()
+        }).catch(e => {
+          that.loading = false
         })
       })
     },
