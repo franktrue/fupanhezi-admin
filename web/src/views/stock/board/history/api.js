@@ -55,3 +55,11 @@ export function FetchData(obj) {
     data: obj
   })
 }
+
+export function FetchAll(obj) {
+  return request({
+    url: urlPrefix + 'fetch_all/',
+    method: 'post',
+    data: obj
+  })
+}

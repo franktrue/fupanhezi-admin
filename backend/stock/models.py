@@ -97,22 +97,21 @@ class StockBoardConcept(models.Model):
         db_table = 'stock_board_concept'
         verbose_name = '概念板块'
         verbose_name_plural = verbose_name
+        ordering = ('-release_date',)
 
 
 class StockBoardHistory(models.Model):
     date = models.DateField(null=False)
+    code = models.CharField(max_length=10, null=False, default='')
     name = models.CharField(max_length=32, null=False, default='')
     open = models.FloatField(null=False)
     close = models.FloatField(null=False)
     high = models.FloatField(null=False)
     low = models.FloatField(null=False)
-    pre_close = models.FloatField(null=False)
     vol = models.BigIntegerField(null=False)
     amo = models.DecimalField(max_digits=20, decimal_places=2, null=False)
-    open_pe = models.FloatField(null=False)
-    high_pe = models.FloatField(null=False)
-    low_pe = models.FloatField(null=False)
     close_pe = models.FloatField(null=False)
+    hs_rate = models.FloatField(null=False)
 
     class Meta:
         db_table = 'stock_board_history'

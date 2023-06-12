@@ -62,6 +62,11 @@ def task__board():
         update_board_cons.delay(row.code, row.name, 'concept')
     return "操作成功"
 
+def task__board_history():
+    today = datetime.date.today()
+    service = StockBoardService()
+    service.fetch_history(trade_date=today)
+
 @shared_task
 def update_auction(date):
     date = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S').date()
@@ -74,7 +79,7 @@ def update_board_cons(symbol, name, type):
     service.update_cons(symbol, name, type)
 
 @shared_task
-def update_board_history(symbol):
+def update_board_history(trade_date):
     service = StockBoardService()
-    service.fetch_history(symbol)
+    service.fetch_history_by_task(trade_date)
     

@@ -11,7 +11,7 @@
           <el-button size="small" type="primary" @click="addRow"
             ><i class="el-icon-plus" /> 新增</el-button
           >
-          <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchLatest" :loading="loading"><i class="el-icon-refresh" /> 同步数据</el-button>
+          <!-- <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchLatest" :loading="loading"><i class="el-icon-refresh" /> 同步数据</el-button> -->
         </el-button-group>
         <crud-toolbar
           :search.sync="crud.searchOptions.show"

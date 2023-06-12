@@ -68,6 +68,26 @@ export const crudOptions = (vm) => {
         }
       },
       {
+        title: '指数代码',
+        key: 'name',
+        show: false,
+        type: 'input',
+        form: {
+          rules: [ // 表单校验规则
+            { required: true, message: '代码必填项' }
+          ],
+          component: {
+            props: {
+              clearable: true
+            },
+            placeholder: '请输入代码'
+          },
+          itemProps: {
+            class: { yxtInput: true }
+          }
+        }
+      },
+      {
         title: '名称',
         key: 'name',
         show: false,
@@ -91,9 +111,6 @@ export const crudOptions = (vm) => {
         title: '开盘价',
         key: 'open',
         type: "number",
-        formatter: (row, column, cellValue) => {
-          return cellValue + '/'+row.open_pe+'%'
-        },
         form: {
           component: {
             name: 'el-input-number',
@@ -164,24 +181,6 @@ export const crudOptions = (vm) => {
         }
       },
       {
-        title: '昨日收盘',
-        key: 'pre_close',
-        show: false,
-        type: "number",
-        form: {
-          component: {
-            name: 'el-input-number',
-            props: {
-              precision: 2
-            }
-          },
-          scopedSlots: {
-            prefix: () => '￥'
-          },
-          rules: [{ required: true, message: '昨日收盘价必填' }]
-        }
-      },
-      {
         title: '成交量',
         key: 'vol',
         type: 'number',
@@ -212,48 +211,21 @@ export const crudOptions = (vm) => {
         }
       },
       {
-        title: '开盘%',
-        key: 'open_pe',
-        show: false,
-        type: 'number',
-        form: {
-          component: {
-            props: {
-              clearable: true
-            }
-          }
-        }
-      },
-      {
-        title: '最高%',
-        key: 'high_pe',
-        show: false,
-        type: 'number',
-        form: {
-          component: {
-            props: {
-              clearable: true
-            }
-          }
-        }
-      },
-      {
-        title: '最低%',
-        key: 'low_pe',
-        show: false,
-        type: 'number',
-        form: {
-          component: {
-            props: {
-              clearable: true
-            }
-          }
-        }
-      },
-      {
         title: '收盘%',
         key: 'close_pe',
         show: false,
+        type: 'number',
+        form: {
+          component: {
+            props: {
+              clearable: true
+            }
+          }
+        }
+      },
+      {
+        title: '换手率%',
+        key: 'hs_rate',
         type: 'number',
         form: {
           component: {
