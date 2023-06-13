@@ -7,7 +7,7 @@ class StockInfoAPI(APIView):
     permission_classes = []
 
     def get(self, request, *args, **kwargs):
-        stock_code = request.query_params.get('stock_code')
+        stock_code = request.query_params.get('stockCode')
         service = StockInfoService()
         info = service.info(symbol = stock_code)
         zyjs = service.zyjs(symbol = stock_code)
