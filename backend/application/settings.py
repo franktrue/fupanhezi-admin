@@ -393,6 +393,10 @@ SYSTEM_CONFIG = {}
 # 字典配置
 DICTIONARY_CONFIG = {}
 
+# 去除缓存中的:1:部分
+def make_key(key, key_prefix, version):
+    return key_prefix+':'+key
+
 # 缓存配置
 CACHES = {
     "default": {
@@ -400,8 +404,9 @@ CACHES = {
         "LOCATION": REDIS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            'PREFIX': 'cache:fupanhezi:',
-        }
+        },
+        "KEY_PREFIX": "fupanhezi",
+        "KEY_FUNCTION": make_key
     }
 }
 
