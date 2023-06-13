@@ -62,6 +62,7 @@ def task__board():
         update_board_cons.delay(row.code, row.name, 'concept')
     return "操作成功"
 
+@app.task 
 def task__board_history():
     today = datetime.date.today()
     service = StockBoardService()
