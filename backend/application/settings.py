@@ -406,7 +406,8 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
         "KEY_PREFIX": "fupanhezi",
-        "KEY_FUNCTION": make_key
+        "KEY_FUNCTION": make_key,
+        "TIMEOUT": 30*24*3600,
     }
 }
 
