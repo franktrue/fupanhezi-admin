@@ -88,7 +88,8 @@ class StockBoardService():
                 "自由流通市值[{0}]".format(trade_date_str),
             ]
             df = df[col_zh]
-            df.columns = ['code', 'name', 'open', 'high', 'low', 'close', 'closePe', 'vol', 'amo', 'hsRate', 'realRate', 'zsSz']
+            df.columns = ['code', 'name', 'open', 'high', 'low', 'close', 'closePe', 'vol', 'amo', 'hsRate', 'realHsRate', 'zsSz']
+            df[['closePe', 'hsRate', 'realHsRate']] = df[['closePe', 'hsRate', 'realHsRate']].astype(float).applymap(lambda x: round(x, 2))
             data = df.to_dict("records")
             cache.set(key, data, timeout=self.timeout)
         return data
