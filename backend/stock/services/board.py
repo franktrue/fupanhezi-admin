@@ -74,7 +74,7 @@ class StockBoardService():
         if data is None:
             if "概念" not in name:
                 name += "概念"
-            df=pywencai.get(question="{0}{1}热门成分股前{2}名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name, num))
+            df=pywencai.get(question="{0}{1}成分股个股热度前{2}名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name, num))
             if df.empty:
                 return data
             col_zh = [
