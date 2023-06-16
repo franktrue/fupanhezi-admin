@@ -10,6 +10,7 @@ from stock.views.board_history import StockBoardHistoryViewSet
 from stock.views.lhb import StockLhbViewSet
 from stock.views.fenshi import StockFenshiAPI
 from stock.views.info import StockInfoAPI
+from stock.views.board import StockBoardAPI
 
 
 router = SimpleRouter()
@@ -25,5 +26,6 @@ router.register("api/stock/board/history", StockBoardHistoryViewSet)
 urlpatterns = [
     path("spider/fenshi", StockFenshiAPI.as_view()),
     path("spider/info", StockInfoAPI.as_view()),
+    path("spider/board/hot", StockBoardAPI.as_view()),
 ]
 urlpatterns += router.urls

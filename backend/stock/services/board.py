@@ -1,7 +1,7 @@
 from stock.models import StockBoardConcept, StockBoardIndustry, StockBoardMap, StockBoardHistory
 from stock.utils.db import get_engine
 from django.db import connections
-from stock.utils.date import is_trade_date
+from django.core.cache import cache
 import datetime
 import akshare as ak
 import pywencai
@@ -9,6 +9,7 @@ import pywencai
 class StockBoardService():
     def __init__(self):
         self.engine = get_engine()
+        self.timeout = 24*3600
 
     # 更新概念
     def fetch_concept(self):
@@ -64,3 +65,31 @@ class StockBoardService():
     def fetch_history_by_task(self, trade_date):
         trade_date = datetime.datetime.strptime(trade_date, '%Y-%m-%d').date()
         self.fetch_history(trade_date=trade_date)
+
+    # 指定日期板块热门股
+    def hot(self, name, trade_date):
+        trade_date_str = trade_date.strftime("%Y%m%d")
+        key = "stock_board_hot:{0}:{1}".format(name, trade_date_str)
+        data = cache.get(key)
+        if data is None:
+            df=pywencai.get(question="{0}{1}热门成分股前20名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name))
+            col_zh = [
+                "code", 
+                "股票简称",
+                "开盘价:前复权[{0}]".format(trade_date_str), 
+                "最高价:前复权[{0}]".format(trade_date_str), 
+                "最低价:前复权[{0}]".format(trade_date_str), 
+                "收盘价:前复权[{0}]".format(trade_date_str), 
+                "涨跌幅:前复权[{0}]".format(trade_date_str), 
+                "成交量[{0}]".format(trade_date_str), 
+                "成交额[{0}]".format(trade_date_str),
+                "换手率[{0}]".format(trade_date_str),
+                "实际换手率[{0}]".format(trade_date_str),
+                "自由流通市值[{0}]".format(trade_date_str),
+            ]
+            df = df[col_zh]
+            df.columns = ['code', 'name', 'open', 'high', 'low', 'close', 'closePe', 'vol', 'amo', 'hsRate', 'realRate', 'zsSz']
+            data = df.to_dict("records")
+            cache.set(key, data, timeout=self.timeout)
+        return data
+       
