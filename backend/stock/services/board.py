@@ -67,12 +67,16 @@ class StockBoardService():
         self.fetch_history(trade_date=trade_date)
 
     # 指定日期板块热门股
-    def hot(self, name, trade_date):
+    def hot(self, name, trade_date, num):
         trade_date_str = trade_date.strftime("%Y%m%d")
-        key = "stock_board_hot:{0}:{1}".format(name, trade_date_str)
+        key = "stock_board_hot:{0}:{1}:{2}".format(name, trade_date_str, num)
         data = cache.get(key)
         if data is None:
-            df=pywencai.get(question="{0}{1}热门成分股前20名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name))
+            if "概念" not in name:
+                name += "概念"
+            df=pywencai.get(question="{0}{1}热门成分股前{2}名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name, num))
+            if df.empty:
+                return data
             col_zh = [
                 "code", 
                 "股票简称",
