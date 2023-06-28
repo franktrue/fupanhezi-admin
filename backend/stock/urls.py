@@ -8,9 +8,10 @@ from stock.views.board_concept import StockBoardConceptViewSet
 from stock.views.board_map import StockBoardMapViewSet
 from stock.views.board_history import StockBoardHistoryViewSet
 from stock.views.lhb import StockLhbViewSet
-from stock.views.fenshi import StockFenshiAPI
-from stock.views.info import StockInfoAPI
-from stock.views.board import StockBoardAPI
+from stock.views.api.fenshi import StockFenshiAPI
+from stock.views.api.info import StockInfoAPI
+from stock.views.api.board import StockBoardAPI
+from stock.views.api.board_cons import StockBoardConsAPI
 
 
 router = SimpleRouter()
@@ -27,5 +28,6 @@ urlpatterns = [
     path("spider/fenshi", StockFenshiAPI.as_view()),
     path("spider/info", StockInfoAPI.as_view()),
     path("spider/board/hot", StockBoardAPI.as_view()),
+    path("spider/board/cons", StockBoardConsAPI.as_view()),
 ]
 urlpatterns += router.urls

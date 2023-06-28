@@ -98,3 +98,27 @@ class StockBoardService():
             cache.set(key, data, timeout=self.timeout)
         return data
        
+    # 指定日期板块成分股
+    def cons(self, name):
+        key = "stock_board_cons:{0}".format(name)
+        data = cache.get(key)
+        if data is None:
+            if "概念" not in name:
+                name += "概念"
+            df=pywencai.get(question="{0}成分股".format(name))
+            if df.empty:
+                return data
+            col_zh = [
+                "code", 
+                "股票简称",
+                "最新价", 
+                "最新涨跌幅", 
+                "概念解析", 
+                "所属指数类", 
+                "所属概念数量"
+            ]
+            df = df[col_zh]
+            df.columns = ['code', 'name', 'price', 'price_pe', 'parse', 'indexs', 'concept_num']
+            data = df.to_dict("records")
+            cache.set(key, data, timeout=self.timeout)
+        return data
