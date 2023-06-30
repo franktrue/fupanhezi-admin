@@ -30,6 +30,9 @@ def task__stock():
     # 清空表格缓存
     service3 = StockTradeDateService()
     service3.clearCache()
+    # 更新概念指数数据
+    service4 = StockBoardService()
+    service4.fetch_history(trade_date=today)
     
 # 工作日18:05收盘后运行
 @app.task
@@ -61,12 +64,6 @@ def task__board():
         board.save()
         update_board_cons.delay(row.code, row.name, 'concept')
     return "操作成功"
-
-@app.task 
-def task__board_history():
-    today = datetime.date.today()
-    service = StockBoardService()
-    service.fetch_history(trade_date=today)
 
 @shared_task
 def update_auction(date):

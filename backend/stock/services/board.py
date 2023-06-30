@@ -28,7 +28,6 @@ class StockBoardService():
     
     # 更新成分股
     def update_cons(self, symbol, name, type):
-        print(symbol, name, type)
         df = ak.stock_board_cons_ths(symbol=symbol)
         df = df[['代码', '名称']]
         df.columns = ['stock_code', 'stock_name']
