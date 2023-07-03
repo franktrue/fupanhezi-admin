@@ -8,6 +8,7 @@ from stock.views.board_concept import StockBoardConceptViewSet
 from stock.views.board_map import StockBoardMapViewSet
 from stock.views.board_history import StockBoardHistoryViewSet
 from stock.views.lhb import StockLhbViewSet
+from stock.views.board_sub import StockBoardSubViewSet
 from stock.views.api.fenshi import StockFenshiAPI
 from stock.views.api.info import StockInfoAPI
 from stock.views.api.board import StockBoardAPI
@@ -21,6 +22,7 @@ router.register("api/stock/trade_date", StockTradeDateViewSet)
 router.register("api/stock/lhb", StockLhbViewSet)
 router.register("api/stock/board/industry", StockBoardIndustryViewSet)
 router.register("api/stock/board/concept", StockBoardConceptViewSet)
+router.register("api/stock/board/sub", StockBoardSubViewSet)
 router.register("api/stock/board/map", StockBoardMapViewSet)
 router.register("api/stock/board/history", StockBoardHistoryViewSet)
 

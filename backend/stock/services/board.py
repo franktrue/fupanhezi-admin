@@ -97,16 +97,18 @@ class StockBoardService():
             cache.set(key, data, timeout=self.timeout)
         return data
        
-    # 指定日期板块成分股
+    # 指定板块成分股
     def cons(self, name):
         key = "stock_board_cons:{0}".format(name)
         data = cache.get(key)
         if data is None:
             if "概念" not in name:
                 name += "概念"
-            df=pywencai.get(question="{0}成分股".format(name))
+            df=pywencai.get(question="{0}成分股 真实流通市值".format(name))
             if df.empty:
                 return data
+            today = datetime.date.today()
+            trade_date_str = today.strftime("%Y%m%d")
             col_zh = [
                 "code", 
                 "股票简称",
@@ -114,10 +116,25 @@ class StockBoardService():
                 "最新涨跌幅", 
                 "概念解析", 
                 "所属指数类", 
-                "所属概念数量"
+                "所属概念数量",
+                "自由流通市值[{0}]".format(trade_date_str),
+                "a股市值(不含限售股)[{0}]".format(trade_date_str),
+                "实际换手率[{0}]".format(trade_date_str),
             ]
             df = df[col_zh]
-            df.columns = ['code', 'name', 'price', 'price_pe', 'parse', 'indexs', 'concept_num']
+            df.columns = ['code', 'name', 'price', 'price_pe', 'parse', 'indexs', 'conceptNum', "zsSz", "zSz", "realHsRate"]
+            df['realHsRate'] = df['realHsRate'].round(2)
             data = df.to_dict("records")
             cache.set(key, data, timeout=self.timeout)
+        return data
+
+    def dict(self, name):
+        rows = StockBoardMap.objects.filter(board_name=name).all()
+        data = []
+        for row in rows:
+            v = row.stock_code + " " + row.stock_name
+            data.append({
+                "value": v,
+                "label": v
+            })
         return data

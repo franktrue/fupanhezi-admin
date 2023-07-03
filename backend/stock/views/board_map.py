@@ -3,7 +3,7 @@ from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from dvadmin.utils.json_response import SuccessResponse
+from dvadmin.utils.json_response import SuccessResponse, DetailResponse
 from stock.services.board import StockBoardService
 
 class StockBoardMapSerializer(CustomModelSerializer):
@@ -46,3 +46,11 @@ class StockBoardMapViewSet(CustomModelViewSet):
             type = request.data.get('type')
         )
         return SuccessResponse(data=[], msg="更新成功")
+    
+    @action(methods=["GET"], detail=False, permission_classes=[IsAuthenticated])
+    def dict(self, request, *args, **kwargs ):
+        name = request.query_params.get('parent_name')
+        print(name)
+        service = StockBoardService()
+        data = service.dict(name=name)
+        return DetailResponse(data=data, msg="获取数据成功")

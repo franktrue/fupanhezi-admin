@@ -5,6 +5,7 @@
       ref="d2Crud"
       v-bind="_crudProps"
       v-on="_crudListeners"
+      @boardSub="boardSub"
       @boardCons="boardCons"
       @boardHistory="boardHistory"
     >
@@ -25,7 +26,18 @@
         <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
     </d2-crud-x>
-    <el-drawer :visible.sync="drawer" :size="700">
+    <el-drawer :visible.sync="drawerSub" :size="700">
+      <div slot="title">
+        <span>二级题材</span>
+        <el-tag size="small" style="margin-left: 10px">{{ boardRow.name }}</el-tag>
+      </div>
+      <board-sub
+        style="margin-top: 80px; margin-left: 10px"
+        :boardRow="boardRow"
+      >
+      </board-sub>
+    </el-drawer>
+    <el-drawer :visible.sync="drawerCons" :size="700">
       <div slot="title">
         <span>成分股列表</span>
         <el-tag size="small" style="margin-left: 10px">{{ boardRow.name }}</el-tag>
@@ -80,11 +92,12 @@ import { crudOptions } from './crud' // 上文的crudOptions配置
 import { d2CrudPlus } from 'd2-crud-plus'
 import { AddObj, GetList, UpdateObj, DelObj, FetchData } from './api' // 查询添加修改删除的http请求接口
 import { FetchData as FetchHistroy} from '../history/api'
+import BoardSub from '@/views/stock/board/sub'
 import BoardMap from '@/views/stock/board/map'
 import BoardHistory from '@/views/stock/board/history'
 export default {
   name: 'stockBoardConcept',
-  components: { BoardMap, BoardHistory },
+  components: { BoardSub, BoardMap, BoardHistory },
   mixins: [d2CrudPlus.crud], // 最核心部分，继承d2CrudPlus.crud
   data() {
     const today = dayjs().format('YYYY-MM-DD')
@@ -99,7 +112,8 @@ export default {
           { required: true, message: '必填项' }
         ]
       },
-      drawer: false,
+      drawerSub: false,
+      drawerCons: false,
       drawerHistory: false,
       boardRow: {}
     }
@@ -141,8 +155,13 @@ export default {
         }
       })
     },
+    boardSub (scope) {
+      this.drawerSub = true
+      this.boardRow = scope.row
+      this.boardRow.type = 'concept'
+    },
     boardCons (scope) {
-      this.drawer = true
+      this.drawerCons = true
       this.boardRow = scope.row
       this.boardRow.type = 'concept'
     },

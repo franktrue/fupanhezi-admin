@@ -11,7 +11,7 @@ export const crudOptions = vm => {
           highlightCurrentRow: false
       },
       rowHandle: {
-          width: 300,
+          width: 400,
           view: {
               thin: true,
               text: "",
@@ -34,6 +34,17 @@ export const crudOptions = vm => {
               }
           },
           custom: [
+            {
+              thin: true,
+              text: '二级题材',
+              size: 'small',
+              type: 'success',
+              icon: 'el-icon-bangzhu',
+              show () {
+                return vm.hasPermissions('Fetch')
+              },
+              emit: 'boardSub'
+            },
             {
               thin: true,
               text: '成分股',
