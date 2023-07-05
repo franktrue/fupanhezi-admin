@@ -54,3 +54,5 @@ panda==0.3.1
 pywencai==0.5.3
 sqlalchemy==2.0.4
 pymysql==0.9.3
+python-alipay-sdk==3.3.0
+wechatpayv3==1.2.39

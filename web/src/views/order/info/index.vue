@@ -1,0 +1,75 @@
+<template>
+  <d2-container :class="{ 'page-compact': crud.pageOptions.compact }">
+    <template slot="header">订单列表</template>
+    <d2-crud-x ref="d2Crud" v-bind="_crudProps" v-on="_crudListeners">
+      <!-- 自动绑定参数与事件 -->
+      <div slot="header">
+        <crud-search
+          ref="search"
+          :options="crud.searchOptions"
+          @submit="handleSearch"
+          @orderItem="orderItem"
+        />
+        <el-button-group>
+          <el-button size="small" type="primary" @click="addRow"
+            ><i class="el-icon-plus" /> 新增</el-button
+          >
+        </el-button-group>
+        <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
+      </div>
+    </d2-crud-x>
+
+    <el-drawer :visible.sync="drawer" :size="700">
+      <div slot="title">
+        <span>子订单</span>
+        <el-tag size="small" style="margin-left: 10px">{{ orderRow.order_no }}</el-tag>
+      </div>
+      <order-item
+        style="margin-top: 80px; margin-left: 10px"
+        :orderRow="orderRow"
+      >
+      </order-item>
+    </el-drawer>
+  </d2-container>
+</template>
+
+<script>
+import dayjs from 'dayjs'
+import { crudOptions } from './crud' // 上文的crudOptions配置
+import { d2CrudPlus } from 'd2-crud-plus'
+import { AddObj, GetList, UpdateObj, DelObj } from './api' // 查询添加修改删除的http请求接口
+import OrderItem from '@/views/order/item'
+export default {
+  name: 'orderInfo',
+  mixins: [d2CrudPlus.crud], // 最核心部分，继承d2CrudPlus.crud
+  components: { OrderItem },
+  data() {
+    const today = dayjs().format('YYYY-MM-DD')
+    return {
+      drawer: false,
+      orderRow: {}
+    }
+  },
+  methods: {
+    orderItem (scope) {
+      this.drawer = true
+      this.orderRow = scope.row
+    },
+    getCrudOptions () {
+      return crudOptions(this)
+    },
+    pageRequest (query) {
+      return GetList(query)
+    }, // 数据请求
+    addRequest (row) {
+      return AddObj(row)
+    }, // 添加请求
+    updateRequest (row) {
+      return UpdateObj(row)
+    }, // 修改请求
+    delRequest (row) {
+      return DelObj(row.id)
+    } // 删除请求
+  }
+}
+</script>
