@@ -108,14 +108,11 @@ class StockBoardSub(models.Model):
     parent_name = models.CharField(max_length=64, null=False, default='')
     name = models.CharField(max_length=64, null=False, default='', unique=True)
     brief = models.CharField(max_length=1000, null=True)
-    release_date = models.DateField(null=True)
-    include_number = models.IntegerField(verbose_name='成分股数量', default=0)
 
     class Meta:
         db_table = 'stock_board_sub'
         verbose_name = '二级题材'
         verbose_name_plural = verbose_name
-        ordering = ('-include_number',)
 
 class StockBoardHistory(models.Model):
     date = models.DateField(null=False)
