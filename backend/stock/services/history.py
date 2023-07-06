@@ -34,8 +34,8 @@ class StockHistoryService():
                 raise Exception("今日数据已更新")
             # 收盘后的行情数据
             stock_history = ak.stock_zh_a_spot_em()
-            stock_history = stock_history[['代码', '名称', '今开', '最新价', '最高', '最低', '成交量', '成交额','换手率', '涨跌幅', '涨跌额', '昨收']]
-            stock_history.columns = ['stock_code', 'stock_name', 'open', 'close', 'high', 'low', 'vol', 'amo', 'hs_rate', 'close_pe', 'change_amo', 'pre_close']
+            stock_history = stock_history[['代码', '名称', '今开', '最新价', '最高', '最低', '成交量', '成交额','换手率', '涨跌幅', '涨跌额', '昨收', '总市值', '流通市值', '市净率']]
+            stock_history.columns = ['stock_code', 'stock_name', 'open', 'close', 'high', 'low', 'vol', 'amo', 'hs_rate', 'close_pe', 'change_amo', 'pre_close', 'z_sz', 'lt_sz', 'pe']
             stock_history = stock_history.dropna(subset=['open', 'high', 'low', 'close'])
             stock_history['date'] = today
             stock_history['open_pe'] = ((stock_history['open']-stock_history['pre_close'])/stock_history['pre_close']*100).apply(lambda x: round(x, 2))

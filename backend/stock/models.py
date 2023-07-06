@@ -56,6 +56,9 @@ class StockHistory(models.Model):
     auction_no_match_amo = models.DecimalField(max_digits=20, decimal_places=2, null=False)
     auction_type = models.CharField(max_length=32, null=False, default='')
     auction_explain = models.CharField(max_length=64, null=False, default='')
+    z_sz = models.DecimalField(max_digits=20, decimal_places=2, verbose_name='总市值', default=0.00)
+    lt_sz = models.DecimalField(max_digits=20, decimal_places=2, verbose_name='流通市值', default=0.00)
+    pe = models.FloatField(max_length=10, verbose_name='市盈率', default=0.00)
 
     class Meta:
         db_table = 'stock_history'

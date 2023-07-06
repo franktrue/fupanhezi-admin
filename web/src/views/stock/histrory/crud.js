@@ -299,6 +299,50 @@ export const crudOptions = vm => {
             }
           },
           {
+            title: '总市值',
+            key: 'z_sz',
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '流通市值',
+            key: 'lt_sz',
+            show: false,
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '市盈率',
+            key: 'pe',
+            show: false,
+            type: 'number',
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
             title: '竞价金额',
             key: 'auction_amo',
             type: 'number',
