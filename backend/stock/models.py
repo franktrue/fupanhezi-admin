@@ -106,13 +106,14 @@ class StockBoardSub(models.Model):
     TYPE = 'sub_concept'
 
     parent_name = models.CharField(max_length=64, null=False, default='')
-    name = models.CharField(max_length=64, null=False, default='', unique=True)
+    name = models.CharField(max_length=64, null=False, default='')
     brief = models.CharField(max_length=1000, null=True)
 
     class Meta:
         db_table = 'stock_board_sub'
         verbose_name = '二级题材'
         verbose_name_plural = verbose_name
+        unique_together = ('parent_name', 'name')
 
 class StockBoardHistory(models.Model):
     date = models.DateField(null=False)
