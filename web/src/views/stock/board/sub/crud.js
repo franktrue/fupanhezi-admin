@@ -95,7 +95,11 @@ export const crudOptions = (vm) => {
           url(dict,{form,component}){
             return '/api/stock/board/map/dict/?parent_name='+form.parent_name
           },
-          cache: false
+          cache: false,
+          onReady:(data,dict,options)=>{
+            vm.optionData = data
+            vm.formOption = options
+          }
         },
         form: {
           component: {
@@ -104,8 +108,27 @@ export const crudOptions = (vm) => {
               elProps:{
                 filterable: true,
                 multiple: true,
-                clearable: true
-              }
+                clearable: true,
+                filterMethod: function(val) {
+                  if(val) {
+                    const arr = []
+                    vm.optionData.forEach((item) => {
+                      if(val.includes(item.value.substring(0,6))) {
+                        arr.push(item.value)
+                      }
+                    })
+                    if (arr.length>0) {
+                      vm.formOption.form.cons = arr
+                    } else {
+                      this.$options.parent.dictOptions = vm.optionData.filter((item) => {
+                        return item.value.includes(val)
+                      })
+                    }
+                  } else {
+                    this.$options.parent.dictOptions = vm.optionData
+                  }
+                }
+              },
             }
           }
         },

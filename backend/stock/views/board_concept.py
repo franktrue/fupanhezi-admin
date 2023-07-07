@@ -45,6 +45,7 @@ class StockBoardConceptViewSet(CustomModelViewSet):
         for row in df.itertuples():
             board = StockBoardConcept.objects.filter(code=row.code).first()
             if board is None:
+                print(row)
                 board = StockBoardConcept(
                     name = row.name,
                     code = row.code,
@@ -52,8 +53,10 @@ class StockBoardConceptViewSet(CustomModelViewSet):
                     include_number = row.include_number,
                     show_url = row.show_url
                 )
-            elif board.include_number != row.include_number:
+            elif board.include_number != row.include_number or board.name != row.name:
                 board.include_number = row.include_number
+                board.release_date = row.release_date
+                board.name = row.name
             else:
                 continue
             board.save()

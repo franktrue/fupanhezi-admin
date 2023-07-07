@@ -1,5 +1,6 @@
 <template>
-  <d2-container>
+  <d2-container :class="{ 'page-compact': crud.pageOptions.compact }">
+    <template slot="header">成分股</template>
     <d2-crud-x ref="d2Crud" v-bind="_crudProps" v-on="_crudListeners">
       <div slot="header">
         <crud-search
@@ -26,29 +27,11 @@
 
 <script>
 import * as api from './api'
-import { request } from '@/api/service'
 import { crudOptions } from './crud'
 import { d2CrudPlus } from 'd2-crud-plus'
-
 export default {
-  name: 'boardSub',
+  name: 'boardCons',
   mixins: [d2CrudPlus.crud],
-  props: {
-    // 容器样式
-    boardRow: {
-      type: Object,
-      required: true
-    },
-    option: {
-      type: Array,
-      required: false
-    }
-  },
-  watch: {
-    boardRow () {
-      this.doRefresh({ from: 'load' })
-    }
-  },
   data () {
     return {
       loading: false
@@ -59,11 +42,9 @@ export default {
       return crudOptions(this)
     },
     pageRequest (query) {
-      query.parent_name = this.boardRow.name
       return api.GetList(query)
     },
     addRequest (row) {
-      row.parent_name = this.boardRow.name
       return api.createObj(row)
     },
     updateRequest (row) {
@@ -71,32 +52,7 @@ export default {
     },
     delRequest (row) {
       return api.DelObj(row.id)
-    },
-    doAfterRowChange (row) {
-      this.doRefresh({ from: 'afterRowChange' })
-    },
-    doDialogOpened(context) {
-      context.form.parent_name = this.boardRow.name
-      if (context.form.name) {
-        request({
-          url: '/api/stock/board/map/',
-          method: 'get',
-          params: {code: context.form.name, page: 1, limit: 100}
-        }).then(res => {
-          context.form.cons = res.data.data.map(item => {
-            return item.stock_code + " " +item.stock_name
-          })
-        })
-      }
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.yxtInput {
-  .el-form-item__label {
-    color: #49a1ff;
-  }
-}
-</style>

@@ -140,6 +140,7 @@ class StockBoardMap(models.Model):
     stock_code = models.CharField(max_length=10, null=False)
     stock_name = models.CharField(max_length=32, null=False, default='')
     type = models.CharField(max_length=20, null=False, default='')
+    brief = models.CharField(max_length=1000, null=True)
 
     class Meta:
         db_table = 'stock_board_map'

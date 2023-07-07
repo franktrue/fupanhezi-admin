@@ -34,8 +34,8 @@ class StockBoardMapViewSet(CustomModelViewSet):
     serializer_class = StockBoardMapSerializer
     create_serializer_class = StockBoardMapCreateUpdateSerializer
     update_serializer_class = StockBoardMapCreateUpdateSerializer
-    filter_fields = ['stock_code', 'stock_name', 'code']
-    search_fields = ['stock_code', 'stock_name']
+    filter_fields = ['stock_code', 'stock_name', 'code', 'board_name', 'type']
+    search_fields = ['stock_code', 'stock_name', 'code', 'board_name', 'type']
 
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
     def fetch(self, request, *args, **kwargs):
