@@ -49,14 +49,21 @@ export default {
   methods: {
     fetchData() {
       const that = this
-      that.loading = true
-      api.FetchObj().then(res => {
-        that.$message.success('更新成功')
-        that.loading = false
-        that.handleSearch()
-      }).catch(e => {
-        that.loading = false
+      that.$confirm('该操作较耗时，请勿轻易操作！', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        that.loading = true
+        api.FetchObj().then(res => {
+          that.$message.success('更新成功')
+          that.loading = false
+          that.handleSearch()
+        }).catch(e => {
+          that.loading = false
+        })
       })
+
     },
     getCrudOptions () {
       return crudOptions(this)
