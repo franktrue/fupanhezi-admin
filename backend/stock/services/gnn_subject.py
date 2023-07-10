@@ -21,7 +21,7 @@ class StockGnnSubjectService():
             for item in json_data['data']:
                 result = self.fetchBasic(item['scode'])
                 parent_id = None
-                if item['pid']!='-1':
+                if item['pid'] != -1:
                     parent_id = item['pid']
                 model = StockGnnSubject(
                     id = item['id'],
