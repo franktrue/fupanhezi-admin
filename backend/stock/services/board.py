@@ -41,7 +41,7 @@ class StockBoardService():
     # 更新板块行情
     def fetch_history(self, trade_date):
         trade_date_str = trade_date.strftime("%Y%m%d")
-        df=pywencai.get(question="同花顺概念指数{0}开盘价 {0}最高价 {0}最低价 {0}收盘价 {0}涨跌幅".format(trade_date_str), query_type="zhishu", loop=True)
+        df=pywencai.get(question="同花顺概念指数{0}开盘价 {0}最高价 {0}最低价 {0}收盘价 {0}涨跌幅 {0}成交额成交量换手率".format(trade_date_str), query_type="zhishu", loop=True)
         col_zh = [
             "code", 
             "指数简称", 
