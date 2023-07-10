@@ -174,3 +174,40 @@ class StockLhb(models.Model):
         verbose_name_plural = verbose_name
         unique_together = ('date', 'stock_code')
         ordering = ('-date',)
+
+class StockGnnSubject(models.Model):
+    id = models.CharField(max_length=10, primary_key=True, help_text="Id", verbose_name="Id")
+    parent = models.ForeignKey(
+        to="StockGnnSubject",
+        on_delete=models.PROTECT,
+        verbose_name="上级题材",
+        null=True,
+        blank=True,
+        db_constraint=False,
+        help_text="上级题材",
+    )
+    code = models.CharField(max_length=10, null=False)
+    name = models.CharField(max_length=64, null=False)
+    change_pe = models.FloatField(null=True)
+    level = models.SmallIntegerField(null=True)
+    desc = models.TextField(null=True)
+
+    class Meta:
+        db_table = 'stock_gnn_subject'
+        verbose_name = '股牛牛题材'
+        verbose_name_plural = verbose_name
+
+class StockGnnMap(models.Model):
+    code = models.CharField(max_length=10, null=False)
+    name = models.CharField(max_length=64, null=False, default='')
+    stock_code = models.CharField(max_length=10, null=False)
+    stock_name = models.CharField(max_length=32, null=False, default='')
+    type = models.CharField(max_length=20, null=False, default='')
+    brief = models.CharField(max_length=1000, null=True)
+    blocks = models.CharField(max_length=1000, null=True)
+
+    class Meta:
+        db_table = 'stock_gnn_map'
+        verbose_name = '题材成分股'
+        verbose_name_plural = verbose_name
+        unique_together = ('code', 'stock_code')
