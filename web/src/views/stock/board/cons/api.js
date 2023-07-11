@@ -51,3 +51,11 @@ export function FetchData(obj) {
     data: obj
   })
 }
+
+export function BatchDel (keys) {
+  return request({
+    url: urlPrefix + 'multiple_delete/',
+    method: 'delete',
+    data: { keys }
+  })
+}

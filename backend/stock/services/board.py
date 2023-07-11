@@ -143,7 +143,7 @@ class StockBoardService():
     def batch(self, name, ids):
         result = StockGnnMap.objects.filter(id__in=ids)
         for item in result:
-            model = StockBoardMap.objects.filter(board_name=name, stock_code = item.stock_name).first()
+            model = StockBoardMap.objects.filter(board_name=name, stock_code = item.stock_code).first()
             if model is None:
                 model = StockBoardMap(
                     code = name,

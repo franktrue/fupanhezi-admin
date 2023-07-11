@@ -12,6 +12,9 @@
           <el-button size="small" type="primary" @click="addRow"
             ><i class="el-icon-plus" /> 新增</el-button
           >
+          <el-button size="small" type="danger" @click="batchDelete">
+            <i class="el-icon-delete"></i> 批量删除
+          </el-button>
         </el-button-group>
         <crud-toolbar
           :search.sync="crud.searchOptions.show"
@@ -52,7 +55,10 @@ export default {
     },
     delRequest (row) {
       return api.DelObj(row.id)
-    }
+    },
+    batchDelRequest (ids) {
+      return api.BatchDel(ids)
+    },
   }
 }
 </script>

@@ -125,6 +125,36 @@ export const crudOptions = (vm) => {
         }
       },
       {
+        title: '题材代码',
+        key: 'code',
+        search: {
+          disabled: false,
+          component: {
+            props: {
+              clearable: true
+            }
+          }
+        },
+        form: {
+          rules: [
+            { required: true, message: '请输入题材代码' }
+          ],
+          component: {
+            show (context) {
+              const { form } = context
+              return !form.is_catalog && !form.is_link
+            },
+            props: {
+              clearable: true
+            },
+            placeholder: '请输入题材代码'
+          }
+        },
+        valueResolve(row, key) {
+          row.id = row.code
+        }
+      },
+      {
         title: '题材名称',
         key: 'name',
         sortable: true,
@@ -153,36 +183,6 @@ export const crudOptions = (vm) => {
             class: { yxtInput: true }
           }
 
-        }
-      },
-      {
-        title: '题材代码',
-        key: 'code',
-        search: {
-          disabled: false,
-          component: {
-            props: {
-              clearable: true
-            }
-          }
-        },
-        form: {
-          rules: [
-            { required: true, message: '请输入题材代码' }
-          ],
-          component: {
-            show (context) {
-              const { form } = context
-              return !form.is_catalog && !form.is_link
-            },
-            props: {
-              clearable: true
-            },
-            placeholder: '请输入题材代码'
-          }
-        },
-        valueResolve(row, key) {
-          row.id = row.code
         }
       },
       {

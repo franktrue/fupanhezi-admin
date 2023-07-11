@@ -9,6 +9,10 @@ export const crudOptions = (vm) => {
       height: '100%', // 表格高度100%, 使用toolbar必须设置
       border: false
     },
+    selectionRow: {
+      align: 'center',
+      width: 46
+    },
     rowHandle: {
       width: 140,
       view: {

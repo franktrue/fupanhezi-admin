@@ -40,14 +40,14 @@ class StockBoardSubViewSet(CustomModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         parent = serializer.data
-        # child_data = request.data.get("cons")
-        # for child in child_data:
-        #     child["board_name"] = parent["name"]
-        #     child["type"] = StockBoardSub.TYPE
-        #     child["code"] = parent["name"]
-        #     child_serializer = StockBoardMapCreateUpdateSerializer(data = child)
-        #     child_serializer.is_valid(raise_exception=True)
-        #     child_serializer.save()
+        child_data = request.data.get("cons")
+        for child in child_data:
+            child["board_name"] = parent["name"]
+            child["type"] = StockBoardSub.TYPE
+            child["code"] = parent["name"]
+            child_serializer = StockBoardMapCreateUpdateSerializer(data = child)
+            child_serializer.is_valid(raise_exception=True)
+            child_serializer.save()
         return DetailResponse(data=parent, msg="新增成功")
     
 
@@ -60,19 +60,26 @@ class StockBoardSubViewSet(CustomModelViewSet):
 
         # 更新关联数据
         parent = serializer.data
-        # StockBoardMap.objects.filter(board_name=parent["name"]).delete()
-        # child_data = request.data.get("cons")
-        # for child in child_data:
-        #     child["board_name"] = parent["name"]
-        #     child["type"] = StockBoardSub.TYPE
-        #     child["code"] = parent["name"]
-        #     child_serializer = StockBoardMapCreateUpdateSerializer(data = child)
-        #     child_serializer.is_valid(raise_exception=True)
-        #     child_serializer.save()
-        # if getattr(instance, '_prefetched_objects_cache', None):
-        #     # If 'prefetch_related' has been applied to a queryset, we need to
-        #     # forcibly invalidate the prefetch cache on the instance.
-        #     instance._prefetched_objects_cache = {}
+        child_data = request.data.get("cons")
+        hadChild = []
+        for child in child_data:
+            model = StockBoardMap.objects.filter(board_name=parent["name"], stock_code=child["stock_code"], type=StockBoardSub.TYPE).first()
+            if model is None:
+                model = StockBoardMap(
+                    board_name = parent["name"],
+                    type = StockBoardSub.TYPE,
+                    code = parent["name"],
+                    stock_code = child['stock_code'],
+                    stock_name = child['stock_name']
+                )
+                model.save()
+            hadChild.append(model.stock_code)
+
+        StockBoardMap.objects.filter(board_name=parent["name"]).exclude(stock_code__in=hadChild).delete()
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
         return DetailResponse(data=parent, msg="更新成功")
     
     def destroy(self, request, *args, **kwargs):
