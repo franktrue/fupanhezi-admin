@@ -47,22 +47,17 @@ export const crudOptions = (vm) => {
           return !vm.hasPermissions('Delete')
         }
       },
-      width: 230,
+      width: 240,
       fixed: 'right',
       custom: [{
-        show (index, row) {
-          if (row.web_path && !row.is_link) {
-            return true
-          }
-          return false
-        },
         disabled () {
-          return !vm.hasPermissions('Update')
+          return !vm.hasPermissions('Fetch')
         },
-        text: ' 菜单按钮',
-        type: 'warning',
+        text: ' 成分股',
+        type: 'success',
         size: 'small',
-        emit: 'createPermission'
+        icon: 'el-icon-folder',
+        emit: 'subjectCons'
       }]
 
     },
@@ -105,8 +100,9 @@ export const crudOptions = (vm) => {
           label: 'name', // 数据字典中label字段的属性名
           children: 'children', // 数据字典中children字段的属性名
           getData: (url, dict, { form, component }) => { // 配置此参数会覆盖全局的getRemoteDictFunc
-            return request({ url: url, params: { limit: 999 } }).then(ret => {
+            return request({ url: url, params: {limit:9999}}).then(ret => {
               const responseData = ret.data.data
+              console.log(responseData)
               const result = XEUtils.toArrayTree(responseData, { parentKey: 'parent', strict: true })
               return [{ id: null, name: '根节点', children: result }]
             })
@@ -184,6 +180,9 @@ export const crudOptions = (vm) => {
             },
             placeholder: '请输入题材代码'
           }
+        },
+        valueResolve(row, key) {
+          row.id = row.code
         }
       },
       {

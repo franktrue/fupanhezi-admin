@@ -10,10 +10,6 @@ export function GetList (query) {
     url: urlPrefix,
     method: 'get',
     params: query
-  }).then(res => {
-    // 将列表数据转换为树形数据
-    res.data.data = XEUtils.toArrayTree(res.data.data, { parentKey: 'parent' })
-    return res
   })
 }
 /**

@@ -5,6 +5,7 @@
       ref="d2Crud"
       v-bind="_crudProps"
       v-on="_crudListeners"
+      @subjectCons="subjectCons"
     >
       <div slot="header">
         <crud-search
@@ -31,6 +32,17 @@
         />
       </div>
     </d2-crud-x>
+    <el-drawer :visible.sync="drawer" :size="800">
+      <div slot="title">
+        <span>成分股列表</span>
+        <el-tag size="small" style="margin-left: 10px">{{ subjectRow.name }}</el-tag>
+      </div>
+      <subject-map
+        style="margin-top: 80px; margin-left: 10px"
+        :subjectRow="subjectRow"
+      >
+      </subject-map>
+    </el-drawer>
   </d2-container>
 </template>
 
@@ -38,12 +50,16 @@
 import * as api from './api'
 import { crudOptions } from './crud'
 import { d2CrudPlus } from 'd2-crud-plus'
+import SubjectMap from '@/views/stock/gnn/map'
 export default {
   name: 'gnn',
+  components: { SubjectMap },
   mixins: [d2CrudPlus.crud],
   data () {
     return {
-      loading: false
+      loading: false,
+      drawer: false,
+      subjectRow: {}
     }
   },
   methods: {
@@ -64,6 +80,10 @@ export default {
         })
       })
 
+    },
+    subjectCons (scope) {
+      this.drawer = true
+      this.subjectRow = scope.row
     },
     getCrudOptions () {
       return crudOptions(this)

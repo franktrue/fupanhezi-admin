@@ -1,9 +1,9 @@
-from stock.models import StockGnnSubject
+from stock.models import StockGnnSubject, StockGnnMap
 from django.db import connections
 import requests
 import json
 
-class StockGnnSubjectService():
+class StockGnnService():
 
     def fetch(self):
         url = 'http://weapp.upchina.com/weeduapi/hq/getBlockTsLevel'
@@ -60,3 +60,28 @@ class StockGnnSubjectService():
             result['level'] = basic['iBlkLevel']
         return result
             
+    def syncCons(self, code, name):
+        url = 'http://gateway.uptougu.com/json/hq_fupan_guniuniu/getBlockStockData'
+        data = {
+            "stReq": {
+                "vecBlk": [
+                    {
+                        "shtSetcode": 1,
+                        "sCode": code
+                    }
+                ]
+            }
+        }
+        response = requests.post(url, data=json.dumps(data))
+        if response.status_code == 200:
+            json_data = response.json()
+            StockGnnMap.objects.filter(code=code).delete()
+            for item in json_data['stRsp']['vecDateBlkStk'][0]['vecBlkStk'][0]['vecStk']:
+                model = StockGnnMap(
+                    code = code,
+                    name = name,
+                    stock_code = item['sCode'],
+                    stock_name = item['sName'],
+                    brief = item['mRxReason'][code]
+                )
+                model.save()

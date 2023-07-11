@@ -1,4 +1,4 @@
-from stock.models import StockBoardConcept, StockBoardIndustry, StockBoardMap, StockBoardHistory
+from stock.models import StockBoardConcept, StockBoardIndustry, StockBoardMap, StockBoardHistory, StockGnnMap,StockBoardSub
 from stock.utils.db import get_engine
 from django.db import connections
 from django.core.cache import cache
@@ -73,7 +73,7 @@ class StockBoardService():
         if data is None:
             if "概念" not in name:
                 name += "概念"
-            df=pywencai.get(question="{0}{1}成分股个股热度前{2}名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name, num))
+            df=pywencai.get(question="{0}{1}成分股个股热度前{2}名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name, num), loop=True)
             if df.empty:
                 return data
             col_zh = [
@@ -138,3 +138,21 @@ class StockBoardService():
                 "label": v
             })
         return data
+
+    # 批量转化
+    def batch(self, name, ids):
+        result = StockGnnMap.objects.filter(id__in=ids)
+        for item in result:
+            model = StockBoardMap.objects.filter(board_name=name, stock_code = item.stock_name).first()
+            if model is None:
+                model = StockBoardMap(
+                    code = name,
+                    board_name = name,
+                    stock_code = item.stock_code,
+                    stock_name = item.stock_name,
+                    brief = item.brief,
+                    type = StockBoardSub.TYPE
+                )
+            else:
+                model.brief = item.brief
+            model.save()

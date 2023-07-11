@@ -53,3 +53,9 @@ class StockBoardMapViewSet(CustomModelViewSet):
         service = StockBoardService()
         data = service.dict(name=name)
         return DetailResponse(data=data, msg="获取数据成功")
+
+    @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
+    def batch(self, request, *args, **kwargs):
+        service = StockBoardService()
+        service.batch(name = request.data.get('name'), ids=request.data.get('ids'))
+        return DetailResponse(data=[], msg="批量操作成功")

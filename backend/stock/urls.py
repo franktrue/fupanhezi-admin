@@ -14,6 +14,7 @@ from stock.views.api.info import StockInfoAPI
 from stock.views.api.board import StockBoardAPI
 from stock.views.api.board_cons import StockBoardConsAPI
 from stock.views.gnn_subject import StockGnnSubjectViewSet
+from stock.views.gnn_map import StockGnnMapViewSet
 
 
 router = SimpleRouter()
@@ -28,6 +29,7 @@ router.register("api/stock/board/map", StockBoardMapViewSet)
 router.register("api/stock/board/history", StockBoardHistoryViewSet)
 
 router.register("api/stock/gnn_subject", StockGnnSubjectViewSet)
+router.register("api/stock/gnn_map", StockGnnMapViewSet)
 
 urlpatterns = [
     path("spider/fenshi", StockFenshiAPI.as_view()),

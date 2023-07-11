@@ -1,6 +1,6 @@
 import { request } from '@/api/service'
 import XEUtils from 'xe-utils'
-export const urlPrefix = '/api/stock/board/map/'
+export const urlPrefix = '/api/stock/gnn_map/'
 
 /**
  * 列表查询
@@ -10,6 +10,10 @@ export function GetList (query) {
     url: urlPrefix,
     method: 'get',
     params: query
+  }).then(res => {
+    // 将列表数据转换为树形数据
+    res.data.data = XEUtils.toArrayTree(res.data.data, { parentKey: 'parent' })
+    return res
   })
 }
 /**
@@ -47,14 +51,6 @@ export function DelObj (id) {
 export function FetchData(obj) {
   return request({
     url: urlPrefix + 'fetch/',
-    method: 'post',
-    data: obj
-  })
-}
-
-export function BatchData(obj) {
-  return request({
-    url: urlPrefix + 'batch/',
     method: 'post',
     data: obj
   })

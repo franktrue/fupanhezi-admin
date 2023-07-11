@@ -86,62 +86,62 @@ export const crudOptions = (vm) => {
           }
         }
       },
-      {
-        title: '成分股',
-        key: 'cons',
-        show: false,
-        type: 'select',
-        dict: {
-          url(dict,{form,component}){
-            return '/api/stock/board/map/dict/?parent_name='+form.parent_name
-          },
-          cache: false,
-          onReady:(data,dict,options)=>{
-            vm.optionData = data
-            vm.formOption = options
-          }
-        },
-        form: {
-          component: {
-            props: {
-              separator: ',' ,//多选时，value的分隔符
-              elProps:{
-                filterable: true,
-                multiple: true,
-                clearable: true,
-                filterMethod: function(val) {
-                  if(val) {
-                    const arr = []
-                    vm.optionData.forEach((item) => {
-                      if(val.includes(item.value.substring(0,6))) {
-                        arr.push(item.value)
-                      }
-                    })
-                    if (arr.length>0) {
-                      vm.formOption.form.cons = arr
-                    } else {
-                      this.$options.parent.dictOptions = vm.optionData.filter((item) => {
-                        return item.value.includes(val)
-                      })
-                    }
-                  } else {
-                    this.$options.parent.dictOptions = vm.optionData
-                  }
-                }
-              },
-            }
-          }
-        },
-        valueResolve (row,key) {
-          if (row.cons !=null && row.cons.length>0) {
-            const result = row.cons.map(item => {
-              const [stock_code, stock_name] = item.split(' ');
-              return { stock_code, stock_name};
-            });
-            row.cons = result
-          }
-        },
-      },
+      // {
+      //   title: '成分股',
+      //   key: 'cons',
+      //   show: false,
+      //   type: 'select',
+      //   dict: {
+      //     url(dict,{form,component}){
+      //       return '/api/stock/board/map/dict/?parent_name='+form.parent_name
+      //     },
+      //     cache: false,
+      //     onReady:(data,dict,options)=>{
+      //       vm.optionData = data
+      //       vm.formOption = options
+      //     }
+      //   },
+      //   form: {
+      //     component: {
+      //       props: {
+      //         separator: ',' ,//多选时，value的分隔符
+      //         elProps:{
+      //           filterable: true,
+      //           multiple: true,
+      //           clearable: true,
+      //           filterMethod: function(val) {
+      //             if(val) {
+      //               const arr = []
+      //               vm.optionData.forEach((item) => {
+      //                 if(val.includes(item.value.substring(0,6))) {
+      //                   arr.push(item.value)
+      //                 }
+      //               })
+      //               if (arr.length>0) {
+      //                 vm.formOption.form.cons = arr
+      //               } else {
+      //                 this.$options.parent.dictOptions = vm.optionData.filter((item) => {
+      //                   return item.value.includes(val)
+      //                 })
+      //               }
+      //             } else {
+      //               this.$options.parent.dictOptions = vm.optionData
+      //             }
+      //           }
+      //         },
+      //       }
+      //     }
+      //   },
+      //   valueResolve (row,key) {
+      //     if (row.cons !=null && row.cons.length>0) {
+      //       const result = row.cons.map(item => {
+      //         const [stock_code, stock_name] = item.split(' ');
+      //         return { stock_code, stock_name};
+      //       });
+      //       row.cons = result
+      //     }
+      //   },
+      // },
     ]
   }
 }

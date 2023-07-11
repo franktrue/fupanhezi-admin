@@ -5,7 +5,7 @@ from dvadmin.utils.viewset import CustomModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from dvadmin.utils.json_response import SuccessResponse
-from stock.services.gnn_subject import StockGnnSubjectService
+from stock.services.gnn import StockGnnService
 
 class StockGnnSubjectSerializer(CustomModelSerializer):
     """
@@ -22,7 +22,6 @@ class StockGnnSubjectSerializer(CustomModelSerializer):
     class Meta:
         model = StockGnnSubject
         fields = '__all__'
-        read_only_fields = ["id"]
 
 class StockGnnSubjectCreateUpdateSerializer(CustomModelSerializer):
     """
@@ -33,7 +32,6 @@ class StockGnnSubjectCreateUpdateSerializer(CustomModelSerializer):
     class Meta:
         model = StockGnnSubject
         fields = '__all__'
-        read_only_fields = ["id"]
 
 class StockGnnSubjectInitSerializer(CustomModelSerializer):
     """
@@ -53,21 +51,18 @@ class StockGnnSubjectInitSerializer(CustomModelSerializer):
     def save(self, **kwargs):
         instance = super().save(**kwargs)
         children = self.initial_data.get('children')
-        menu_button = self.initial_data.get('menu_button')
         # 菜单表
         if children:
-            for menu_data in children:
-                menu_data['parent'] = instance.id
+            for subject_data in children:
+                subject_data['parent'] = instance.id
                 filter_data = {
-                    "name": menu_data['name'],
-                    "web_path": menu_data['web_path'],
-                    "component": menu_data['component'],
-                    "component_name": menu_data['component_name'],
+                    "id": subject_data['code'],
+                    "code": subject_data['code'],
                 }
-                instance_obj = Menu.objects.filter(**filter_data).first()
+                instance_obj = StockGnnSubject.objects.filter(**filter_data).first()
                 if instance_obj and not self.initial_data.get('reset'):
                     continue
-                serializer = MenuInitSerializer(instance_obj, data=menu_data, request=self.request)
+                serializer = StockGnnSubjectInitSerializer(instance_obj, data=subject_data, request=self.request)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
         return instance
@@ -110,6 +105,6 @@ class StockGnnSubjectViewSet(CustomModelViewSet):
 
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
     def fetch(self, request):
-        service = StockGnnSubjectService()
+        service = StockGnnService()
         service.fetch()
         return SuccessResponse(data=[], msg="同步成功")
