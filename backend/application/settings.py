@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     "drf_yasg",
     "captcha",
     'channels',
-    'stock'
+    'stock',
+    'order'
 ]
 
 MIDDLEWARE = [
