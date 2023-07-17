@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     "captcha",
     'channels',
     'stock',
-    'order'
+    'order',
+    'user_center'
 ]
 
 MIDDLEWARE = [
