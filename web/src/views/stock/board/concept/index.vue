@@ -22,6 +22,7 @@
           >
           <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchLatest" :loading="loading"><i class="el-icon-refresh" /> 同步数据</el-button>
           <el-button size="small" type="warning" v-permission="'Fetch'" @click="dialogFormVisible = true"><i class="el-icon-data-line" /> 同步指数数据</el-button>
+          <el-button size="small" type="danger" v-permission="'Fetch'" @click="delCache"><i class="el-icon-trash" /> 清除缓存</el-button>
         </el-button-group>
         <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
@@ -92,6 +93,7 @@ import { crudOptions } from './crud' // 上文的crudOptions配置
 import { d2CrudPlus } from 'd2-crud-plus'
 import { AddObj, GetList, UpdateObj, DelObj, FetchData } from './api' // 查询添加修改删除的http请求接口
 import { FetchData as FetchHistroy} from '../history/api'
+import { DeleteCache } from '@/views/stock/tradeDate/api'
 import BoardSub from '@/views/stock/board/sub'
 import BoardMap from '@/views/stock/board/map'
 import BoardHistory from '@/views/stock/board/history'
@@ -129,6 +131,23 @@ export default {
       }).then(function () {
         that.loading = true
         return FetchData().then(res => {
+          that.loading = false
+          that.$message.success('操作成功')
+          that.handleSearch()
+        }).catch(e => {
+          that.loading = false
+        })
+      })
+    },
+    delCache() {
+      const that = this
+      this.$confirm('确认清除移动端缓存吗？', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        that.loading = true
+        return DeleteCache({prefix: "cache:fupanhezi:stockBoardMap:"}).then(res => {
           that.loading = false
           that.$message.success('操作成功')
           that.handleSearch()

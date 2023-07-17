@@ -27,3 +27,6 @@ class StockTradeDateService():
 
         # 题材相关API缓存
         delete_cache_by_prefix(prefix="cache:fupanhezi:stockBoardMap:Board:")
+
+    def clear_cache_by(self, prefix):
+        delete_cache_by_prefix(prefix=prefix)

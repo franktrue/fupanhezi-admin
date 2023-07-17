@@ -40,3 +40,13 @@ export function FetchData(obj) {
     method: 'post'
   })
 }
+
+
+// 清除缓存
+export function DeleteCache(obj) {
+  return request({
+    url: urlPrefix + "del_cache/",
+    method: 'post',
+    data: obj
+  })
+}

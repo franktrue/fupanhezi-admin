@@ -41,3 +41,10 @@ class StockTradeDateViewSet(CustomModelViewSet):
         service = StockTradeDateService()
         service.fetch()
         return SuccessResponse(data=[], msg="获取成功")
+
+    #清除指定前缀缓存 
+    @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
+    def del_cache(self, request, *args, **kwargs):
+        service = StockTradeDateService()
+        service.clear_cache_by(prefix=request.data.get("prefix"))
+        return SuccessResponse(data=[], msg="操作成功")
