@@ -48,7 +48,7 @@
               v-for="item in conceptOptions"
               :key="item.name"
               :label="item.parent_name + '/' + item.name"
-              :value="item.name">
+              :value="item.parent_name + '/' + item.name">
             </el-option>
           </el-select>
         </el-form-item>

@@ -141,12 +141,13 @@ class StockBoardService():
 
     # 批量转化
     def batch(self, name, ids):
+        code, name = name.split("/")
         result = StockGnnMap.objects.filter(id__in=ids)
         for item in result:
             model = StockBoardMap.objects.filter(board_name=name, stock_code = item.stock_code).first()
             if model is None:
                 model = StockBoardMap(
-                    code = name,
+                    code = code,
                     board_name = name,
                     stock_code = item.stock_code,
                     stock_name = item.stock_name,
@@ -154,5 +155,6 @@ class StockBoardService():
                     type = StockBoardSub.TYPE
                 )
             else:
+                model.code = name
                 model.brief = item.brief
             model.save()

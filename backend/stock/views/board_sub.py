@@ -44,7 +44,8 @@ class StockBoardSubViewSet(CustomModelViewSet):
         for child in child_data:
             child["board_name"] = parent["name"]
             child["type"] = StockBoardSub.TYPE
-            child["code"] = parent["name"]
+            # 使用上级概念作为code码，方便联查
+            child["code"] = parent["parent_name"]  
             child_serializer = StockBoardMapCreateUpdateSerializer(data = child)
             child_serializer.is_valid(raise_exception=True)
             child_serializer.save()
