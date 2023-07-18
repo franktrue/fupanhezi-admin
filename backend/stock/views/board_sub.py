@@ -69,11 +69,13 @@ class StockBoardSubViewSet(CustomModelViewSet):
                 model = StockBoardMap(
                     board_name = parent["name"],
                     type = StockBoardSub.TYPE,
-                    code = parent["name"],
+                    code = parent["parent_name"],
                     stock_code = child['stock_code'],
                     stock_name = child['stock_name']
                 )
-                model.save()
+            else:
+                model.code = parent["parent_name"]
+            model.save()
             hadChild.append(model.stock_code)
 
         StockBoardMap.objects.filter(board_name=parent["name"]).exclude(stock_code__in=hadChild).delete()
