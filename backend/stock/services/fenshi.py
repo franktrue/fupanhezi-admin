@@ -84,6 +84,8 @@ class StockFenshiService():
             return
         df["日期"] = pd.to_datetime(df["时间"]).dt.date
         df["时间"] = pd.to_datetime(df["时间"]).dt.strftime('%H%M')
+        # 1手=100股
+        df["成交量"] = df["成交量"]*100
         df=df[["日期", "时间", "开盘", "最高", "最低", "收盘", "成交量", "成交额"]]
         csv_bytes = io.BytesIO()
         df.to_csv(csv_bytes, index=False, encoding="gb2312")
