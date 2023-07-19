@@ -15,6 +15,7 @@ from stock.views.api.board import StockBoardAPI
 from stock.views.api.board_cons import StockBoardConsAPI
 from stock.views.gnn_subject import StockGnnSubjectViewSet
 from stock.views.gnn_map import StockGnnMapViewSet
+from stock.views.api.config import StockConfigAPI
 
 
 router = SimpleRouter()
@@ -36,5 +37,6 @@ urlpatterns = [
     path("spider/info", StockInfoAPI.as_view()),
     path("spider/board/hot", StockBoardAPI.as_view()),
     path("spider/board/cons", StockBoardConsAPI.as_view()),
+    path("spider/config", StockConfigAPI.as_view())
 ]
 urlpatterns += router.urls
