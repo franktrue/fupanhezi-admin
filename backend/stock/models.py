@@ -95,6 +95,7 @@ class StockBoardConcept(models.Model):
     release_date = models.DateField(null=True)
     show_url = models.CharField(max_length=255, null=False, default='')
     include_number = models.IntegerField(verbose_name='成分股数量', default=0)
+    sort = models.IntegerField(null=False, default=0)
 
     class Meta:
         db_table = 'stock_board_concept'

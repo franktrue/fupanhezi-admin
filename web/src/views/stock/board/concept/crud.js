@@ -163,6 +163,20 @@ export const crudOptions = vm => {
             }
           }
         },
+        {
+          title: '排序',
+          key: 'sort',
+          type: 'number',
+          sortable: 'custom',
+          form: {
+            value: 0,
+            component: {
+              props: {
+                clearable: true
+              }
+            }
+          }
+        },
       ]
   };
 };
