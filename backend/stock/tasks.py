@@ -13,6 +13,7 @@ from stock.services.history import StockHistoryService
 from stock.services.trade_date import StockTradeDateService
 from stock.services.lhb import StockLhbService
 from stock.services.board import StockBoardService
+from stock.services.fenshi import StockFenshiService
 from celery import shared_task
 import akshare as ak
 import datetime
@@ -65,6 +66,20 @@ def task__board():
         update_board_cons.delay(row.code, row.name, 'concept')
     return "操作成功"
 
+# 每日收盘后更新
+@app.task
+def task__update_fenshi():
+    stock_history = ak.stock_zh_a_spot_em()
+    stock_history = stock_history[['代码', '名称', '今开', '最新价', '最高', '最低']]
+    stock_history.columns = ['stock_code', 'stock_name', 'open', 'close', 'high', 'low']
+    stock_history = stock_history.dropna(subset=['open', 'high', 'low', 'close'])
+    trade_date = datetime.date.today().strftime("%Y-%m-%d")
+    for row in stock_history.itertuples():
+        sync_stock_fenshi.delay(row.stock_code, trade_date)
+        print(row.stock_code)
+    return "SUCCESS"
+
+
 @shared_task
 def update_auction(date):
     date = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S').date()
@@ -80,4 +95,9 @@ def update_board_cons(symbol, name, type):
 def update_board_history(trade_date):
     service = StockBoardService()
     service.fetch_history_by_task(trade_date)
+
+@shared_task
+def sync_stock_fenshi(stock_code, trade_date):
+    service = StockFenshiService()
+    service.sync(stock_code=stock_code, date=trade_date)
     

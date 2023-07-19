@@ -81,7 +81,7 @@ export default {
         request({
           url: '/api/stock/board/map/',
           method: 'get',
-          params: {code: context.form.name, page: 1, limit: 100}
+          params: {board_name: context.form.name, page: 1, limit: 100}
         }).then(res => {
           context.form.cons = res.data.data.map(item => {
             return item.stock_code + " " +item.stock_name

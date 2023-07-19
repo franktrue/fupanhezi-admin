@@ -55,3 +55,4 @@ pywencai==0.5.3
 sqlalchemy==2.0.4
 pymysql==0.9.3
 wechatpayv3==1.2.39
+cos-python-sdk-v5==1.9.25

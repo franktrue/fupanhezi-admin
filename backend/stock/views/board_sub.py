@@ -77,7 +77,6 @@ class StockBoardSubViewSet(CustomModelViewSet):
                 model.code = parent["parent_name"]
             model.save()
             hadChild.append(model.stock_code)
-
         StockBoardMap.objects.filter(board_name=parent["name"]).exclude(stock_code__in=hadChild).delete()
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
