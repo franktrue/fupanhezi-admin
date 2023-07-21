@@ -49,7 +49,7 @@ class OrderItem(CoreModel):
 
 class OrderGoods(CoreModel):
     del_flag = models.CharField(max_length=1, default='0')
-    remark = models.CharField(max_length=500, default='')
+    remark = models.CharField(max_length=500, null=True, blank=True)
     name = models.CharField(max_length=255, null=True)
     month_num = models.BigIntegerField(default='1')
     sales_price = models.FloatField()

@@ -122,11 +122,6 @@ export const crudOptions = (vm) => {
             },
             placeholder: '请输入手机号'
           }
-        },
-        editForm: {
-          component: {
-            readonly: true
-          }
         }
       },
       {

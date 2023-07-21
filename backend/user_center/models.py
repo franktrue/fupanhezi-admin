@@ -11,8 +11,8 @@ class User(models.Model):
     password = models.CharField(max_length=255, null=True, blank=True)
     nickname = models.CharField(max_length=255, default='')
     sex = models.IntegerField(choices=[(0, '未知'), (1, '男'), (2, '女')], default=0)
-    avatar = models.CharField(max_length=255, default='')
-    info = models.CharField(max_length=255, default='')
+    avatar = models.CharField(max_length=255, null=True, blank=True)
+    info = models.CharField(max_length=255, null=True, blank=True)
     level = models.PositiveSmallIntegerField(default=1)
     expire_time = models.DateTimeField()
     class Meta:

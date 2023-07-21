@@ -73,9 +73,6 @@ export const crudOptions = (vm) => {
         key: 'brief',
         type: 'textarea',
         form: {
-          rules: [ // 表单校验规则
-            { required: true, message: '题材解析必填项' }
-          ],
           component: {
             placeholder: '请输入备注',
             showWordLimit: true,

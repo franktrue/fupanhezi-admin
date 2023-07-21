@@ -113,22 +113,18 @@ export const crudOptions = vm => {
             }
           },
           {
-            title: '下架',
-            key: 'del_flag',
-            type: "radio",
-            search: {
-              disabled: false
-            },
-            dict:  {
-              data: vm.dictionary('button_whether_number')
-            },
+            title: '备注',
+            key: 'remark',
+            type: "textarea",
             form: {
               component: {
+                placeholder: '请输入备注',
+                showWordLimit: true,
+                maxlength: '500',
                 props: {
-                  clearable: true
+                  type: 'textarea'
                 }
-              },
-              rules: [{ required: true, message: '状态必填' }]
+              }
             }
           },
       ]
