@@ -26,7 +26,7 @@ class StockFenshiService():
             amo = 0
             for row in reader:
                 if row[0] == date_str:
-                    if i == 0:
+                    if i == 0 and open_price is None:
                         open_price = float(row[2])
                         if date_str >= "2023-07-19":
                             continue
