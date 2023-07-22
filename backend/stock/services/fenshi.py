@@ -28,6 +28,8 @@ class StockFenshiService():
                 if row[0] == date_str:
                     if i == 0:
                         open_price = float(row[2])
+                        if date_str >= "2023-07-19":
+                            continue
                     vol = vol + int(row[6])
                     amo = amo + float(row[7])
                     list.append({
