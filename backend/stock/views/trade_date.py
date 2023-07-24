@@ -48,3 +48,9 @@ class StockTradeDateViewSet(CustomModelViewSet):
         service = StockTradeDateService()
         service.clear_cache_by(prefix=request.data.get("prefix"))
         return SuccessResponse(data=[], msg="操作成功")
+    #清除指定Key缓存 
+    @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
+    def del_latest_board_cache(self, request, *args, **kwargs):
+        service = StockTradeDateService()
+        service.clear_board_sort_cache()
+        return SuccessResponse(data=[], msg="操作成功")

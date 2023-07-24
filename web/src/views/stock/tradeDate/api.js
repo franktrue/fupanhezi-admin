@@ -50,3 +50,12 @@ export function DeleteCache(obj) {
     data: obj
   })
 }
+
+
+// 清除最新板块排序缓存
+export function DeleteLatestBoardCache() {
+  return request({
+    url: urlPrefix + "del_latest_board_cache/",
+    method: 'post'
+  })
+}

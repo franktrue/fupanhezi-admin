@@ -1,4 +1,5 @@
-from stock.models import StockTradeDate
+from stock.models import StockTradeDate, StockBoardHistory
+from django.db.models import Max
 from stock.utils.db import get_engine
 from django.db import connections
 from stock.utils.cache import delete_cache_by_prefix
@@ -29,4 +30,9 @@ class StockTradeDateService():
         delete_cache_by_prefix(prefix="cache:fupanhezi:stockBoardMap:Board:")
 
     def clear_cache_by(self, prefix):
+        delete_cache_by_prefix(prefix=prefix)
+
+    def clear_board_sort_cache(self):
+        latest_date = StockBoardHistory.objects.aggregate(date=Max('date'))['date']
+        prefix = "cache:fupanhezi:stockBoardMap:col_{0}:sort:sort:num:".format(latest_date)
         delete_cache_by_prefix(prefix=prefix)
