@@ -7,7 +7,7 @@ class User(models.Model):
     delete_time = models.DateTimeField(auto_now=True)
     del_state = models.BooleanField(default=False)
     parent_id = models.BigIntegerField(default=0)
-    mobile = models.CharField(max_length=11, null=True, blank=True, unique=True)
+    mobile = models.CharField(max_length=11, null=True, blank=True)
     password = models.CharField(max_length=255, null=True, blank=True)
     nickname = models.CharField(max_length=255, default='')
     sex = models.IntegerField(choices=[(0, '未知'), (1, '男'), (2, '女')], default=0)

@@ -58,10 +58,39 @@ export const crudOptions = vm => {
             }
           },
           {
+            title: '有效期（年）',
+            key: 'year_num',
+            type: 'number',
+            form: {
+              value: 0,
+              component: {
+                props: {
+                  clearable: true
+                }
+              },
+              rules: [{ required: true, message: '有效期必填' }]
+            }
+          },
+          {
             title: '有效期（月）',
             key: 'month_num',
             type: 'number',
             form: {
+              value: 0,
+              component: {
+                props: {
+                  clearable: true
+                }
+              },
+              rules: [{ required: true, message: '有效期必填' }]
+            }
+          },
+          {
+            title: '有效期（日）',
+            key: 'day_num',
+            type: 'number',
+            form: {
+              value: 0,
               component: {
                 props: {
                   clearable: true
