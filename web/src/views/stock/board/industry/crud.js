@@ -1,5 +1,8 @@
 export const crudOptions = vm => {
   return {
+      pagination: {
+          pageSizes: [20, 50, 100, 200, 500]
+      },
       pageOptions: {
           compact: true
       },
@@ -11,7 +14,7 @@ export const crudOptions = vm => {
           highlightCurrentRow: false
       },
       rowHandle: {
-          width: 240,
+          width: 400,
           view: {
               thin: true,
               text: "",
@@ -36,6 +39,17 @@ export const crudOptions = vm => {
           custom: [
             {
               thin: true,
+              text: '二级题材',
+              size: 'small',
+              type: 'success',
+              icon: 'el-icon-bangzhu',
+              show () {
+                return vm.hasPermissions('Fetch')
+              },
+              emit: 'boardSub'
+            },
+            {
+              thin: true,
               text: '成分股',
               size: 'small',
               type: 'success',
@@ -44,6 +58,17 @@ export const crudOptions = vm => {
                 return vm.hasPermissions('Fetch')
               },
               emit: 'boardCons'
+            },
+            {
+              thin: true,
+              text: '指数',
+              size: 'small',
+              type: 'success',
+              icon: 'el-icon-data-line',
+              show () {
+                return vm.hasPermissions('Fetch')
+              },
+              emit: 'boardHistory'
             }
           ]
       },
@@ -100,6 +125,20 @@ export const crudOptions = vm => {
               }
             },
             rules: [{ required: true, message: '行业名称必填' }]
+          }
+        },
+        {
+          title: '排序',
+          key: 'sort',
+          type: 'number',
+          sortable: 'custom',
+          form: {
+            value: 0,
+            component: {
+              props: {
+                clearable: true
+              }
+            }
           }
         },
       ]

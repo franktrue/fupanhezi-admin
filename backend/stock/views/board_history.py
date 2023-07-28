@@ -36,7 +36,7 @@ class StockBoardHistoryViewSet(CustomModelViewSet):
     serializer_class = StockBoardHistorySerializer
     create_serializer_class = StockBoardHistoryCreateUpdateSerializer
     update_serializer_class = StockBoardHistoryCreateUpdateSerializer
-    filter_fields = ['name', 'date']
+    filter_fields = ['code', 'name', 'date']
     search_fields = ['name', 'date']
 
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
@@ -49,7 +49,10 @@ class StockBoardHistoryViewSet(CustomModelViewSet):
     
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
     def fetch(self, request, *args, **kwargs):
-        trade_date = datetime.datetime.strptime(request.data.get('trade_date'), '%Y-%m-%d').date()
+        between = request.data.get('between')
+        trade_date_range = StockTradeDate.objects.filter(trade_date__gte=between[0], trade_date__lte=between[1]).all()
+        type = request.data.get('type')
         service = StockBoardService()
-        service.fetch_history(trade_date=trade_date)
+        for trade_date in trade_date_range.iterator():
+            service.fetch_history(trade_date=trade_date.trade_date, type=type)
         return DetailResponse(data=[], msg="更新成功")

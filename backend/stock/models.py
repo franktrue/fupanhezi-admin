@@ -81,6 +81,7 @@ class StockBoardIndustry(models.Model):
 
     code = models.CharField(max_length=10, null=False)
     name = models.CharField(max_length=64, null=False, default='')
+    sort = models.IntegerField(null=False, default=0)
 
     class Meta:
         db_table = 'stock_board_industry'
@@ -128,6 +129,7 @@ class StockBoardHistory(models.Model):
     amo = models.DecimalField(max_digits=20, decimal_places=2, null=False)
     close_pe = models.FloatField(null=False)
     hs_rate = models.FloatField(null=False)
+    type = models.CharField(max_length=32, null=False, default='concept')
 
     class Meta:
         db_table = 'stock_board_history'

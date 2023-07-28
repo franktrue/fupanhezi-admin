@@ -45,7 +45,6 @@ class StockBoardConceptViewSet(CustomModelViewSet):
         for row in df.itertuples():
             board = StockBoardConcept.objects.filter(code=row.code).first()
             if board is None:
-                print(row)
                 board = StockBoardConcept(
                     name = row.name,
                     code = row.code,
@@ -60,6 +59,6 @@ class StockBoardConceptViewSet(CustomModelViewSet):
             else:
                 continue
             board.save()
-            update_board_cons.delay(row.code, row.name, 'concept')
+            update_board_cons.apply_async((row.code, row.name, 'concept'), countdown = 4*row.Index)
         return DetailResponse(data=[], msg="获取成功")
     

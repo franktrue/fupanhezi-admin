@@ -65,7 +65,11 @@ export default {
       return crudOptions(this)
     },
     pageRequest (query) {
-      query.name = this.boardRow.name
+      if (this.boardRow.type == 'industry') {
+        query.code = this.boardRow.code
+      } else {
+        query.name = this.boardRow.name
+      }
       return api.GetList(query)
     },
     addRequest (row) {

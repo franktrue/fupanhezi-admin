@@ -46,9 +46,10 @@ def task__lhb():
 # 每日凌晨更新概念及成分股
 @app.task 
 def task__board():
-    df = ak.stock_board_concept_name_ths()
-    df.columns = ['release_date', 'name', 'include_number', 'show_url', 'code']
-    for row in df.itertuples():
+    i = 0
+    df1 = ak.stock_board_concept_name_ths()
+    df1.columns = ['release_date', 'name', 'include_number', 'show_url', 'code']
+    for row in df1.itertuples():
         board = StockBoardConcept.objects.filter(code=row.code).first()
         if board is None:
             board = StockBoardConcept(
@@ -58,12 +59,20 @@ def task__board():
                 include_number = row.include_number,
                 show_url = row.show_url
             )
-        elif board.include_number != row.include_number:
+        elif board.include_number != row.include_number or board.name != row.name:
             board.include_number = row.include_number
+            board.release_date = row.release_date
+            board.name = row.name
         else:
             continue
         board.save()
-        update_board_cons.delay(row.code, row.name, 'concept')
+        update_board_cons.apply_async((row.code, row.name, 'concept'), countdown = 4*i)
+        i = i+1
+    df2 = ak.stock_board_industry_name_ths()
+    for row in df2.itertuples():
+        # 每隔任务间隔5s防止触发保护机制
+        update_board_cons.apply_async((row.code, row.name, 'industry'), countdown = 4*i)
+        i = i+1
     return "操作成功"
 
 # 每日收盘后更新

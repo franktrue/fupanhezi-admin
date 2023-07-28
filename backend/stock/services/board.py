@@ -25,6 +25,7 @@ class StockBoardService():
         with connections['default'].cursor() as cursor:
             cursor.execute('TRUNCATE TABLE {0}'.format(StockBoardIndustry._meta.db_table))
         df.to_sql(name=StockBoardIndustry._meta.db_table, con=self.engine, if_exists="append", index=False)
+        return df
     
     # 更新成分股
     def update_cons(self, symbol, name, type):
@@ -39,9 +40,11 @@ class StockBoardService():
         df.to_sql('stock_board_map', con=self.engine, if_exists="append", index=False)
 
     # 更新板块行情
-    def fetch_history(self, trade_date):
+    def fetch_history(self, trade_date, type = None):
         trade_date_str = trade_date.strftime("%Y%m%d")
-        df=pywencai.get(question="同花顺概念指数{0}开盘价 {0}最高价 {0}最低价 {0}收盘价 {0}涨跌幅 {0}成交额成交量换手率".format(trade_date_str), query_type="zhishu", loop=True)
+        df=pywencai.get(question="同花顺板块指数{0}开盘价 {0}最高价 {0}最低价 {0}收盘价 {0}涨跌幅 {0}成交额成交量换手率".format(trade_date_str), query_type="zhishu", loop=True)
+        # 包含概念和行业
+        df = df[(df["指数@同花顺板块指数"]=="同花顺概念指数") | (df["指数@同花顺板块指数"]=="同花顺行业指数")]
         col_zh = [
             "code", 
             "指数简称", 
@@ -52,13 +55,19 @@ class StockBoardService():
             "指数@涨跌幅:前复权[{0}]".format(trade_date_str), 
             "指数@成交额[{0}]".format(trade_date_str), 
             "指数@成交量[{0}]".format(trade_date_str),
-            "指数@换手率[{0}]".format(trade_date_str)
+            "指数@换手率[{0}]".format(trade_date_str),
+            "指数@同花顺板块指数",
         ]
         df = df[col_zh]
-        df.columns = ['code', 'name', 'open', 'high', 'low', 'close', 'close_pe', 'vol', 'amo', 'hs_rate']
+        df.columns = ['code', 'name', 'open', 'high', 'low', 'close', 'close_pe', 'vol', 'amo', 'hs_rate', 'type']
         df = df[~df['open'].isna()]
+        df['type'] = df['type'].replace('同花顺概念指数', 'concept').replace('同花顺行业指数', 'industry')
         df['date'] = trade_date
-        StockBoardHistory.objects.filter(date=trade_date).delete()
+        if type is not None :
+            df = df[df['type'] == type]
+            StockBoardHistory.objects.filter(date=trade_date, type=type).delete()
+        else:
+            StockBoardHistory.objects.filter(date=trade_date).delete()
         df.to_sql(name=StockBoardHistory._meta.db_table, con=self.engine, if_exists="append", index=False)
 
     def fetch_history_by_task(self, trade_date):

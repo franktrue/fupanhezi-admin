@@ -5,7 +5,9 @@
       ref="d2Crud"
       v-bind="_crudProps"
       v-on="_crudListeners"
+      @boardSub="boardSub"
       @boardCons="boardCons"
+      @boardHistory="boardHistory"
     >
       <!-- 自动绑定参数与事件 -->
       <div slot="header">
@@ -19,11 +21,23 @@
             ><i class="el-icon-plus" /> 新增</el-button
           >
           <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchLatest" :loading="loading"><i class="el-icon-refresh" /> 同步数据</el-button>
+          <el-button size="small" type="info" v-permission="'Fetch'" @click="dialogFormVisible = true"><i class="el-icon-data-line" /> 同步指数数据</el-button>
         </el-button-group>
         <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
     </d2-crud-x>
-    <el-drawer :visible.sync="drawer" :size="700">
+    <el-drawer :visible.sync="drawerSub" :size="700">
+      <div slot="title">
+        <span>二级题材</span>
+        <el-tag size="small" style="margin-left: 10px">{{ boardRow.name }}</el-tag>
+      </div>
+      <board-sub
+        style="margin-top: 80px; margin-left: 10px"
+        :boardRow="boardRow"
+      >
+      </board-sub>
+    </el-drawer>
+    <el-drawer :visible.sync="drawerCons" :size="700">
       <div slot="title">
         <span>成分股列表</span>
         <el-tag size="small" style="margin-left: 10px">{{ boardRow.name }}</el-tag>
@@ -34,22 +48,76 @@
       >
       </board-map>
     </el-drawer>
+    <el-drawer :visible.sync="drawerHistory" :size="900">
+      <div slot="title">
+        <span>指数日频率列表</span>
+        <el-tag size="small" style="margin-left: 10px">{{ boardRow.name }}</el-tag>
+      </div>
+      <board-history
+        style="margin-top: 80px; margin-left: 10px"
+        :boardRow="boardRow"
+      >
+      </board-history>
+    </el-drawer>
+    <el-dialog
+      :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
+      width="40%"
+    >
+      <template slot="title">
+        同步数据 <small>会更新替换指定日期的指数行情数据</small>
+      </template>
+      <el-form :model="fetchForm" ref="fetchForm" :rules="fetchFormRules" :inline="true">
+        <el-form-item label="时间范围" prop="between">
+          <el-date-picker
+            v-model="fetchForm.between"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            :clearable="false"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="fetchDataSubmit" :loading="loading">确定</el-button>
+      </div>
+    </el-dialog>
   </d2-container>
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import { crudOptions } from './crud' // 上文的crudOptions配置
 import { d2CrudPlus } from 'd2-crud-plus'
 import { AddObj, GetList, UpdateObj, DelObj, FetchData } from './api' // 查询添加修改删除的http请求接口
+import { FetchData as FetchHistroy} from '../history/api'
+import BoardSub from '@/views/stock/board/sub'
 import BoardMap from '@/views/stock/board/map'
+import BoardHistory from '@/views/stock/board/history'
 export default {
   name: 'stockBoardIndustry',
-  components: { BoardMap },
+  components: { BoardSub, BoardMap, BoardHistory },
   mixins: [d2CrudPlus.crud], // 最核心部分，继承d2CrudPlus.crud
   data() {
+    const today = dayjs().format('YYYY-MM-DD')
     return {
+      dialogFormVisible: false,
       loading: false,
-      drawer: false,
+      fetchForm: {
+        between: [today, today],
+        type: 'industry'
+      },
+      fetchFormRules: {
+        trade_date: [
+          { required: true, message: '必填项' }
+        ]
+      },
+      drawerSub: false,
+      drawerCons: false,
+      drawerHistory: false,
       boardRow: {}
     }
   },
@@ -57,7 +125,7 @@ export default {
     // 获取最新行业
     fetchLatest() {
       const that = this
-      this.$confirm('是否确认更新行业信息?', '警告', {
+      this.$confirm('是否确认更新行业信息?会异步更新对应成分股', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -72,8 +140,36 @@ export default {
         })
       })
     },
+    fetchDataSubmit() {
+      const that = this
+      that.$refs.fetchForm.validate((valid) => {
+        if (valid) {
+          that.loading = true
+          FetchHistroy(that.fetchForm).then((res) => {
+            that.dialogFormVisible = false
+            that.loading = false
+            that.$message.success('操作成功')
+            that.handleSearch()
+          }).catch(e => {
+            that.loading = false
+          })
+        } else {
+          that.$message.error('表单校验失败，请检查')
+        }
+      })
+    },
+    boardSub (scope) {
+      this.drawerSub = true
+      this.boardRow = scope.row
+      this.boardRow.type = 'industry'
+    },
     boardCons (scope) {
-      this.drawer = true
+      this.drawerCons = true
+      this.boardRow = scope.row
+      this.boardRow.type = 'industry'
+    },
+    boardHistory (scope) {
+      this.drawerHistory = true
       this.boardRow = scope.row
       this.boardRow.type = 'industry'
     },

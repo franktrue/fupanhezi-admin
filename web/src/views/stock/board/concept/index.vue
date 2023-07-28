@@ -70,13 +70,15 @@
         同步数据 <small>会更新替换指定日期的指数行情数据</small>
       </template>
       <el-form :model="fetchForm" ref="fetchForm" :rules="fetchFormRules" :inline="true">
-        <el-form-item label="交易日" prop="trade_date">
+        <el-form-item label="时间范围" prop="between">
           <el-date-picker
-            v-model="fetchForm.trade_date"
+            v-model="fetchForm.between"
             value-format="yyyy-MM-dd"
+            type="daterange"
             :clearable="false"
-            type="date"
-            placeholder="选择日期">
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -108,10 +110,11 @@ export default {
       dialogFormVisible: false,
       loading: false,
       fetchForm: {
-        trade_date: today,
+        between: [today, today],
+        type: 'concept'
       },
       fetchFormRules: {
-        trade_date: [
+        between: [
           { required: true, message: '必填项' }
         ]
       },
