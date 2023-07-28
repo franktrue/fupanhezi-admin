@@ -36,15 +36,24 @@ export const crudOptions = (vm) => {
           return !vm.hasPermissions('Delete')
         }
       },
-      width: 280,
+      width: 400,
       fixed: 'right',
-      custom: [{
-        text: '第三方登录信息',
-        type: 'success',
-        size: 'small',
-        icon: 'el-icon-folder',
-        emit: 'userAuth'
-      }]
+      custom: [
+        {
+          text: '提现记录',
+          type: 'danger',
+          size: 'small',
+          icon: 'el-icon-money',
+          emit: 'userWithdrawRecord'
+        },
+        {
+          text: '第三方登录信息',
+          type: 'success',
+          size: 'small',
+          icon: 'el-icon-folder',
+          emit: 'userAuth'
+        },
+      ]
 
     },
     indexRow: { // 或者直接传true,不显示title，不居中

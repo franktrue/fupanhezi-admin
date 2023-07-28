@@ -6,6 +6,7 @@
       v-bind="_crudProps"
       v-on="_crudListeners"
       @userAuth="userAuth"
+      @userWithdrawRecord="userWithdrawRecord"
     >
       <div slot="header">
         <crud-search
@@ -42,6 +43,17 @@
       >
       </user-auth>
     </el-drawer>
+    <el-drawer :visible.sync="drawerWithdrawRecord" :size="800">
+      <div slot="title">
+        <span>提现记录</span>
+        <el-tag size="small" style="margin-left: 10px">{{ userRow.nickname }}</el-tag>
+      </div>
+      <user-withdraw-record
+        style="margin-top: 80px; margin-left: 10px"
+        :userRow="userRow"
+      >
+      </user-withdraw-record>
+    </el-drawer>
   </d2-container>
 </template>
 
@@ -50,20 +62,26 @@ import * as api from './api'
 import { crudOptions } from './crud'
 import { d2CrudPlus } from 'd2-crud-plus'
 import UserAuth from '@/views/usercenter/user/auth'
+import UserWithdrawRecord from '@/views/usercenter/user/withdrawRecord'
 export default {
   name: 'user',
-  components: { UserAuth },
+  components: { UserAuth, UserWithdrawRecord },
   mixins: [d2CrudPlus.crud],
   data () {
     return {
       loading: false,
       drawer: false,
+      drawerWithdrawRecord: false,
       userRow: {}
     }
   },
   methods: {
     userAuth (scope) {
       this.drawer = true
+      this.userRow = scope.row
+    },
+    userWithdrawRecord (scope) {
+      this.drawerWithdrawRecord = true
       this.userRow = scope.row
     },
     getCrudOptions () {

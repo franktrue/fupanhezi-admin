@@ -1,5 +1,7 @@
 from django.db import models
 
+from dvadmin.utils.models import CoreModel
+
 # Create your models here.
 class User(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
@@ -34,3 +36,16 @@ class UserAuth(models.Model):
         verbose_name = '第三方登录'
         verbose_name_plural = verbose_name
         unique_together = (('user_id', 'auth_type'), ('auth_type', 'auth_key'))
+
+class UserWithdrawRecord(CoreModel):
+    user_id = models.IntegerField(null=False)
+    amount = models.DecimalField(max_digits=7, decimal_places=2, default=0)
+    status = models.CharField(max_length=2, null=False, default="0")
+    transaction_id = models.CharField(max_length=64, null=True, blank=True)
+    type = models.CharField(max_length=32)
+
+    class Meta:
+        db_table = 'user_withdraw_record'
+        verbose_name = '提现记录'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
