@@ -107,11 +107,6 @@ export const crudOptions = (vm) => {
             placeholder: '请输入昵称'
           },
         },
-        editForm: {
-          component: {
-            readonly: true
-          }
-        }
       },
       {
         title: '手机号',
@@ -131,6 +126,27 @@ export const crudOptions = (vm) => {
             },
             placeholder: '请输入手机号'
           }
+        }
+      },
+      {
+        title: '推广佣金',
+        key: 'level',
+        type: 'number',
+        form: {
+          rules: [ // 表单校验规则
+            { required: true, message: '佣金金额必填项' }
+          ],
+          value: 30,
+          component: {
+            name: 'el-input-number',
+            props: {
+              precision: 0
+            }
+          },
+          scopedSlots: {
+            prefix: () => '￥'
+          },
+          helper: '每推广一个付费用户奖励金额额度'
         }
       },
       {
