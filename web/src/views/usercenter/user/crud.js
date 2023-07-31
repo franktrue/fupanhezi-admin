@@ -3,7 +3,6 @@ import { urlPrefix as subjectPrefix } from './api'
 import XEUtils from 'xe-utils'
 export const crudOptions = (vm) => {
   return {
-    pagination: false,
     pageOptions: {
       compact: true
     },

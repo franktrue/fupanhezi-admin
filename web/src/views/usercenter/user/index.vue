@@ -15,21 +15,11 @@
           @submit="handleSearch"
         />
         <el-button-group>
-          <el-button
-            size="small"
-            v-permission="'Create'"
-            type="primary"
-            @click="addRow"
+          <el-button size="small" type="primary" @click="addRow"
             ><i class="el-icon-plus" /> 新增</el-button
           >
         </el-button-group>
-        <crud-toolbar
-          :search.sync="crud.searchOptions.show"
-          :compact.sync="crud.pageOptions.compact"
-          :columns="crud.columns"
-          @refresh="doRefresh()"
-          @columns-filter-changed="handleColumnsFilterChanged"
-        />
+        <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
     </d2-crud-x>
     <el-drawer :visible.sync="drawer" :size="600">
@@ -59,7 +49,7 @@
 
 <script>
 import * as api from './api'
-import { crudOptions } from './crud'
+import { crudOptions } from './crud' // 上文的crudOptions配置
 import { d2CrudPlus } from 'd2-crud-plus'
 import UserAuth from '@/views/usercenter/user/auth'
 import UserWithdrawRecord from '@/views/usercenter/user/withdrawRecord'
