@@ -35,8 +35,8 @@ class StockBoardService():
         df['code'] = symbol
         df['board_name'] = name
         df['type'] = type
-        # 先删除旧数据
-        StockBoardMap.objects.filter(code=symbol).delete()
+        # 仅删除原重复数据
+        StockBoardMap.objects.filter(code=symbol, stock_code__in=df['stock_code'].to_list()).delete()
         df.to_sql('stock_board_map', con=self.engine, if_exists="append", index=False)
 
     # 更新板块行情
