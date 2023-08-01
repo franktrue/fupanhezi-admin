@@ -137,8 +137,11 @@ class StockBoardService():
             cache.set(key, data, timeout=self.timeout)
         return data
 
-    def dict(self, name):
-        rows = StockBoardMap.objects.filter(board_name=name).all()
+    def dict(self, name, type):
+        if type is None:
+            rows = StockBoardMap.objects.filter(board_name=name).all()
+        else:
+            rows = StockBoardMap.objects.filter(board_name=name, type = type).all()
         data = []
         for row in rows:
             v = row.stock_code + " " + row.stock_name
@@ -153,7 +156,12 @@ class StockBoardService():
         code, name = name.split("/")
         result = StockGnnMap.objects.filter(id__in=ids)
         for item in result:
-            model = StockBoardMap.objects.filter(board_name=name, stock_code = item.stock_code).first()
+            # 上级题材中不包含的成分股跳过
+            p = StockBoardMap.objects.filter(board_name=code, stock_code = item.stock_code).first()
+            if p is None:
+                continue
+
+            model = StockBoardMap.objects.filter(board_name=name, stock_code = item.stock_code, type = StockBoardSub.TYPE).first()
             if model is None:
                 model = StockBoardMap(
                     code = code,

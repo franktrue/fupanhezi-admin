@@ -65,7 +65,7 @@ export default {
   methods: {
     fetchData() {
       const that = this
-      that.$confirm('该操作较耗时，请勿轻易操作！', '警告', {
+      that.$confirm('该操作较耗时，会异步更新，请勿轻易操作！', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

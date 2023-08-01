@@ -110,6 +110,7 @@ class StockBoardSub(models.Model):
     parent_name = models.CharField(max_length=64, null=False, default='')
     name = models.CharField(max_length=64, null=False, default='')
     brief = models.CharField(max_length=1000, null=True, blank=True)
+    type = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:
         db_table = 'stock_board_sub'

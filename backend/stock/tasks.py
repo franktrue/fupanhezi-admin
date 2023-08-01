@@ -7,13 +7,14 @@
 @Remark:
 """
 from application.celery import app
-from stock.models import StockBoardConcept
+from stock.models import StockBoardConcept, StockGnnSubject
 from stock.services.zt_history import StockZtHistoryService
 from stock.services.history import StockHistoryService
 from stock.services.trade_date import StockTradeDateService
 from stock.services.lhb import StockLhbService
 from stock.services.board import StockBoardService
 from stock.services.fenshi import StockFenshiService
+from stock.services.gnn import StockGnnService
 from celery import shared_task
 import akshare as ak
 import datetime
@@ -110,3 +111,22 @@ def sync_stock_fenshi(stock_code, trade_date):
     service = StockFenshiService()
     service.sync(stock_code=stock_code, date=trade_date)
     
+@shared_task
+def sync_gnn_subject(id, pid, scode, sname):
+    server = StockGnnService()
+    result = server.fetchBasic(scode)
+    parent_id = None
+    if pid != -1:
+        parent_id = pid
+    model = StockGnnSubject.objects.filter(code=scode).first()
+    if model is None:
+        model = StockGnnSubject(
+            id = id,
+            parent_id = parent_id,
+            code = scode,
+            name = sname,
+            desc = result['desc'],
+            level = result['level']
+        )
+        model.save()
+    server.syncCons(code = scode, name = sname)

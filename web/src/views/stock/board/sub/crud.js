@@ -89,7 +89,8 @@ export const crudOptions = (vm) => {
         type: 'select',
         dict: {
           url(dict,{form,component}){
-            return '/api/stock/board/map/dict/?parent_name='+form.parent_name
+            console.log(form)
+            return '/api/stock/board/map/dict/?type='+form.type+'&name='+form.parent_name
           },
           cache: false,
           onReady:(data,dict,options)=>{

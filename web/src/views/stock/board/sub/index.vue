@@ -60,10 +60,12 @@ export default {
     },
     pageRequest (query) {
       query.parent_name = this.boardRow.name
+      query.type = this.boardRow.type
       return api.GetList(query)
     },
     addRequest (row) {
       row.parent_name = this.boardRow.name
+      row.type = this.boardRow.type
       return api.createObj(row)
     },
     updateRequest (row) {
@@ -77,14 +79,15 @@ export default {
     },
     doDialogOpened(context) {
       context.form.parent_name = this.boardRow.name
+      context.form.type = this.boardRow.type
       if (context.form.name) {
         request({
-          url: '/api/stock/board/map/',
+          url: '/api/stock/board/map/dict/',
           method: 'get',
-          params: {board_name: context.form.name, page: 1, limit: 100}
+          params: {name: context.form.name, type: "sub_concept"}
         }).then(res => {
-          context.form.cons = res.data.data.map(item => {
-            return item.stock_code + " " +item.stock_name
+          context.form.cons = res.data.map(item => {
+            return item['value']
           })
         })
       }

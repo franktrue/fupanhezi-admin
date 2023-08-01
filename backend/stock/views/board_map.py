@@ -49,9 +49,10 @@ class StockBoardMapViewSet(CustomModelViewSet):
     
     @action(methods=["GET"], detail=False, permission_classes=[IsAuthenticated])
     def dict(self, request, *args, **kwargs ):
-        name = request.query_params.get('parent_name')
+        name = request.query_params.get('name')
+        type = request.query_params.get('type')
         service = StockBoardService()
-        data = service.dict(name=name)
+        data = service.dict(name=name, type = type)
         return DetailResponse(data=data, msg="获取数据成功")
 
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])

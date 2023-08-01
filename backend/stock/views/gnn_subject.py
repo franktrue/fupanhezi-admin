@@ -6,6 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from dvadmin.utils.json_response import SuccessResponse
 from stock.services.gnn import StockGnnService
+from django.db import connections
+from stock.tasks import sync_gnn_subject
+import requests
+
 
 class StockGnnSubjectSerializer(CustomModelSerializer):
     """
@@ -105,6 +109,17 @@ class StockGnnSubjectViewSet(CustomModelViewSet):
 
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
     def fetch(self, request):
-        service = StockGnnService()
-        service.fetch()
+        url = 'http://weapp.upchina.com/weeduapi/hq/getBlockTsLevel'
+        data = {
+            "stReq": {
+                "vBlockCode": []
+            }
+        }
+        response = requests.post(url, data=data)
+        if response.status_code == 200:
+            json_data = response.json()
+            i = 0
+            for item in json_data['data']:
+                sync_gnn_subject.apply_async((item['id'], item['pid'], item['scode'], item['sname']), countdown = 3*i)
+                i = i +1
         return SuccessResponse(data=[], msg="同步成功")

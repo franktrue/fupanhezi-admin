@@ -32,8 +32,8 @@ class StockBoardSubViewSet(CustomModelViewSet):
     serializer_class = StockBoardSubSerializer
     create_serializer_class = StockBoardSubCreateUpdateSerializer
     update_serializer_class = StockBoardSubCreateUpdateSerializer
-    filter_fields = ['parent_name', 'name']
-    search_fields = ['parent_name', 'name']
+    filter_fields = ['parent_name', 'name', 'type']
+    search_fields = ['parent_name', 'name', 'type']
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, request=request)
@@ -41,14 +41,15 @@ class StockBoardSubViewSet(CustomModelViewSet):
         self.perform_create(serializer)
         parent = serializer.data
         child_data = request.data.get("cons")
-        for child in child_data:
-            child["board_name"] = parent["name"]
-            child["type"] = StockBoardSub.TYPE
-            # 使用上级概念作为code码，方便联查
-            child["code"] = parent["parent_name"]  
-            child_serializer = StockBoardMapCreateUpdateSerializer(data = child)
-            child_serializer.is_valid(raise_exception=True)
-            child_serializer.save()
+        if child_data is not None:
+            for child in child_data:
+                child["board_name"] = parent["name"]
+                child["type"] = StockBoardSub.TYPE
+                # 使用上级概念作为code码，方便联查
+                child["code"] = parent["parent_name"]  
+                child_serializer = StockBoardMapCreateUpdateSerializer(data = child)
+                child_serializer.is_valid(raise_exception=True)
+                child_serializer.save()
         return DetailResponse(data=parent, msg="新增成功")
     
 
@@ -63,20 +64,21 @@ class StockBoardSubViewSet(CustomModelViewSet):
         parent = serializer.data
         child_data = request.data.get("cons")
         hadChild = []
-        for child in child_data:
-            model = StockBoardMap.objects.filter(board_name=parent["name"], stock_code=child["stock_code"], type=StockBoardSub.TYPE).first()
-            if model is None:
-                model = StockBoardMap(
-                    board_name = parent["name"],
-                    type = StockBoardSub.TYPE,
-                    code = parent["parent_name"],
-                    stock_code = child['stock_code'],
-                    stock_name = child['stock_name']
-                )
-            else:
-                model.code = parent["parent_name"]
-            model.save()
-            hadChild.append(model.stock_code)
+        if child_data is not None:
+            for child in child_data:
+                model = StockBoardMap.objects.filter(board_name=parent["name"], stock_code=child["stock_code"], type=StockBoardSub.TYPE).first()
+                if model is None:
+                    model = StockBoardMap(
+                        board_name = parent["name"],
+                        type = StockBoardSub.TYPE,
+                        code = parent["parent_name"],
+                        stock_code = child['stock_code'],
+                        stock_name = child['stock_name']
+                    )
+                else:
+                    model.code = parent["parent_name"]
+                model.save()
+                hadChild.append(model.stock_code)
         StockBoardMap.objects.filter(board_name=parent["name"]).exclude(stock_code__in=hadChild).delete()
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
