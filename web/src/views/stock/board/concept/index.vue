@@ -23,7 +23,7 @@
           <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchLatest" :loading="loading"><i class="el-icon-refresh" /> 同步数据</el-button>
           <el-button size="small" type="info" v-permission="'Fetch'" @click="dialogFormVisible = true"><i class="el-icon-data-line" /> 同步指数数据</el-button>
           <el-button size="small" type="danger" v-permission="'Fetch'" @click="delCache"><i class="el-icon-trash" /> 清除缓存</el-button>
-          <el-button size="small" type="danger" v-permission="'Fetch'" @click="delSortCache"><i class="el-icon-trash" /> 清除排序缓存</el-button>
+          <el-button size="small" type="danger" v-permission="'Fetch'" @click="delSortCache"><i class="el-icon-trash" /> 清除最新一天缓存</el-button>
         </el-button-group>
         <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
@@ -162,7 +162,7 @@ export default {
     },
     delSortCache() {
       const that = this
-      this.$confirm('确认清除板块排序缓存吗？', '警告', {
+      this.$confirm('确认清除最新一天板块缓存吗？', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

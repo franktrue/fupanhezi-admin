@@ -2,7 +2,7 @@ from stock.models import StockTradeDate, StockBoardHistory
 from django.db.models import Max
 from stock.utils.db import get_engine
 from django.db import connections
-from stock.utils.cache import delete_cache_by_prefix
+from stock.utils.cache import delete_cache_by_match
 import akshare as ak
 import datetime
 
@@ -24,15 +24,16 @@ class StockTradeDateService():
         trade_date_range = StockTradeDate.objects.filter(trade_date__lte=today).order_by("-trade_date")[:20]
         prefix = "cache:fupanhezi:stockZtHistory:ztRow_"
         for trade_date in trade_date_range:
-            delete_cache_by_prefix(prefix=prefix+trade_date.trade_date.strftime("%Y-%m-%d"))
+            r = trade_date.trade_date.strftime("%Y-%m-%d") + "*"
+            delete_cache_by_match(regex=r)
 
         # 题材相关API缓存
-        delete_cache_by_prefix(prefix="cache:fupanhezi:stockBoardMap:Board:")
+        delete_cache_by_match(prefix="cache:fupanhezi:stockBoardMap:Board:")
 
     def clear_cache_by(self, prefix):
-        delete_cache_by_prefix(prefix=prefix)
+        delete_cache_by_match(regex=prefix+"*")
 
     def clear_board_sort_cache(self):
         latest_date = StockBoardHistory.objects.aggregate(date=Max('date'))['date']
-        prefix = "cache:fupanhezi:stockBoardMap:col_{0}:sort:sort:num:".format(latest_date)
-        delete_cache_by_prefix(prefix=prefix)
+        r = "cache:fupanhezi:stockBoardMap:*{0}:*".format(latest_date)
+        delete_cache_by_match(regex=r)
