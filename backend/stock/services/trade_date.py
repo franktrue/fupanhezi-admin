@@ -25,10 +25,10 @@ class StockTradeDateService():
         prefix = "cache:fupanhezi:stockZtHistory:ztRow_"
         for trade_date in trade_date_range:
             r = trade_date.trade_date.strftime("%Y-%m-%d") + "*"
-            delete_cache_by_match(regex=r)
+            delete_cache_by_match(regex=prefix + r)
 
         # 题材相关API缓存
-        delete_cache_by_match(prefix="cache:fupanhezi:stockBoardMap:Board:")
+        delete_cache_by_match(regex="cache:fupanhezi:stockBoardMap:Board:*")
 
     def clear_cache_by(self, prefix):
         delete_cache_by_match(regex=prefix+"*")
