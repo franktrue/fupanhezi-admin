@@ -10,7 +10,8 @@ RUN python3 -m pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/s
     # 由于pywencai包需要nodejs支持
     && apt-get update \
     && apt-get install -y  curl gnupg \
-    && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-    && apt-get install -y  nodejs
+    && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y  nodejs \
+    && npm install jsdom -g
 
 CMD ["/backend/docker_start.sh"]
