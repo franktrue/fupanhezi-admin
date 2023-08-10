@@ -31,7 +31,6 @@ class StockZtHistoryService():
                 if zt_stock.ztlb_num >= 1:
                     head_trade_date = trade_date_range[-1*int(zt_stock.ztlb_num)]
                     sort = zt_stock.ztlb_num
-                    zt_pool.loc[zt_pool['stock_code']==zt_stock.stock_code, 'sort'] = sort
                 else: # 炸板
                     # 查看前一天数据是否存在
                     pre_zt_stock = pre_zt_pool.loc[pre_zt_pool['stock_code']==zt_stock.stock_code, 'ztlb_num']
@@ -42,7 +41,6 @@ class StockZtHistoryService():
                         ztlb_num = pre_zt_stock.values[0]
                         head_trade_date = trade_date_range[-1*int(ztlb_num+1)]
                         sort = ztlb_num + 0.5 # 今日炸板起始日期+0.5
-                        zt_pool.loc[zt_pool['stock_code']==zt_stock.stock_code, 'sort'] = sort
                 # 增加梯队排序
                 StockZtHistory.objects.filter(date=head_trade_date.strftime("%Y-%m-%d"),stock_code=zt_stock.stock_code).update(sort=sort)
                 print("更新{0}，日期{1}排序为{2}".format(zt_stock.stock_name, head_trade_date, sort)) 
