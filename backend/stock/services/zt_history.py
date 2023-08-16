@@ -72,23 +72,21 @@ class StockZtHistoryService():
             "code", 
             "股票简称", 
             "涨停封单额[{0}]".format(trade_date_str), 
-            "首次涨停时间[{0}]".format(trade_date_str), 
-            "最终涨停时间[{0}]".format(trade_date_str), 
+            "首次涨停时间", 
+            "最终涨停时间", 
             "涨停开板次数[{0}]".format(trade_date_str), 
             "几天几板[{0}]".format(trade_date_str), 
             "连续涨停天数[{0}]".format(trade_date_str), 
             "总市值[{0}]".format(trade_date_str),
             "a股市值(不含限售股)[{0}]".format(trade_date_str),
             "自由流通市值[{0}]".format(trade_date_str),
-            # "换手率[{0}]".format(trade_date_str),
             "实际换手率[{0}]".format(trade_date_str),
-            "市盈率(pe)[{0}]".format(trade_date_str),
-            # "基本每股收益[{0}]".format(trade_date_str),
+            # "市盈率(pe)[{0}]".format(trade_date_str),
             "涨停类型[{0}]".format(trade_date_str),
             "涨停原因类别[{0}]".format(trade_date_str)
         ]
-        zt_pool_col = ['stock_code', 'stock_name', 'fb_amount', 'first_zt_time', 'last_zt_time', 'zb_num', 'zt_statistics', 'ztlb_num', 'z_sz', 'lt_sz', 'zs_sz', 'real_hs_rate', 'pe', 'zt_type', 'zt_reson']
-        question = "{0}涨停板 {0}总市值 {0}流通市值 {0}自由流通市值 {0}实际换手率 {0}市盈率 {0}涨停类型 {0}涨停原因".format(trade_date_str)
+        zt_pool_col = ['stock_code', 'stock_name', 'fb_amount', 'first_zt_time', 'last_zt_time', 'zb_num', 'zt_statistics', 'ztlb_num', 'z_sz', 'lt_sz', 'zs_sz', 'real_hs_rate', 'zt_type', 'zt_reson']
+        question = "{0}总市值 {0}流通市值 {0}自由流通市值 {0}实际换手率 {0}涨停类型 {0}涨停原因 {0}涨停封单额 首次涨停时间 最终涨停时间 {0}涨停开板次数 {0}几天几板 {0}连续涨停天数".format(trade_date_str)
         zt_pool = pywencai.get(question=question, loop=True)
         zt_pool = zt_pool[zt_pool_col_zh]
         zt_pool.columns = zt_pool_col
@@ -97,7 +95,7 @@ class StockZtHistoryService():
         zb_pool_col_zh = [
             "code", 
             "股票简称", 
-            "首次涨停时间[{0}]".format(trade_date_str), 
+            "首次涨停时间", 
             "涨停开板次数[{0}]".format(trade_date_str), 
             "几天几板[{0}]".format(trade_date_str), 
             "总市值[{0}]".format(trade_date_str),
