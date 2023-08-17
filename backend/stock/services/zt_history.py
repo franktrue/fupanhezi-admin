@@ -95,7 +95,7 @@ class StockZtHistoryService():
         zb_pool_col_zh = [
             "code", 
             "股票简称", 
-            "首次涨停时间", 
+            "首次涨停时间[{0}]".format(trade_date_str), 
             "涨停开板次数[{0}]".format(trade_date_str), 
             "几天几板[{0}]".format(trade_date_str), 
             "总市值[{0}]".format(trade_date_str),
