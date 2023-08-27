@@ -1,4 +1,5 @@
-from stock.models import StockBoardConcept, StockBoardIndustry, StockBoardMap, StockBoardHistory, StockGnnMap,StockBoardSub
+from django.db.models import Sum, F, DecimalField
+from stock.models import StockBoardConcept, StockBoardIndustry, StockBoardMap, StockBoardHistory, StockGnnMap,StockBoardSub, StockHistory
 from stock.utils.db import get_engine
 from django.db import connections
 from django.core.cache import cache
@@ -69,6 +70,31 @@ class StockBoardService():
         else:
             StockBoardHistory.objects.filter(date=trade_date).delete()
         df.to_sql(name=StockBoardHistory._meta.db_table, con=self.engine, if_exists="append", index=False)
+        concepts = StockBoardConcept.objects.filter(code__startswith="7").all()
+        for concept in concepts:
+            self.calculate(trade_date, code=concept.code, name=concept.name)
+
+    def calculate(self, date, code, name, type = "concept"):
+        stocks = StockBoardMap.objects.filter(code=code, type=type).values_list("stock_code", flat=True)
+        if stocks is None:
+            return
+        t = StockHistory.objects.filter(date=date, stock_code__in=stocks).aggregate(sum_sz=Sum("z_sz"))
+        h = StockHistory.objects.filter(date=date, stock_code__in=stocks).aggregate(close_pe=Sum(F('z_sz') * F('close_pe'), output_field=DecimalField()))
+        model = StockBoardHistory(
+            date = date,
+            code = code,
+            name = name,
+            open = -1,
+            close = -1,
+            high = -1,
+            low = -1,
+            vol = -1,
+            amo = -1,
+            close_pe = round(h['close_pe']/t['sum_sz'], 2),
+            hs_rate = -1,
+            type = type
+        )
+        model.save()
 
     def fetch_history_by_task(self, trade_date):
         trade_date = datetime.datetime.strptime(trade_date, '%Y-%m-%d').date()
@@ -175,3 +201,18 @@ class StockBoardService():
                 model.code = name
                 model.brief = item.brief
             model.save()
+
+    def batchAdd(self, code, board_name, type, stocks):
+        for stock in stocks:
+            stock_code, stock_name = stock.split("/")
+            model = StockBoardMap.objects.filter(board_name=board_name, stock_code = stock_code, type = type).first()
+            if model is None:
+                model = StockBoardMap(
+                    code = code,
+                    board_name = board_name,
+                    stock_code = stock_code,
+                    stock_name = stock_name,
+                    type = type
+                )
+                model.save()
+            

@@ -60,3 +60,9 @@ class StockBoardMapViewSet(CustomModelViewSet):
         service = StockBoardService()
         service.batch(name = request.data.get('name'), ids=request.data.get('ids'))
         return DetailResponse(data=[], msg="批量操作成功")
+    
+    @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
+    def batchAdd(self, request, *args, **kwargs):
+        service = StockBoardService()
+        service.batchAdd(code = request.data.get('code'), board_name=request.data.get('board_name'), type=request.data.get('type'), stocks=request.data.get('stocks'))
+        return DetailResponse(data=[], msg="批量操作成功")  

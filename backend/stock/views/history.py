@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from dvadmin.utils.json_response import DetailResponse
 from stock.services.history import StockHistoryService
 from stock.tasks import update_auction
+from django.db.models import Q
 import datetime
 
 class StockHistorySerializer(CustomModelSerializer):
@@ -70,3 +71,11 @@ class StockHistoryViewSet(CustomModelViewSet):
         for trade_date in trade_date_range.iterator():
             update_auction.delay(trade_date.trade_date)
         return DetailResponse(data=[], msg="更新成功")
+
+    @action(methods=["GET"], detail=False, permission_classes=[IsAuthenticated])
+    def search_stocks(self, request, *args, **kwargs):
+        keyword = request.query_params.get('query')
+        trade_date = StockTradeDate.objects.filter(trade_date__lt=datetime.date.today()).first()
+        stocks = StockHistory.objects.filter(date="2023-08-04").filter(Q(stock_code__startswith=keyword) | Q(stock_name__contains=keyword)).values("stock_code", "stock_name")
+        print(stocks)
+        return DetailResponse(data=stocks, msg="获取成功")

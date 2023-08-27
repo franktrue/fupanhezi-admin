@@ -56,3 +56,11 @@ export function UpdateAuction(obj) {
     data: obj
   })
 }
+
+export function SearchStocks(query) {
+  return request({
+    url: urlPrefix+'search_stocks/',
+    method: 'get',
+    params: query
+  })
+}

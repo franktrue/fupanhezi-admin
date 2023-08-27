@@ -11,6 +11,9 @@
           <el-button size="small" type="primary" @click="addRow"
             ><i class="el-icon-plus" /> 新增</el-button
           >
+          <el-button size="small" type="success" @click="addBatch"
+            ><i class="el-icon-plus" /> 批量新增</el-button
+          >
           <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchLatest" :loading="loading"><i class="el-icon-refresh" /> 同步数据</el-button>
         </el-button-group>
         <crud-toolbar
@@ -22,11 +25,47 @@
         />
       </div>
     </d2-crud-x>
+    <el-dialog
+      :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
+      :append-to-body="true"
+      width="40%"
+    >
+      <template slot="title">
+        批量新增
+      </template>
+
+      <el-form :model="batchForm" ref="batchForm" :inline="true">
+        <el-form-item label="股票代码" prop="stocks">
+          <el-select
+            v-model="batchForm.stocks"
+            multiple
+            filterable
+            remote
+            reserve-keyword
+            placeholder="请输入关键词"
+            :remote-method="remoteStocks"
+            :loading="loading">
+            <el-option
+              v-for="item in stockOptions"
+              :key="item.stock_code"
+              :label="item.stock_code + item.stock_name"
+              :value="item.stock_code + '/' + item.stock_name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="batchSubmit" :loading="loading">确定</el-button>
+      </div>
+    </el-dialog>
   </d2-container>
 </template>
 
 <script>
 import * as api from './api'
+import { SearchStocks } from '@/views/stock/histrory/api'
 import { crudOptions } from './crud'
 import { d2CrudPlus } from 'd2-crud-plus'
 export default {
@@ -46,10 +85,40 @@ export default {
   },
   data () {
     return {
-      loading: false
+      loading: false,
+      dialogFormVisible: false,
+      batchForm: {
+        stocks: []
+      },
+      stockOptions:[]
     }
   },
   methods: {
+    addBatch() {
+      this.dialogFormVisible = true
+      this.batchForm.stocks = []
+    },
+    remoteStocks(query) {
+      SearchStocks({query: query}).then(res => {
+        this.stockOptions = res.data
+      })
+      console.log(this.stockOptions)
+    },
+    batchSubmit() {
+      api.BatchData({
+        code: this.boardRow.code,
+        board_name: this.boardRow.name,
+        type: this.boardRow.type,
+        stocks: this.batchForm.stocks
+      }).then(res => {
+        this.$message.success('更新成功')
+        this.loading = false
+        this.dialogFormVisible = false
+        this.handleSearch()
+      }).catch(e => {
+        this.loading = false
+      })
+    },
     fetchLatest() {
       const that = this
       that.loading = true

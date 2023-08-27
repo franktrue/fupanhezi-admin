@@ -56,3 +56,4 @@ class StockBoardHistoryViewSet(CustomModelViewSet):
         for trade_date in trade_date_range.iterator():
             service.fetch_history(trade_date=trade_date.trade_date, type=type)
         return DetailResponse(data=[], msg="更新成功")
+    
