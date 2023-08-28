@@ -69,7 +69,8 @@ def task__board():
         board.save()
         update_board_cons.apply_async((row.code, row.name, 'concept'), countdown = 4*i)
         i = i+1
-    df2 = ak.stock_board_industry_name_ths()
+    # 仅一级行业
+    df2 = ak.stock_board_industry_name_ths().head(76)
     for row in df2.itertuples():
         # 每隔任务间隔5s防止触发保护机制
         update_board_cons.apply_async((row.code, row.name, 'industry'), countdown = 4*i)
