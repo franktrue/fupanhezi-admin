@@ -61,9 +61,9 @@ export function BatchData(obj) {
 }
 
 
-export function BatchAllData(obj) {
+export function BatchAddData(obj) {
   return request({
-    url: urlPrefix + 'batchAll/',
+    url: urlPrefix + 'batchAdd/',
     method: 'post',
     data: obj
   })
