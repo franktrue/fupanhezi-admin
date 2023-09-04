@@ -105,7 +105,7 @@ export default {
       console.log(this.stockOptions)
     },
     batchSubmit() {
-      api.BatchData({
+      api.BatchAllData({
         code: this.boardRow.code,
         board_name: this.boardRow.name,
         type: this.boardRow.type,

@@ -54,7 +54,16 @@ export function FetchData(obj) {
 
 export function BatchData(obj) {
   return request({
-    url: urlPrefix + 'batchAdd/',
+    url: urlPrefix + 'batch/',
+    method: 'post',
+    data: obj
+  })
+}
+
+
+export function BatchAllData(obj) {
+  return request({
+    url: urlPrefix + 'batchAll/',
     method: 'post',
     data: obj
   })
