@@ -8,7 +8,16 @@ class User(models.Model):
     update_time = models.DateTimeField(auto_now=True)
     delete_time = models.DateTimeField(auto_now=True)
     del_state = models.BooleanField(default=False)
-    parent_id = models.BigIntegerField(default=0)
+    parent = models.ForeignKey(
+        to="User",
+        on_delete=models.CASCADE,
+        default=None,
+        verbose_name="来源",
+        db_constraint=False,
+        null=True,
+        blank=True,
+        help_text="来源",
+    )
     mobile = models.CharField(max_length=11, null=True, blank=True)
     password = models.CharField(max_length=255, null=True, blank=True)
     nickname = models.CharField(max_length=255, default='')

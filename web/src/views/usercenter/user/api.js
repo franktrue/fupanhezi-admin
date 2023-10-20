@@ -45,3 +45,16 @@ export function DelObj (id) {
     data: { id }
   })
 }
+
+/**
+ * 生成小程序码
+ * @param {*} obj
+ * @returns
+ */
+export function QrcodeObj(obj) {
+  return request({
+    url: urlPrefix + 'qrcode/',
+    method: 'post',
+    data: obj
+  })
+}

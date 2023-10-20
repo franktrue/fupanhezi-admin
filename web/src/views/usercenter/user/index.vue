@@ -18,6 +18,7 @@
           <el-button size="small" type="primary" @click="addRow"
             ><i class="el-icon-plus" /> 新增</el-button
           >
+          <el-button size="small" type="success" :loading="loading" @click="dialogFormVisible = true"><i class="el-icon-qrcode" /> 小程序码</el-button>
         </el-button-group>
         <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
@@ -44,6 +45,37 @@
       >
       </user-withdraw-record>
     </el-drawer>
+
+    <el-dialog
+      :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
+      width="40%"
+    >
+      <template slot="title">
+        小程序码 <small>参数自定义，需小程序端配合修改</small>
+      </template>
+
+      <el-form :model="fetchForm" ref="fetchForm" :rules="fetchFormRules">
+        <el-form-item label="参数" prop="scene">
+          <el-input
+            v-model="fetchForm.scene"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="页面" prop="page">
+          <el-input
+            v-model="fetchForm.page"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="fetchDataSubmit" :loading="loading">确定</el-button>
+      </div>
+      <el-image v-if="url.length > 0"
+      style="width: 100px; height: 100px"
+      :src="'data:image/png;base64,'+url"
+      :fit="fit"></el-image>
+    </el-dialog>
   </d2-container>
 </template>
 
@@ -59,13 +91,41 @@ export default {
   mixins: [d2CrudPlus.crud],
   data () {
     return {
+      dialogFormVisible: false,
       loading: false,
       drawer: false,
       drawerWithdrawRecord: false,
-      userRow: {}
+      userRow: {},
+      fetchForm: {
+        scene: 'free_day=3&parent_id=',
+        page: 'pages/tabbar-1/tabbar-1',
+      },
+      fetchFormRules: {
+        scene: [
+          { required: true, message: '必填项' }
+        ]
+      },
+      url: ""
     }
   },
   methods: {
+    fetchDataSubmit() {
+      const that = this
+      that.$refs.fetchForm.validate((valid) => {
+        if (valid) {
+          that.loading = true
+          api.QrcodeObj(that.fetchForm).then((res) => {
+            that.url = res.data
+            that.loading = false
+            that.$message.success('操作成功')
+          }).catch(e => {
+            that.loading = false
+          })
+        } else {
+          that.$message.error('表单校验失败，请检查')
+        }
+      })
+    },
     userAuth (scope) {
       this.drawer = true
       this.userRow = scope.row

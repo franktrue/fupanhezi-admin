@@ -1,6 +1,3 @@
-import { request } from '@/api/service'
-import { urlPrefix as subjectPrefix } from './api'
-import XEUtils from 'xe-utils'
 export const crudOptions = (vm) => {
   return {
     pageOptions: {
@@ -55,11 +52,7 @@ export const crudOptions = (vm) => {
       ]
 
     },
-    indexRow: { // 或者直接传true,不显示title，不居中
-      title: '序号',
-      align: 'center',
-      width: 80
-    },
+    indexRow: false,
     viewOptions: {
       componentType: 'form'
     },
@@ -71,13 +64,18 @@ export const crudOptions = (vm) => {
       {
         title: 'ID',
         key: 'id',
-        show: false,
         width: 60,
         form: {
           component: {
             show: false
           }
         }
+      },
+      {
+        title: '上级ID',
+        key: 'parent_id',
+        show: false,
+        search: true
       },
       {
         title: '昵称',
@@ -106,6 +104,10 @@ export const crudOptions = (vm) => {
             placeholder: '请输入昵称'
           },
         },
+      },
+      {
+        title: '邀请数量',
+        key: 'has_children'
       },
       {
         title: '手机号',

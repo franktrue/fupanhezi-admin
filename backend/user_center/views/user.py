@@ -1,8 +1,13 @@
+# -*- coding: utf-8 -*-
+from rest_framework import serializers
 from user_center.models import User
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
-from dvadmin.utils.json_response import DetailResponse
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from dvadmin.utils.json_response import DetailResponse, SuccessResponse
 from stock.utils.cache import delete_cache_by_key
+from user_center.services.qrocde import QrcodeService
 
 class MemberSerializer(CustomModelSerializer):
     """
@@ -11,6 +16,19 @@ class MemberSerializer(CustomModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+    
+    parent_name = serializers.CharField(read_only=True, source='parent.name')
+    has_children = serializers.SerializerMethodField()
+    hasChild = serializers.SerializerMethodField()
+
+    def get_hasChild(self, instance):
+        hasChild = User.objects.filter(parent=instance.id)
+        if hasChild:
+            return True
+        return False
+    
+    def get_has_children(self, obj: User):
+        return User.objects.filter(parent_id=obj.id).count()
 
 class MemberCreateUpdateSerializer(CustomModelSerializer):
     """
@@ -55,3 +73,12 @@ class UserViewSet(CustomModelViewSet):
         instance.delete()
         delete_cache_by_key(key)
         return DetailResponse(data=[], msg="删除成功")
+    
+    # 获取小程序码
+    @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
+    def qrcode(self, request, *args, **kwargs):
+        scene = request.data.get('scene')
+        page = request.data.get('page')
+        service = QrcodeService()
+        data = service.unlimited(scene = scene, page = page)
+        return DetailResponse(data=data, msg="成功")
