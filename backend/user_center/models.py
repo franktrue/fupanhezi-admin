@@ -1,5 +1,5 @@
 from django.db import models
-
+from order.models import OrderInfo
 from dvadmin.utils.models import CoreModel
 
 # Create your models here.
@@ -8,16 +8,7 @@ class User(models.Model):
     update_time = models.DateTimeField(auto_now=True)
     delete_time = models.DateTimeField(auto_now=True)
     del_state = models.BooleanField(default=False)
-    parent = models.ForeignKey(
-        to="User",
-        on_delete=models.CASCADE,
-        default=None,
-        verbose_name="来源",
-        db_constraint=False,
-        null=True,
-        blank=True,
-        help_text="来源",
-    )
+    parent_id = models.BigIntegerField(default=0)
     mobile = models.CharField(max_length=11, null=True, blank=True)
     password = models.CharField(max_length=255, null=True, blank=True)
     nickname = models.CharField(max_length=255, default='')
@@ -25,6 +16,10 @@ class User(models.Model):
     avatar = models.CharField(max_length=255, null=True, blank=True)
     info = models.CharField(max_length=255, null=True, blank=True)
     level = models.PositiveSmallIntegerField(default=1)
+
+    reward_type = models.CharField(max_length=30, null=False, default="percent")
+    reward_value = models.DecimalField(max_digits=10, decimal_places=2, default=30)
+
     expire_time = models.DateTimeField()
     class Meta:
         db_table = 'user'
@@ -58,3 +53,36 @@ class UserWithdrawRecord(CoreModel):
         verbose_name = '提现记录'
         verbose_name_plural = verbose_name
         ordering = ('-create_datetime',)
+
+class UserReward(models.Model):
+    create_time = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now=True)
+    delete_time = models.DateTimeField(auto_now=True)
+    del_state = models.BooleanField(default=False)
+
+    user = models.ForeignKey(
+        to="User",
+        verbose_name="所属用户",
+        on_delete=models.PROTECT,
+        db_constraint=False,
+        null=True,
+        blank=True,
+        help_text="所属用户",
+    )
+    invite_user_id = models.BigIntegerField(default=0)
+    order = models.ForeignKey(
+        to=OrderInfo,
+        verbose_name="关联订单",
+        on_delete=models.PROTECT,
+        db_constraint=False,
+        null=True,
+        blank=True,
+        help_text="关联订单",
+    )
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    class Meta:
+        db_table = 'user_reward'
+        verbose_name = '奖励记录'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_time',)

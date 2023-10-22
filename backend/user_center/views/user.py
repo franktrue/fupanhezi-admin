@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Sum
 from rest_framework import serializers
-from user_center.models import User
+from user_center.models import User, UserReward, UserWithdrawRecord
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -16,19 +17,31 @@ class MemberSerializer(CustomModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-    
-    parent_name = serializers.CharField(read_only=True, source='parent.name')
-    has_children = serializers.SerializerMethodField()
-    hasChild = serializers.SerializerMethodField()
 
-    def get_hasChild(self, instance):
-        hasChild = User.objects.filter(parent=instance.id)
-        if hasChild:
-            return True
-        return False
-    
+    has_children = serializers.SerializerMethodField()
+
+    reward_amount = serializers.SerializerMethodField()
+    withdraw_amount = serializers.SerializerMethodField()
+
+    reward_info = serializers.SerializerMethodField()
+
     def get_has_children(self, obj: User):
         return User.objects.filter(parent_id=obj.id).count()
+    
+    # 佣金总金额
+    def get_reward_amount(self, obj: User):
+        res = UserReward.objects.filter(user_id=obj.id).aggregate(Sum("amount"))
+        return res['amount__sum']
+    
+    # 已提现金额
+    def get_withdraw_amount(self, obj: User):
+        res = UserWithdrawRecord.objects.filter(user_id=obj.id, status='2').aggregate(Sum("amount"))
+        return res['amount__sum']
+    
+    def get_reward_info(self, obj: User):
+        if obj.reward_type == 'percent':
+            return f"百分比：{obj.reward_value}%"
+        return f"固额：{obj.reward_value}元"
 
 class MemberCreateUpdateSerializer(CustomModelSerializer):
     """

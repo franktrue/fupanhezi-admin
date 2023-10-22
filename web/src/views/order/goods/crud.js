@@ -58,6 +58,24 @@ export const crudOptions = vm => {
             }
           },
           {
+            title: '是否体验卡',
+            key: 'is_try',
+            type: 'dict-switch',
+            search: {
+              disabled: true
+            },
+            dict: {
+              data: vm.dictionary('button_whether_bool')
+            },
+            form: {
+              value: false,
+              component: {
+                placeholder: '请选择是否目录'
+              },
+              helper: "体验卡仅可购买一次且无法分佣"
+            }
+          },
+          {
             title: '有效期（年）',
             key: 'year_num',
             type: 'number',

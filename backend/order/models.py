@@ -58,8 +58,10 @@ class OrderGoods(CoreModel):
     payment_price = models.FloatField()
     sale_num = models.BigIntegerField(default='0')
 
+    is_try = models.BooleanField(default=False, verbose_name="是否体验卡", help_text="是否体验卡")
+
     class Meta:
         db_table = 'order_goods'
         verbose_name = '商品'
         verbose_name_plural = verbose_name
-        ordering = ('-create_datetime',)
+        ordering = ('year_num','month_num', 'day_num')
