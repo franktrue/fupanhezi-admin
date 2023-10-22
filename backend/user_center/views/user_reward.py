@@ -17,7 +17,9 @@ class UserRewardSerializer(CustomModelSerializer):
 
     def get_invite_user(self, instance):
         if instance.invite_user_id > 0 :
-            return User.objects.filter(id=instance.invite_user_id).first().nickname
+            res =  User.objects.filter(id=instance.invite_user_id).first()
+            if res is not None:
+                return res.nickname
         return ""
 
 class UserRewardCreateUpdateSerializer(CustomModelSerializer):
