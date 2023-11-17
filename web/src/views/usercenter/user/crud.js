@@ -227,6 +227,15 @@ export const crudOptions = (vm) => {
         }
       },
       {
+        title: '最后登录时间',
+        key: 'update_time',
+        sortable: true,
+        type: 'datetime',
+        form: {
+          disabled: true
+        }
+      },
+      {
         title: '注册时间',
         key: 'create_time',
         sortable: true,
