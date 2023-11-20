@@ -65,6 +65,7 @@ export const crudOptions = (vm) => {
         title: 'ID',
         key: 'id',
         width: 60,
+        search: true,
         form: {
           component: {
             show: false

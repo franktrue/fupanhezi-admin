@@ -63,7 +63,7 @@ class UserViewSet(CustomModelViewSet):
     serializer_class = MemberSerializer
     create_serializer_class = MemberCreateUpdateSerializer
     update_serializer_class = MemberCreateUpdateSerializer
-    filter_fields = ['parent_id', 'nickname', 'mobile']
+    filter_fields = ['id', 'parent_id', 'nickname', 'mobile']
     cache_key = "cache:fupanhezi:user:id:"
 
     def update(self, request, *args, **kwargs):
