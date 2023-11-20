@@ -9,7 +9,7 @@
           </div>
         </el-col>
         <el-col :span="6" :offset="6" style="text-align: right;">
-          <i class="el-icon-user-solid" size="48px"></i>
+          <i class="el-icon-money" size="48px"></i>
         </el-col>
       </el-row>
     </div>
@@ -22,7 +22,7 @@ import { request } from '@/api/service'
 export default {
   sort: 1,
   title: '订单总额',
-  icon: 'el-icon-user-solid',
+  icon: 'el-icon-money',
   description: '平台总订单额',
   name: 'orderTotal',
   height: 14,
