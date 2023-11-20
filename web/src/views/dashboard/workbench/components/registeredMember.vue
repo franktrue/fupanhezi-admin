@@ -5,7 +5,7 @@
       backgroundColor: randomColor(),
     }"
   >
-    <div id="main" :style="{width: pxData.wpx+'px',height: pxData.hpx+'px'}"></div>
+    <div id="registeredMember" :style="{width: pxData.wpx+'px',height: pxData.hpx+'px'}"></div>
   </el-card>
 </template>
 
@@ -182,7 +182,7 @@ export default {
     }
   },
   mounted () {
-    this.myChart = this.$echarts.init(document.getElementById('main'))
+    this.myChart = this.$echarts.init(document.getElementById('registeredMember'))
     this.initGet()
     this.drawLine()
   }

@@ -6,7 +6,7 @@
     }"
   >
     <!-- shadow="always" -->
-    <div id="myChart" :style="{width: pxData.wpx+'px',height: pxData.hpx+'px'}"></div>
+    <div id="memberLogin" :style="{width: pxData.wpx+'px',height: pxData.hpx+'px'}"></div>
   </el-card>
 </template>
 
@@ -186,7 +186,7 @@ export default {
     }
   },
   mounted () {
-    this.myChart = this.$echarts.init(document.getElementById('myChart'))
+    this.myChart = this.$echarts.init(document.getElementById('memberLogin'))
     this.initGet()
     this.drawLine()
   }
