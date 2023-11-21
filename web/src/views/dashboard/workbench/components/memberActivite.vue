@@ -5,19 +5,19 @@
       backgroundColor: randomColor(),
     }"
   >
-    <div id="registeredMember" :style="{width: pxData.wpx+'px',height: pxData.hpx+'px'}"></div>
+    <!-- shadow="always" -->
+    <div id="memberLogin" :style="{width: pxData.wpx+'px',height: pxData.hpx+'px'}"></div>
   </el-card>
 </template>
 
 <script>
 import { request } from '@/api/service'
-
 export default {
-  sort: 7,
-  title: '注册会员趋势',
-  name: 'registeredMemeber',
+  sort: 6,
+  title: '会员活跃趋势',
+  name: 'memberActivite',
   icon: 'el-icon-s-data',
-  description: '会员注册',
+  description: '会员活跃',
   height: 28,
   width: 20,
   isResizable: true,
@@ -44,15 +44,17 @@ export default {
   data () {
     this.myChart = null
     return {
-      data: []
+      data: [],
+      radio: '7'
+
     }
   },
   methods: {
     initGet () {
       request({
-        url: '/api/user_center/datav/registered_user/'
+        url: '/api/user_center/datav/activite_user/'
       }).then((res) => {
-        this.data = res.data.registered_user_list
+        this.data = res.data
         this.drawLine(this.data)
       })
     },
@@ -66,7 +68,9 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       // 绘制图表
       const xAxisData = this.data.map(item => item.day)
-      const seriesData = this.data.map(item => item.count)
+      const seriesData1 = this.data.map(item => item.register)
+      const seriesData2 = this.data.map(item => item.login)
+
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -82,12 +86,13 @@ export default {
             }
           },
           formatter: params => {
-            const param = params[0]
-            return `<div style="padding: 8px;"><div style="color: #333;">${param.name}</div><div style="color: #FFA500;">${param.value} 人</div></div>`
+            const param1 = params[0]
+            const param2 = params[1]
+            return `<div style="padding: 8px;"><div style="color: #333;">${param1.name}</div><div style="color: #FFA500;">${param1.seriesName}:${param1.value} 人</div><div style="color: #FFA500;">${param2.seriesName}:${param2.value} 次</div></div>`
           }
         },
         legend: {
-          data: ['会员注册数'],
+          data: ['会员注册数', '会员登陆数'],
           textStyle: {
             color: '#666',
             fontSize: 12
@@ -143,10 +148,46 @@ export default {
           {
             name: '会员注册数',
             type: 'line',
-            data: seriesData,
+            data: seriesData1,
             symbol: 'circle',
-            symbolSize: 6,
             smooth: true,
+            symbolSize: 6,
+            lineStyle: {
+              color: 'rgba(0, 128, 255, 0.8)',
+              width: 2
+            },
+            itemStyle: {
+              color: 'rgba(0, 128, 255, 0.8)',
+              borderColor: 'rgba(0, 128, 255, 1)',
+              borderWidth: 1
+            },
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(140,189,250, 0.8)'
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 128, 255, 0)'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: '会员登陆数',
+            type: 'line',
+            data: seriesData2,
+            symbol: 'circle',
+            smooth: true,
+            symbolSize: 6,
             lineStyle: {
               color: 'rgba(38,204,164, 0.8)',
               width: 2
@@ -178,24 +219,32 @@ export default {
           }
         ]
       }
+
       this.myChart.setOption(option)
     }
   },
   mounted () {
-    this.myChart = this.$echarts.init(document.getElementById('registeredMember'))
+    this.myChart = this.$echarts.init(document.getElementById('memberLogin'))
     this.initGet()
     this.drawLine()
   }
 }
 </script>
 
-<style scoped lang="scss">
+  <style scoped lang="scss">
 .card-view {
   //border-radius: 10px;
   color: $color-primary;
 }
-
-.el-card {
+.el-card{
   height: 100%;
+}
+::v-deep .el-card__body {
+  width: 100%;
+  height: 100%;
+}
+
+.el-radio-button__inner {
+  border-radius: 20px;
 }
 </style>

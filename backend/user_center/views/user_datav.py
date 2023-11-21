@@ -81,3 +81,24 @@ class DataVViewSet(GenericViewSet):
             result.append({'day': date, 'count': data_dict[date] if date in data_dict else 0})
         result = sorted(result, key=lambda x: x['day'])
         return DetailResponse(data={"login_user": result}, msg="获取成功")
+
+    @action(methods=["GET"], detail=False, permission_classes=[IsAuthenticated])
+    def activite_user(self, request):
+        """
+        用户活动趋势
+        :param request:
+        :return:
+        """
+        day = 30
+        today = datetime.datetime.today()
+        seven_days_ago = today - datetime.timedelta(days=day)
+        register_users = User.objects.filter(create_time__gte=seven_days_ago).annotate(day=TruncDay('create_time')).values('day').annotate(count=Count('id')).order_by('-day')
+        login_users = User.objects.filter(update_time__gte=seven_days_ago).annotate(day=TruncDay('update_time')).values('day').annotate(count=Count('id')).order_by('-day')
+        result = []
+        register_dict = {ele.get('day').strftime('%Y-%m-%d'): ele.get('count') for ele in register_users}
+        login_dict = {ele.get('day').strftime('%Y-%m-%d'): ele.get('count') for ele in login_users}
+        for i in range(day):
+            date = (today - datetime.timedelta(days=i)).strftime('%Y-%m-%d')
+            result.append({'day': date, 'register': register_dict[date] if date in register_dict else 0, 'login': login_dict[date] if date in login_dict else 0,})
+        result = sorted(result, key=lambda x: x['day'])
+        return DetailResponse(data=result, msg="获取成功")
