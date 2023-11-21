@@ -39,6 +39,7 @@ class StockZtHistoryService():
                         continue
                     else:
                         ztlb_num = pre_zt_stock.values[0]
+                        zt_pool.loc[zt_pool['stock_code']==zt_stock.stock_code, 'ztlb_num'] = -1*(ztlb_num+1)
                         head_trade_date = trade_date_range[-1*int(ztlb_num+1)]
                         sort = ztlb_num + 0.5 # 今日炸板起始日期+0.5
                 # 增加梯队排序
