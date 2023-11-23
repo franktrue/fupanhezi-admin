@@ -53,7 +53,7 @@ class DataVViewSet(GenericViewSet):
         day = 30
         today = datetime.datetime.today()
         seven_days_ago = today - datetime.timedelta(days=day)
-        orders = OrderInfo.objects.filter(create_datetime__gte=seven_days_ago).annotate(day=TruncDay('create_datetime')).values('day').annotate(amount=Sum('payment_price')).order_by('-day')
+        orders = OrderInfo.objects.filter(create_datetime__gte=seven_days_ago, is_pay='1').annotate(day=TruncDay('create_datetime')).values('day').annotate(amount=Sum('payment_price')).order_by('-day')
         result = []
         data_dict = {ele.get('day').strftime('%Y-%m-%d'): ele.get('amount') for ele in orders}
         for i in range(day):
