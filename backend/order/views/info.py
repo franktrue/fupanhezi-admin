@@ -30,5 +30,5 @@ class OrderInfoViewSet(CustomModelViewSet):
     serializer_class = OrderInfoSerializer
     create_serializer_class = OrderInfoCreateUpdateSerializer
     update_serializer_class = OrderInfoCreateUpdateSerializer
-    filter_fields = ['order_no', 'transaction_id', 'status', 'is_pay', 'payment_way']
-    search_fields = ['order_no', 'transaction_id', 'status', 'is_pay', 'payment_way']
+    filter_fields = ['user_id', 'order_no', 'transaction_id', 'status', 'is_pay', 'payment_way']
+    search_fields = ['user_id', 'order_no', 'transaction_id', 'status', 'is_pay', 'payment_way']
