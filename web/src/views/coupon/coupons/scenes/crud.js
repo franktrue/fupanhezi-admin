@@ -57,7 +57,7 @@ export const crudOptions = (vm) => {
         type: 'select',
         dict: {
           url(dict,{form,component}){
-            return '/api/order/goods'
+            return '/api/order/goods/'
           },
           value:'id', // value的属性名
           label:'name', // label的属性名
