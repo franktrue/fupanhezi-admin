@@ -238,6 +238,26 @@ export const crudOptions = (vm) => {
         }
       },
       {
+        title: '已领取',
+        key: 'claimed_count',
+        type: "number",
+        form: {
+          component: {
+            show: false
+          }
+        }
+      },
+      {
+        title: '已使用',
+        key: 'used_count',
+        type: "number",
+        form: {
+          component: {
+            show: false
+          }
+        }
+      },
+      {
         title: '说明',
         key: 'description',
         type: 'textarea',
