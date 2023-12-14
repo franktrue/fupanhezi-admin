@@ -59,6 +59,7 @@ class OrderGoods(CoreModel):
     payment_price = models.FloatField()
     sale_num = models.BigIntegerField(default='0')
     is_try = models.BooleanField(default=False, verbose_name="是否体验卡", help_text="是否体验卡")
+    level = models.SmallIntegerField(default=1, verbose_name="对应等级")
 
     class Meta:
         db_table = 'order_goods'

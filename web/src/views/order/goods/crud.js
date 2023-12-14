@@ -167,6 +167,19 @@ export const crudOptions = vm => {
             }
           },
           {
+            title: '对应等级',
+            key: 'level',
+            type: "number",
+            form: {
+              value: 1,
+              component: {
+                name: 'el-input-number',
+              },
+              rules: [{ required: true, message: '对应等级必填' }],
+              helper: "用户默认等级为1级"
+            }
+          },
+          {
             title: '销量',
             key: 'sale_num',
             type: "number",

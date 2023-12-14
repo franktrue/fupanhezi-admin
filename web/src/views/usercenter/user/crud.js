@@ -157,17 +157,17 @@ export const crudOptions = (vm) => {
           }
         }
       },
-      {
-        title: '分佣信息',
-        key: 'reward_info',
-        width: 120,
-        type: 'text',
-        form: {
-          component: {
-            show: false
-          }
-        }
-      },
+      // {
+      //   title: '分佣信息',
+      //   key: 'reward_info',
+      //   width: 120,
+      //   type: 'text',
+      //   form: {
+      //     component: {
+      //       show: false
+      //     }
+      //   }
+      // },
       {
         title: '是否代理',
         key: 'is_agent',
@@ -270,6 +270,19 @@ export const crudOptions = (vm) => {
               precision: 2
             }
           },
+        }
+      },
+      {
+        title: '等级',
+        key: 'level',
+        type: "number",
+        form: {
+          value: 1,
+          component: {
+            name: 'el-input-number',
+          },
+          rules: [{ required: true, message: '等级必填' }],
+          helper: "等级越高权限越多，默认1级"
         }
       },
       {
