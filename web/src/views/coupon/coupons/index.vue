@@ -22,7 +22,7 @@
         <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
     </d2-crud-x>
-    <el-drawer :visible.sync="drawer" :size="700">
+    <el-drawer :visible.sync="drawer" :size="800">
       <div slot="title">
         <span>使用场景</span>
         <el-tag size="small" style="margin-left: 10px">{{ subjectRow.name }}</el-tag>

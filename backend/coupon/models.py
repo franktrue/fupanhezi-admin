@@ -30,6 +30,8 @@ class CouponScenesModel(CoreModel):
     
     goods_id = models.IntegerField(verbose_name="商品ID")
     agent_id = models.IntegerField(verbose_name="代理ID")
+    claimed_count = models.IntegerField(default=0, verbose_name="领取数量")
+    used_count = models.IntegerField(default=0, verbose_name="使用数量")
     status = models.SmallIntegerField(default=0, verbose_name="状态")
     class Meta:
         db_table = "coupon_scenes"
