@@ -1,5 +1,6 @@
 from coupon.models import CouponScenesModel
 from order.models import OrderGoods
+from user_center.models import User
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from dvadmin.utils.json_response import DetailResponse
@@ -25,7 +26,7 @@ class CouponScenesSerializer(CustomModelSerializer):
     
     def get_agent_name(self, instance):
         if instance.agent_id > 0 :
-            res =  OrderGoods.objects.filter(id=instance.agent_id).first()
+            res =  User.objects.filter(id=instance.agent_id).first()
             if res is not None:
                 return res.nickname
         return ""
