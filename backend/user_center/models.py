@@ -18,9 +18,14 @@ class User(models.Model):
     level = models.PositiveSmallIntegerField(default=1)
 
     reward_type = models.CharField(max_length=30, null=False, default="percent")
-    reward_value = models.DecimalField(max_digits=10, decimal_places=2, default=30)
+    reward_value = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     expire_time = models.DateTimeField()
+    is_agent = models.SmallIntegerField(default=0, verbose_name="是否代理")
+    reward1 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="一级分佣比例")
+    reward2 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="二级分佣比例")
+    reward3 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="三级分佣比例")
+
     class Meta:
         db_table = 'user'
         verbose_name = '用户管理'

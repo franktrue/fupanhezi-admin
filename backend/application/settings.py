@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     'channels',
     'stock',
     'order',
-    'user_center'
+    'user_center',
+    'coupon'
 ]
 
 MIDDLEWARE = [

@@ -48,16 +48,16 @@ class OrderItem(CoreModel):
         ordering = ('-create_datetime',)
 
 class OrderGoods(CoreModel):
-    del_flag = models.CharField(max_length=1, default='0')
+    del_flag = models.BooleanField(max_length=1, default=0)
     remark = models.CharField(max_length=500, null=True, blank=True)
     name = models.CharField(max_length=255, null=True)
+    product_id = models.CharField(max_length=64, null=True, unique=True)
     year_num = models.IntegerField(default=0)
     month_num = models.IntegerField(default=0)
     day_num = models.IntegerField(default=0)
     sales_price = models.FloatField()
     payment_price = models.FloatField()
     sale_num = models.BigIntegerField(default='0')
-
     is_try = models.BooleanField(default=False, verbose_name="是否体验卡", help_text="是否体验卡")
 
     class Meta:

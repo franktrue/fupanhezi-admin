@@ -84,7 +84,8 @@ urlpatterns = (
 
             path('',include('stock.urls')),
             path('', include('order.urls')),
-            path('', include('user_center.urls'))
+            path('', include('user_center.urls')),
+            path('', include('coupon.urls'))
         ]
         + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
         + static(settings.STATIC_URL, document_root=settings.STATIC_URL)
