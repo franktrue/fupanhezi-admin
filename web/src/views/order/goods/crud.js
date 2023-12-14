@@ -54,7 +54,22 @@ export const crudOptions = vm => {
                   clearable: true
                 }
               },
-              rules: [{ required: true, message: 'spu_name必填' }]
+              rules: [{ required: true, message: '名称必填' }]
+            }
+          },
+          {
+            title: '产品 ID',
+            key: 'product_id',
+            type: "input",
+            search: true,
+            form: {
+              component: {
+                props: {
+                  clearable: true,
+                }
+              },
+              rules: [{ required: true, message: '产品 ID必填' }],
+              helper: '对应AppStore内置购买项目产品ID，仅IOS内有效'
             }
           },
           {
@@ -174,6 +189,25 @@ export const crudOptions = vm => {
               }
             }
           },
+          {
+            title: '是否下架',
+            key: 'del_flag',
+            type: 'dict-switch',
+            search: { disabled: false, component: { name: 'dict-select', props: { clearable: true } } },
+            dict: {
+              data: vm.dictionary('button_whether_bool')
+            },
+            form: {
+              value: false,
+              component: {
+                props: {
+                  clearable: true
+                }
+              },
+              rules: [{ required: true, message: '是否支付必填' }],
+              helper: "下架后产品用户不可见"
+            }
+          }
       ]
   };
 };

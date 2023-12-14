@@ -92,7 +92,7 @@ export default {
           }
         },
         legend: {
-          data: ['会员注册数', '会员登陆数'],
+          data: ['会员注册数', '最后登录数'],
           textStyle: {
             color: '#666',
             fontSize: 12
@@ -182,7 +182,7 @@ export default {
             }
           },
           {
-            name: '会员登陆数',
+            name: '最后登录数',
             type: 'line',
             data: seriesData2,
             symbol: 'circle',

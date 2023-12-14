@@ -74,7 +74,7 @@ export const crudOptions = vm => {
           {
             title: '用户ID',
             key: 'user_id',
-            type: "number",
+            type: "input",
             search: true,
             form: {
               component: {

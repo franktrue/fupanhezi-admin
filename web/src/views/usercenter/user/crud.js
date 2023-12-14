@@ -169,6 +169,24 @@ export const crudOptions = (vm) => {
         }
       },
       {
+        title: '是否代理',
+        key: 'is_agent',
+        type: 'dict-switch',
+        search: { disabled: false, component: { name: 'dict-select', props: { clearable: true, multiple: false } } },
+        dict: {
+          data: vm.dictionary('button_whether_number')
+        },
+        form: {
+          value: 0,
+          component: {
+            props: {
+              clearable: true
+            }
+          },
+          helper: "开启代理后用户可分佣"
+        }
+      },
+      {
         title: '分佣类型',
         key: 'reward_type',
         type: 'radio',
@@ -178,36 +196,80 @@ export const crudOptions = (vm) => {
         },
         form: {
           value: 'percent',
+          component: {
+            show (context) {
+              const { form } = context
+              return form.is_agent
+            },
+          },
           valueChange (key, value, form, { getColumn, mode, component, immediate, getComponent }) {
             if (value == 'percent') {
-              getColumn('reward_value').title = '百分比%'
-              getColumn('reward_value').component.placeholder = '请输入百分点'
-              getColumn('reward_value').helper = "分佣时按照成交百分点计算"
+              getColumn('reward1').title = '一级百分点'
+              getColumn('reward2').title = '二级百分点'
+              getColumn('reward3').title = '三级百分点'
             } else {
-              getColumn('reward_value').title = '固定额度¥'
-              getColumn('reward_value').component.placeholder = '请输入金额'
-              getColumn('reward_value').helper = "分佣时奖励固定金额"
+              getColumn('reward1').title = '一级额度'
+              getColumn('reward2').title = '二级额度'
+              getColumn('reward3').title = '三级额度'
             }
           }
         }
       },
       {
-        title: '分佣值',
-        key: 'reward_value',
+        title: '一级百分点',
+        key: 'reward1',
         type: 'number',
         show: false,
         form: {
-          rules: [ // 表单校验规则
-            { required: true, message: '必填项' }
-          ],
-          value: 30,
+          value: 0,
           component: {
+            show (context) {
+              const { form } = context
+              return form.is_agent
+            },
             name: 'el-input-number',
             props: {
               precision: 2
             }
           },
-          helper: "分佣时按照成交百分点计算"
+        }
+      },
+      {
+        title: '二级百分点',
+        key: 'reward2',
+        type: 'number',
+        show: false,
+        form: {
+          value: 0,
+          component: {
+            show (context) {
+              const { form } = context
+              return form.is_agent
+            },
+            name: 'el-input-number',
+            props: {
+              precision: 2
+            }
+          },
+        }
+      },
+      {
+        title: '三级百分点',
+        key: 'reward3',
+        type: 'number',
+        show: false,
+        form: {
+          value: 0,
+          component: {
+            show (context) {
+              const { form } = context
+              return form.is_agent
+            },
+            name: 'el-input-number',
+            props: {
+              precision: 2
+            }
+          },
         }
       },
       {
