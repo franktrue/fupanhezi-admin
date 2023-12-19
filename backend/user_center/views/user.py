@@ -76,6 +76,19 @@ class UserViewSet(CustomModelViewSet):
     update_serializer_class = MemberCreateUpdateSerializer
     filter_fields = ['id', 'parent_id', 'nickname', 'mobile', 'is_agent']
     cache_key = "cache:fupanhezi:user:id:"
+
+    def filter_queryset(self, queryset):
+        query_params = self.request.query_params.copy()
+        if "identifier" in query_params:
+            id = identifierToUserId(query_params["identifier"])
+            if id is not None:
+                query_params['id'] = id
+                new_query_params = QueryDict('', mutable=True)
+                new_query_params.update(query_params)
+                self.request._request.GET = new_query_params
+        for backend in set(set(self.filter_backends) | set(self.extra_filter_backends or [])):
+            queryset = backend().filter_queryset(self.request, queryset, self)
+        return queryset
     
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

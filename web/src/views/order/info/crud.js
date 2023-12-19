@@ -62,7 +62,7 @@ export const crudOptions = vm => {
             key: "order_no",
             type: "input",
             search: true,
-            width: 280,
+            width: 320,
             form: {
               component: {
                 props: {

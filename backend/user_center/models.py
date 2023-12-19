@@ -115,3 +115,18 @@ class UserCoupon(models.Model):
         verbose_name = '用户优惠券'
         verbose_name_plural = verbose_name
         ordering = ('-claimed_time',)
+
+class UserAgent(CoreModel):
+    agent_id = models.BigIntegerField(default=0, verbose_name="代理ID")
+    reward_type = models.CharField(max_length=30, null=False, default="percent")
+    reward1 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="一级下线分佣比例")
+    reward2 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="二级下线分佣比例")
+    reward3 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="三级下线分佣比例")
+    end_time = models.DateTimeField()
+    status = models.SmallIntegerField(default=0)
+
+    class Meta:
+        db_table = 'user_agent'
+        verbose_name = '代理设置'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
