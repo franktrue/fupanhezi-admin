@@ -1,5 +1,4 @@
 from django.db import models
-
 from dvadmin.utils.models import CoreModel
 
 class OrderInfo(CoreModel):
@@ -12,6 +11,7 @@ class OrderInfo(CoreModel):
     status = models.CharField(max_length=32, default='1')
     freight_price = models.FloatField(default='0')
     sales_price = models.FloatField(default='0')
+    discount_price = models.FloatField(default='0')
     payment_price = models.FloatField(default='0')
     payment_time = models.DateTimeField(null=True)
     delivery_time = models.DateTimeField(null=True)
@@ -19,6 +19,7 @@ class OrderInfo(CoreModel):
     closing_time = models.DateTimeField(null=True)
     user_message = models.CharField(max_length=255, null=True)
     transaction_id = models.CharField(max_length=255, null=True)
+    user_coupon_id = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'order_info'

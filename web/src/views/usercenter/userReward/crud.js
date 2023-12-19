@@ -60,6 +60,13 @@ export const crudOptions = vm => {
             show: false,
           },
           {
+            title: '被邀请ID',
+            key: 'invite_user_id',
+            type: "input",
+            search: true,
+            show: false,
+          },
+          {
             title: '用户',
             key: 'user_name',
             type: "input",
@@ -70,6 +77,9 @@ export const crudOptions = vm => {
                 }
               },
               rules: [{ required: true, message: '用户必填' }]
+            },
+            formatter (row, column, value, index) {
+              return `${value}（ID:${row.user}）`
             }
           },
           {
@@ -83,6 +93,9 @@ export const crudOptions = vm => {
                 }
               },
               rules: [{ required: true, message: '订单号必填' }]
+            },
+            formatter (row, column, value, index) {
+              return `${value}（ID:${row.order}）`
             }
           },
           {
@@ -96,6 +109,9 @@ export const crudOptions = vm => {
                 }
               },
               rules: [{ required: true, message: '被邀请用户必填' }]
+            },
+            formatter (row, column, value, index) {
+              return `${value}（ID:${row.invite_user_id}）`
             }
           },
           {
@@ -113,6 +129,31 @@ export const crudOptions = vm => {
                 prefix: () => '￥'
               },
               rules: [{ required: true, message: '佣金必填' }]
+            }
+          },
+          {
+            title: '下线级别',
+            key: 'level',
+            type: 'number',
+            form: {
+              component: {
+                placeholder: '请输入级别',
+              }
+            }
+          },
+          {
+            title: '说明',
+            key: 'remark',
+            type: 'textarea',
+            form: {
+              component: {
+                placeholder: '请输入说明',
+                showWordLimit: true,
+                maxlength: '500',
+                props: {
+                  type: 'textarea'
+                }
+              }
             }
           },
           {

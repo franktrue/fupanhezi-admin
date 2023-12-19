@@ -84,6 +84,16 @@ export const crudOptions = (vm) => {
         }
       },
       {
+        title: '编号',
+        key: 'identifier',
+        search: true,
+        form: {
+          component: {
+            show: false
+          }
+        }
+      },
+      {
         title: '昵称',
         key: 'nickname',
         search: {

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db.models import Sum
+from django.http import QueryDict
 from rest_framework import serializers
 from user_center.models import User, UserReward, UserWithdrawRecord
 from dvadmin.utils.serializers import CustomModelSerializer
@@ -9,6 +10,7 @@ from rest_framework.decorators import action
 from dvadmin.utils.json_response import DetailResponse, SuccessResponse
 from stock.utils.cache import delete_cache_by_key
 from user_center.services.qrocde import QrcodeService
+from user_center.utils.core import identifierToUserId
 
 class MemberSerializer(CustomModelSerializer):
     """
@@ -24,6 +26,7 @@ class MemberSerializer(CustomModelSerializer):
     withdraw_amount = serializers.SerializerMethodField()
 
     reward_info = serializers.SerializerMethodField()
+    identifier = serializers.SerializerMethodField()
 
     def get_has_children(self, obj: User):
         return User.objects.filter(parent_id=obj.id).count()
@@ -42,6 +45,14 @@ class MemberSerializer(CustomModelSerializer):
         if obj.reward_type == 'percent':
             return f"百分比：{obj.reward_value}%"
         return f"固额：{obj.reward_value}元"
+    
+    def get_identifier(self, obj: User):
+        num = obj.id*9 + 10000
+        id_str = str(num)
+        length = len(id_str)
+        if length < 8:
+            id_str = '0'*(8-length) + id_str
+        return id_str
 
 class MemberCreateUpdateSerializer(CustomModelSerializer):
     """
@@ -65,7 +76,7 @@ class UserViewSet(CustomModelViewSet):
     update_serializer_class = MemberCreateUpdateSerializer
     filter_fields = ['id', 'parent_id', 'nickname', 'mobile', 'is_agent']
     cache_key = "cache:fupanhezi:user:id:"
-
+    
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()

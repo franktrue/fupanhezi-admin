@@ -1,6 +1,8 @@
 from order.models import OrderInfo
+from user_center.models import UserCoupon
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
+from rest_framework import serializers
 
 class OrderInfoSerializer(CustomModelSerializer):
     """
@@ -9,6 +11,15 @@ class OrderInfoSerializer(CustomModelSerializer):
     class Meta:
         model = OrderInfo
         fields = '__all__'
+
+    user_coupon_name = serializers.SerializerMethodField()
+
+    def get_user_coupon_name(self, instance):
+        if instance.user_coupon_id > 0 :
+            res =  UserCoupon.objects.filter(id=instance.user_coupon_id).first()
+            if res is not None:
+                return res.name
+        return None
 
 class OrderInfoCreateUpdateSerializer(CustomModelSerializer):
     """

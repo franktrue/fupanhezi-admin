@@ -62,6 +62,7 @@ export const crudOptions = vm => {
             key: "order_no",
             type: "input",
             search: true,
+            width: 280,
             form: {
               component: {
                 props: {
@@ -69,6 +70,9 @@ export const crudOptions = vm => {
                 }
               },
               rules: [{ required: true, message: '订单号必填' }]
+            },
+            formatter (row, column, value, index) {
+              return `（ID:${row.id}）${value}`
             }
           },
           {
@@ -76,6 +80,7 @@ export const crudOptions = vm => {
             key: 'user_id',
             type: "input",
             search: true,
+            width: 60,
             form: {
               component: {
                 props: {
@@ -143,7 +148,7 @@ export const crudOptions = vm => {
             }
           },
           {
-            title: '市场价',
+            title: '销售价',
             key: 'sales_price',
             type: "number",
             form: {
@@ -157,6 +162,23 @@ export const crudOptions = vm => {
                 prefix: () => '￥'
               },
               rules: [{ required: true, message: '市场价必填' }]
+            }
+          },
+          {
+            title: '优惠价格',
+            key: 'discount_price',
+            type: "number",
+            form: {
+              component: {
+                name: 'el-input-number',
+                props: {
+                  precision: 2
+                }
+              },
+              scopedSlots: {
+                prefix: () => '￥'
+              },
+              rules: [{ required: true, message: '优惠价格' }]
             }
           },
           {
@@ -174,6 +196,36 @@ export const crudOptions = vm => {
                 prefix: () => '￥'
               },
               rules: [{ required: true, message: '支付价' }]
+            }
+          },
+          {
+            title: '销售价',
+            key: 'sales_price',
+            type: "number",
+            form: {
+              component: {
+                name: 'el-input-number',
+                props: {
+                  precision: 2
+                }
+              },
+              scopedSlots: {
+                prefix: () => '￥'
+              },
+              rules: [{ required: true, message: '市场价必填' }]
+            }
+          },
+          {
+            title: '优惠券',
+            key: 'user_coupon_name',
+            type: "input",
+            form: {
+              show: false,
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
             }
           },
           {

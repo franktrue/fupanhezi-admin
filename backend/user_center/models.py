@@ -85,9 +85,33 @@ class UserReward(models.Model):
         help_text="关联订单",
     )
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    level = models.SmallIntegerField(default=1)
+    remark = models.CharField(max_length=255, null=True, default="")
 
     class Meta:
         db_table = 'user_reward'
         verbose_name = '奖励记录'
         verbose_name_plural = verbose_name
         ordering = ('-create_time',)
+
+class UserCoupon(models.Model):
+    agent_id = models.BigIntegerField(default=0, verbose_name="代理ID")
+    user_id = models.BigIntegerField(default=0, verbose_name="所属用户")
+    scene_id = models.BigIntegerField(default=0, verbose_name="领取场景ID")
+    claimed_time = models.DateTimeField(auto_now_add=True, verbose_name="领取时间")
+    used_time = models.DateTimeField(null=True, verbose_name="使用时间")
+    coupon_id = models.BigIntegerField(verbose_name="优惠券ID")
+    name = models.CharField(max_length=255, verbose_name="名称")
+    goods_id = models.IntegerField(default=0, verbose_name="优惠券ID")
+    type = models.CharField(max_length=255, verbose_name="优惠类型")
+    value = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="优惠值")
+    min_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="最小使用金额")
+    start_time = models.DateTimeField(verbose_name="开始时间")
+    end_time = models.DateTimeField(verbose_name="结束时间")
+    status = models.SmallIntegerField(default=0)
+
+    class Meta:
+        db_table = 'user_coupons'
+        verbose_name = '用户优惠券'
+        verbose_name_plural = verbose_name
+        ordering = ('-claimed_time',)
