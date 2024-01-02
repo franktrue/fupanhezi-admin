@@ -167,17 +167,23 @@ export const crudOptions = (vm) => {
           }
         }
       },
-      // {
-      //   title: '分佣信息',
-      //   key: 'reward_info',
-      //   width: 120,
-      //   type: 'text',
-      //   form: {
-      //     component: {
-      //       show: false
-      //     }
-      //   }
-      // },
+      {
+        title: '注册方式',
+        key: 'platform',
+        width: 120,
+        type: 'radio',
+        search: {
+          disabled: false
+        },
+        dict:  {
+          data: vm.dictionary('order_payment_way')
+        },
+        form: {
+          component: {
+            show: false
+          }
+        }
+      },
       {
         title: '是否代理',
         key: 'is_agent',

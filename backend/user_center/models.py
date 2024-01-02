@@ -25,6 +25,7 @@ class User(models.Model):
     reward1 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="一级分佣比例")
     reward2 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="二级分佣比例")
     reward3 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="三级分佣比例")
+    platform = models.CharField(max_length=64, null=False, default="wxMini", verbose_name="注册方式")
 
     class Meta:
         db_table = 'user'
