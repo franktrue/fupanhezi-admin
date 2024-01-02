@@ -74,7 +74,7 @@ class UserViewSet(CustomModelViewSet):
     serializer_class = MemberSerializer
     create_serializer_class = MemberCreateUpdateSerializer
     update_serializer_class = MemberCreateUpdateSerializer
-    filter_fields = ['id', 'parent_id', 'nickname', 'mobile', 'is_agent']
+    filter_fields = ['id', 'parent_id', 'nickname', 'mobile', 'is_agent', 'platform']
     cache_key = "cache:fupanhezi:user:id:"
 
     def filter_queryset(self, queryset):
