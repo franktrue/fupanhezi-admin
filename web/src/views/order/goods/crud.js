@@ -40,7 +40,6 @@ export const crudOptions = vm => {
       },
       formOptions: {
           defaultSpan: 24, // 默认的表单 span
-          width: "35%"
       },
       columns: [
           {
@@ -66,7 +65,8 @@ export const crudOptions = vm => {
               component: {
                 props: {
                   clearable: true,
-                }
+                },
+                span: 12
               },
               rules: [{ required: true, message: '产品 ID必填' }],
               helper: '对应AppStore内置购买项目产品ID，仅IOS内有效'
@@ -85,13 +85,14 @@ export const crudOptions = vm => {
             form: {
               value: false,
               component: {
-                placeholder: '请选择是否目录'
+                placeholder: '请选择是否目录',
+                span: 12
               },
               helper: "体验卡仅可购买一次且无法分佣"
             }
           },
           {
-            title: '有效期（年）',
+            title: '有效期 年',
             key: 'year_num',
             type: 'number',
             form: {
@@ -99,13 +100,14 @@ export const crudOptions = vm => {
               component: {
                 props: {
                   clearable: true
-                }
+                },
+                span: 8
               },
               rules: [{ required: true, message: '有效期必填' }]
             }
           },
           {
-            title: '有效期（月）',
+            title: '月',
             key: 'month_num',
             type: 'number',
             form: {
@@ -113,13 +115,14 @@ export const crudOptions = vm => {
               component: {
                 props: {
                   clearable: true
-                }
+                },
+                span: 8
               },
               rules: [{ required: true, message: '有效期必填' }]
             }
           },
           {
-            title: '有效期（日）',
+            title: '日',
             key: 'day_num',
             type: 'number',
             form: {
@@ -127,7 +130,8 @@ export const crudOptions = vm => {
               component: {
                 props: {
                   clearable: true
-                }
+                },
+                span: 8
               },
               rules: [{ required: true, message: '有效期必填' }]
             }
@@ -205,7 +209,7 @@ export const crudOptions = vm => {
           {
             title: '是否下架',
             key: 'del_flag',
-            type: 'dict-switch',
+            type: 'radio',
             search: { disabled: false, component: { name: 'dict-select', props: { clearable: true } } },
             dict: {
               data: vm.dictionary('button_whether_bool')

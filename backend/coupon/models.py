@@ -38,3 +38,35 @@ class CouponScenesModel(CoreModel):
         verbose_name = '使用场景'
         verbose_name_plural = verbose_name
         ordering = ('-create_datetime',)
+
+class CouponExchangesModel(CoreModel):
+    del_flag = models.BooleanField(max_length=1, default=0)
+    name = models.CharField(max_length=255, null=True)
+    year_num = models.IntegerField(default=0)
+    month_num = models.IntegerField(default=0)
+    day_num = models.IntegerField(default=0)
+    used_count = models.BigIntegerField(default=0)
+    level = models.SmallIntegerField(default=1, verbose_name="对应等级")
+    expire_type = models.CharField(max_length=255, verbose_name="有效期类型")
+    days = models.IntegerField(verbose_name="有效期")
+    start_time = models.DateTimeField(verbose_name="开始时间")
+    end_time = models.DateTimeField(verbose_name="结束时间")
+    class Meta:
+        db_table = "coupon_exchanges"
+        verbose_name = '兑换码场景'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
+
+class CouponExchangeCodesModel(CoreModel):
+    del_flag = models.BooleanField(max_length=1, default=False)
+    key = models.CharField(max_length=16, unique=True, verbose_name="兑换码")
+    exchange_id = models.IntegerField(verbose_name="兑换码场景ID")
+    user_id = models.IntegerField(default=0, verbose_name="用户ID")
+    start_time = models.DateTimeField(verbose_name="开始时间")
+    end_time = models.DateTimeField(verbose_name="结束时间")
+    status = models.BooleanField(max_length=1, default=0)
+    class Meta:
+        db_table = "coupon_exchange_codes"
+        verbose_name = '兑换码'
+        verbose_name_plural = verbose_name
+        ordering = ('-create_datetime',)
