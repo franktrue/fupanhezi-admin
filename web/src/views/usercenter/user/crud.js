@@ -176,7 +176,7 @@ export const crudOptions = (vm) => {
           disabled: false
         },
         dict:  {
-          data: vm.dictionary('order_payment_way')
+          data: vm.dictionary('register_way')
         },
         form: {
           component: {
