@@ -14,6 +14,13 @@
           <el-button size="small" type="danger" @click="batchDelete">
             <i class="el-icon-delete"></i> 批量删除
           </el-button>
+          <el-button
+            size="small"
+            type="warning"
+            @click="onExport"
+            v-permission="'Export'"
+            ><i class="el-icon-download" /> 导出
+          </el-button>
         </el-button-group>
         <crud-toolbar
           :search.sync="crud.searchOptions.show"
@@ -82,7 +89,20 @@ export default {
     },
     doAfterRowChange (row) {
       this.doRefresh({ from: 'afterRowChange' })
-    }
+    },
+    onExport () {
+      const that = this
+      this.$confirm('是否确认导出所有数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        console.log(1111)
+        const query = that.getSearch().getForm()
+        console.log(query)
+        return api.exportData({ ...query })
+      })
+    },
   }
 }
 </script>

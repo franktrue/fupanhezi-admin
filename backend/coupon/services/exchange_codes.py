@@ -1,7 +1,6 @@
 from coupon.utils.tool import generate_exchange_code
 from coupon.models import CouponExchangesModel, CouponExchangeCodesModel
 from datetime import datetime, timedelta
-import json
 
 class ExchangeCodesService():
     # 批量生成兑换码

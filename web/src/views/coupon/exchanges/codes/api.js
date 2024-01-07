@@ -1,4 +1,4 @@
-import { request } from '@/api/service'
+import { request, downloadFile } from '@/api/service'
 export const urlPrefix = '/api/coupon/exchange_codes/'
 
 /**
@@ -48,5 +48,17 @@ export function BatchDel (keys) {
     url: urlPrefix + 'multiple_delete/',
     method: 'delete',
     data: { keys }
+  })
+}
+
+/**
+ * 导出
+ * @param params
+ */
+export function exportData (params) {
+  return downloadFile({
+    url: urlPrefix + 'export/',
+    params: params,
+    method: 'post'
   })
 }

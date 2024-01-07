@@ -3,6 +3,9 @@ from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from dvadmin.utils.json_response import DetailResponse
 from stock.utils.cache import delete_cache_by_key
+from coupon.utils.tool import generate_exchange_code
+from coupon.services.exchange_codes import ExchangeCodesService
+
 
 class CouponExchangesSerializer(CustomModelSerializer):
     """
@@ -35,6 +38,21 @@ class CouponExchangesViewSet(CustomModelViewSet):
     filter_fields = ['name', 'del_flag']
     search_fields = ['name', 'del_flag']
     cache_key = "cache:fupanhezi:couponExchanges:id:"
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        print(data)
+        if data["type"] == "many":
+            data["code"] = generate_exchange_code(10)
+
+        serializer = self.get_serializer(data=request.data, request=request)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        res = serializer.data
+        if data["type"] == "only":
+            service = ExchangeCodesService()
+            service.generateCode(exchange_id=res["id"], num=data["total_count"])
+        return DetailResponse(data=res, msg="新增成功")
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

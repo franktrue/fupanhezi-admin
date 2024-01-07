@@ -48,9 +48,12 @@ class CouponExchangesModel(CoreModel):
     used_count = models.BigIntegerField(default=0)
     level = models.SmallIntegerField(default=1, verbose_name="对应等级")
     expire_type = models.CharField(max_length=255, verbose_name="有效期类型")
-    days = models.IntegerField(verbose_name="有效期")
+    days = models.IntegerField(default=0,verbose_name="有效期")
     start_time = models.DateTimeField(verbose_name="开始时间")
     end_time = models.DateTimeField(verbose_name="结束时间")
+    type = models.CharField(max_length=16, default="many", verbose_name="兑换码类型")
+    code = models.CharField(max_length=16, null=True, unique=True, verbose_name="兑换码")
+    total_count = models.BigIntegerField(default=0)
     class Meta:
         db_table = "coupon_exchanges"
         verbose_name = '兑换码场景'
@@ -59,7 +62,7 @@ class CouponExchangesModel(CoreModel):
 
 class CouponExchangeCodesModel(CoreModel):
     del_flag = models.BooleanField(max_length=1, default=False)
-    key = models.CharField(max_length=16, unique=True, verbose_name="兑换码")
+    key = models.CharField(max_length=16, null=True, unique=True, verbose_name="兑换码")
     exchange_id = models.IntegerField(verbose_name="兑换码场景ID")
     user_id = models.IntegerField(default=0, verbose_name="用户ID")
     start_time = models.DateTimeField(verbose_name="开始时间")

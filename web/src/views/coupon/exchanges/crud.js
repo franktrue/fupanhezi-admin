@@ -50,6 +50,7 @@ export const crudOptions = (vm) => {
     },
     formOptions: {
       defaultSpan: 24, // 默认的表单 span
+      width: "900px"
     },
     columns: [
       {
@@ -84,6 +85,55 @@ export const crudOptions = (vm) => {
             placeholder: '请输入名称',
           }
         }
+      },
+      {
+        title: '类型',
+        key: 'type',
+        type: 'radio',
+        search: { disabled: false, component: { name: 'dict-select', props: { clearable: true } } },
+        dict: {
+          data: vm.dictionary('coupon_exchange_type')
+        },
+        form: {
+          value: "only",
+          component: {
+            props: {
+              clearable: true
+            }
+          },
+          helper: "通用码可使用多次，单次码需手动再次生成",
+        },
+        valueBuilder(row, key) {
+          if (row.type == "many") {
+            row.expire_type = "range"
+          }
+        },
+      },
+      {
+        title: '兑换码',
+        key: 'code',
+        type: 'input',
+        search: {
+          disabled: false,
+          component: {
+            props: {
+              clearable: true
+            }
+          }
+        },
+        width: 120,
+        form: {
+          component: {
+            show: false
+          }
+        },
+        formatter: (row, column, cellValue) => {
+          if (row.type == "many") {
+            return cellValue
+          } else {
+            return ""
+          }
+        },
       },
       {
         title: '有效期 年',
@@ -154,9 +204,14 @@ export const crudOptions = (vm) => {
         dict: {
           data: vm.dictionary('expire_type')
         },
+        show: false,
         form: {
           value: "countdown",
           component: {
+            show (context) {
+              const { form } = context
+              return form.type == "only"
+            },
             props: {
               clearable: true
             }
@@ -173,7 +228,7 @@ export const crudOptions = (vm) => {
           component: {
             show (context) {
               const { form } = context
-              return form.expire_type == "countdown"
+              return form.expire_type == "countdown" && form.type == "only"
             },
             name: 'el-input-number',
           },
@@ -190,7 +245,7 @@ export const crudOptions = (vm) => {
           component: {
             show (context) {
               const { form } = context
-              return form.expire_type == "range"
+              return form.expire_type == "range" || form.type == "many"
             },
             props: {
               "time-arrow-control": false,
@@ -198,7 +253,7 @@ export const crudOptions = (vm) => {
               valueFormat: "yyyy-MM-dd",
             },
           },
-          rules: [{ required: true, message: '天数必填' }]
+          rules: [{ required: true, message: '日期范围必填' }]
         },
         valueBuilder(row, key) {
           if (row.expire_type == "range") {
@@ -225,6 +280,29 @@ export const crudOptions = (vm) => {
         },
       },
       {
+        title: '总数量',
+        key: 'total_count',
+        type: "number",
+        form: {
+          component: {
+            props: {
+              clearable: true
+            }
+          },
+          helper: "单次码建议小于1000个"
+        },
+      },
+      {
+        title: '已使用',
+        key: 'used_count',
+        type: "number",
+        form: {
+          component: {
+            show: false
+          }
+        }
+      },
+      {
         title: '是否下架',
         key: 'del_flag',
         type: 'dict-switch',
@@ -239,16 +317,6 @@ export const crudOptions = (vm) => {
             }
           },
           helper: "下架后不可用"
-        }
-      },
-      {
-        title: '已使用',
-        key: 'used_count',
-        type: "number",
-        form: {
-          component: {
-            show: false
-          }
         }
       }
     ].concat(vm.commonEndColumns())
