@@ -67,6 +67,7 @@ export default {
       // 绘制图表
       const xAxisData = this.data.map(item => item.day)
       const seriesData = this.data.map(item => item.amount)
+      const seriesData2 = this.data.map(item => item.pay_count)
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -82,12 +83,13 @@ export default {
             }
           },
           formatter: params => {
-            const param = params[0]
-            return `<div style="padding: 8px;"><div style="color: #333;">${param.name}</div><div style="color: #FFA500;">${param.value} 元</div></div>`
+            const param1 = params[0]
+            const param2 = params[1]
+            return `<div style="padding: 8px;"><div style="color: #333;">${param1.name}</div><div style="color: #FFA500;">${param1.seriesName}:${param1.value} 人</div><div style="color: #FFA500;">${param2.seriesName}:${param2.value} 次</div></div>`
           }
         },
         legend: {
-          data: ['订单金额'],
+          data: ['订单金额', '成交笔数'],
           textStyle: {
             color: '#666',
             fontSize: 12
@@ -118,35 +120,71 @@ export default {
             }
           }
         },
-        yAxis: {
-          axisLine: {
-            lineStyle: {
-              color: '#aaa',
-              width: 1
+        yAxis: [
+          {
+            type: 'value',
+            name: '订单金额',
+            position: 'left',
+            axisLabel: {
+              formatter: '{value} 元'
             }
           },
-          axisLabel: {
-            textStyle: {
-              color: '#333',
-              fontSize: 12
-            }
-          },
-          splitLine: {
-            lineStyle: {
-              color: '#ddd',
-              type: 'dotted',
-              width: 1
+          {
+            type: 'value',
+            name: '成交笔数',
+            position: 'right',
+            interval: 1, //设置y轴刻度间隔
+            axisLabel: {
+              formatter: '{value} 笔'
             }
           }
-        },
+        ],
         series: [
           {
             name: '订单金额',
             type: 'line',
+            // yAxisIndex: 0,
             data: seriesData,
             symbol: 'circle',
             symbolSize: 6,
             smooth: true,
+            lineStyle: {
+              color: 'rgba(38,204,164, 0.8)',
+              width: 2
+            },
+            itemStyle: {
+              color: 'rgba(98,206,178, 0.8)',
+              borderColor: 'rgba(38,204,164, 1)',
+              borderWidth: 1
+            },
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(140,189,250, 0.8)'
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 128, 255, 0)'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: '成交笔数',
+            type: 'line',
+            yAxisIndex: 1,
+            data: seriesData2,
+            symbol: 'circle',
+            smooth: true,
+            symbolSize: 6,
             lineStyle: {
               color: 'rgba(38,204,164, 0.8)',
               width: 2

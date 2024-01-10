@@ -5,6 +5,8 @@
 @contact: QQ:807615827
 @Created on: 2023/5/21 15:30
 @Remark:
+
+celery -A application.celery worker -B --loglevel=info
 """
 from application.celery import app
 from stock.models import StockBoardConcept, StockGnnSubject
@@ -131,3 +133,9 @@ def sync_gnn_subject(id, pid, scode, sname):
         )
         model.save()
     server.syncCons(code = scode, name = sname)
+
+@shared_task
+def sync_lhb_items(trade_date):
+    date = datetime.datetime.strptime(trade_date, '%Y-%m-%dT%H:%M:%S').date()
+    service = StockLhbService()
+    service.fetch(trade_date=date)

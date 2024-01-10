@@ -53,11 +53,17 @@ class DataVViewSet(GenericViewSet):
         day = 30
         today = datetime.datetime.today()
         seven_days_ago = today - datetime.timedelta(days=day)
-        orders = OrderInfo.objects.filter(create_datetime__gte=seven_days_ago, is_pay='1').annotate(day=TruncDay('create_datetime')).values('day').annotate(amount=Sum('payment_price')).order_by('-day')
+        orders = OrderInfo.objects.filter(create_datetime__gte=seven_days_ago, is_pay='1').annotate(day=TruncDay('create_datetime')).values('day').annotate(amount=Sum('payment_price'), pay_count=Count('id')).order_by('-day')
+        print(orders)
         result = []
-        data_dict = {ele.get('day').strftime('%Y-%m-%d'): ele.get('amount') for ele in orders}
+        amount_dict = {ele.get('day').strftime('%Y-%m-%d'): ele.get('amount') for ele in orders}
+        count_dict = {ele.get('day').strftime('%Y-%m-%d'): ele.get('pay_count') for ele in orders}
         for i in range(day):
             date = (today - datetime.timedelta(days=i)).strftime('%Y-%m-%d')
-            result.append({'day': date, 'amount': round(data_dict[date], 2) if date in data_dict else 0})
+            result.append({
+                'day': date, 
+                'amount': round(amount_dict[date], 2) if date in amount_dict else 0, 
+                'pay_count': count_dict[date] if date in count_dict else 0    
+            })
         result = sorted(result, key=lambda x: x['day'])
         return DetailResponse(data={"order_list": result}, msg="获取成功")

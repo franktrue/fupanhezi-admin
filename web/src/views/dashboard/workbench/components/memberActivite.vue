@@ -86,13 +86,12 @@ export default {
             }
           },
           formatter: params => {
-            const param1 = params[0]
-            const param2 = params[1]
-            return `<div style="padding: 8px;"><div style="color: #333;">${param1.name}</div><div style="color: #FFA500;">${param1.seriesName}:${param1.value} 人</div><div style="color: #FFA500;">${param2.seriesName}:${param2.value} 次</div></div>`
+            const param = params[0]
+            return `<div style="padding: 8px;"><div style="color: #333;">${param.name}</div><div style="color: #FFA500;">${param.value} 元</div></div>`
           }
         },
         legend: {
-          data: ['会员注册数', '最后登录数'],
+          data: ['会员注册数'],
           textStyle: {
             color: '#666',
             fontSize: 12
@@ -159,42 +158,6 @@ export default {
             itemStyle: {
               color: 'rgba(0, 128, 255, 0.8)',
               borderColor: 'rgba(0, 128, 255, 1)',
-              borderWidth: 1
-            },
-            areaStyle: {
-              color: {
-                type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: 'rgba(140,189,250, 0.8)'
-                  },
-                  {
-                    offset: 1,
-                    color: 'rgba(0, 128, 255, 0)'
-                  }
-                ]
-              }
-            }
-          },
-          {
-            name: '最后登录数',
-            type: 'line',
-            data: seriesData2,
-            symbol: 'circle',
-            smooth: true,
-            symbolSize: 6,
-            lineStyle: {
-              color: 'rgba(38,204,164, 0.8)',
-              width: 2
-            },
-            itemStyle: {
-              color: 'rgba(98,206,178, 0.8)',
-              borderColor: 'rgba(38,204,164, 1)',
               borderWidth: 1
             },
             areaStyle: {
