@@ -186,12 +186,12 @@ export default {
             smooth: true,
             symbolSize: 6,
             lineStyle: {
-              color: 'rgba(38,204,164, 0.8)',
+              color: 'rgba(0,90,164, 0.8)',
               width: 2
             },
             itemStyle: {
-              color: 'rgba(98,206,178, 0.8)',
-              borderColor: 'rgba(38,204,164, 1)',
+              color: 'rgba(30,206,178, 0.8)',
+              borderColor: 'rgba(0,90,,164, 1)',
               borderWidth: 1
             },
             areaStyle: {
@@ -204,7 +204,7 @@ export default {
                 colorStops: [
                   {
                     offset: 0,
-                    color: 'rgba(140,189,250, 0.8)'
+                    color: 'rgba(0,100,250, 0.8)'
                   },
                   {
                     offset: 1,

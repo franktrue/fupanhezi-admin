@@ -87,7 +87,7 @@ export default {
           },
           formatter: params => {
             const param = params[0]
-            return `<div style="padding: 8px;"><div style="color: #333;">${param.name}</div><div style="color: #FFA500;">${param.value} 元</div></div>`
+            return `<div style="padding: 8px;"><div style="color: #333;">${param.name}</div><div style="color: #FFA500;">${param.value} 个</div></div>`
           }
         },
         legend: {
@@ -114,10 +114,10 @@ export default {
           },
           axisLabel: {
             interval: 'auto',
-            maxInterval: 1,
+            minInterval: 1,
             rotate: 0,
             textStyle: {
-              color: '#333',
+              color: '#090',
               fontSize: 12
             }
           }
