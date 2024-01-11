@@ -85,7 +85,7 @@ export default {
           formatter: params => {
             const param1 = params[0]
             const param2 = params[1]
-            return `<div style="padding: 8px;"><div style="color: #333;">${param1.name}</div><div style="color: #FFA500;">${param1.seriesName}:${param1.value} 人</div><div style="color: #FFA500;">${param2.seriesName}:${param2.value} 次</div></div>`
+            return `<div style="padding: 8px;"><div style="color: #333;">${param1.name}</div><div style="color: #FFA500;">${param1.seriesName}:${param1.value} 元</div><div style="color: #FFA500;">${param2.seriesName}:${param2.value} 次</div></div>`
           }
         },
         legend: {
@@ -97,8 +97,8 @@ export default {
         },
         grid: {
           top: 40,
-          left: 40,
-          right: 65,
+          left: 80,
+          right: 80,
           bottom: 60
         },
         xAxis: {
