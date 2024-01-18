@@ -76,5 +76,5 @@ class StockHistoryViewSet(CustomModelViewSet):
     def search_stocks(self, request, *args, **kwargs):
         keyword = request.query_params.get('query')
         trade_date = StockTradeDate.objects.filter(trade_date__lt=datetime.date.today()).first()
-        stocks = StockHistory.objects.filter(date=trade_date).filter(Q(stock_code__startswith=keyword) | Q(stock_name__contains=keyword)).values("stock_code", "stock_name")
+        stocks = StockHistory.objects.filter(date=trade_date.trade_date).filter(Q(stock_code__startswith=keyword) | Q(stock_name__contains=keyword)).values("stock_code", "stock_name")
         return DetailResponse(data=stocks, msg="获取成功")
