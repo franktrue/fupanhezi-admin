@@ -72,4 +72,4 @@ class CouponExchangeCodesModel(CoreModel):
         db_table = "coupon_exchange_codes"
         verbose_name = '兑换码'
         verbose_name_plural = verbose_name
-        ordering = ('-create_datetime',)
+        ordering = ('-id',)
