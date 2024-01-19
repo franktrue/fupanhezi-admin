@@ -21,6 +21,7 @@ from celery import shared_task
 import akshare as ak
 import datetime
 import requests
+from stock.utils.date import is_trade_date
 
 # 工作日15:00收盘后运行
 @app.task
@@ -38,12 +39,12 @@ def task__stock():
     # 更新概念指数数据
     service4 = StockBoardService()
     service4.fetch_history(trade_date=today)
-
-    # 更新完成，发送通知
-    # App通知
-    requests.get("https://fc-mp-4768bfcd-d34d-4c32-bc50-28036f034579.next.bspapp.com/data-update")
-    # 小程序通知
-    requests.get("https://www.fupanhezi.com/usercenter/v1/user/send-subscribe/data-update")
+    if is_trade_date(today):
+        # 更新完成，发送通知
+        # App通知
+        requests.get("https://fc-mp-4768bfcd-d34d-4c32-bc50-28036f034579.next.bspapp.com/data-update")
+        # 小程序通知
+        requests.get("https://www.fupanhezi.com/usercenter/v1/user/send-subscribe/data-update")
 
     
 # 工作日18:05收盘后运行
