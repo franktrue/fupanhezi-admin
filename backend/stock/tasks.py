@@ -55,6 +55,12 @@ def task__lhb():
     service = StockLhbService()
     service.fetch(today)
 
+# 每年1月1号更新交易日
+@app.task
+def task_trade_date():
+    service = StockTradeDateService()
+    service.fetch()
+
 # 每日凌晨更新概念及成分股
 @app.task 
 def task__board():
