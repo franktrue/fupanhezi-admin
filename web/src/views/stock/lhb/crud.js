@@ -32,7 +32,14 @@ export const crudOptions = vm => {
               disabled() {
                   return !vm.hasPermissions("Delete");
               }
-          }
+          },
+          custom: [{
+            text: '营业部',
+            type: 'success',
+            size: 'small',
+            icon: 'el-icon-folder',
+            emit: 'officeItem'
+          }]
       },
       indexRow: false,
       viewOptions: {

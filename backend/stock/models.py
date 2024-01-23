@@ -1,4 +1,5 @@
 from django.db import models
+from dvadmin.utils.models import CoreModel
 
 # Create your models here.
 
@@ -215,3 +216,45 @@ class StockGnnMap(models.Model):
         verbose_name = '题材成分股'
         verbose_name_plural = verbose_name
         unique_together = ('code', 'stock_code')
+
+# 龙虎榜营业部信息
+class StockLhbItem(models.Model):
+    id = models.BigAutoField(primary_key=True, help_text="Id", verbose_name="Id")
+    date = models.DateField(null=False)
+    stock_code = models.CharField(max_length=10, null=False)
+    type = models.CharField(max_length=20, null=False)
+    office = models.CharField(max_length=64, null=False)
+    sort = models.SmallIntegerField(null=False)
+    buy_amount = models.DecimalField(max_digits=20, decimal_places=2, null=False)
+    buy_rate = models.DecimalField(max_digits=20, decimal_places=6, null=False)
+    sell_amount = models.DecimalField(max_digits=20, decimal_places=2, null=False)
+    sell_rate = models.DecimalField(max_digits=20, decimal_places=6, null=False)
+    net_amount = models.DecimalField(max_digits=20, decimal_places=2, null=False)
+    desc = models.CharField(max_length=255, null=True)
+
+    class Meta:
+        db_table = 'stock_lhb_item'
+        verbose_name = '龙虎榜营业部'
+        verbose_name_plural = verbose_name
+        ordering = ('-date', 'type', 'sort')
+
+# 游资席位
+class StockSeat(CoreModel):
+    name = models.CharField(max_length=255, null=False, unique=True)
+
+    class Meta:
+        db_table = 'stock_seat'
+        verbose_name = '游资席位'
+        verbose_name_plural = verbose_name
+        ordering = ('-id',)
+
+# 营业部
+class StockSeatOffice(CoreModel):
+    seat_id = models.IntegerField(max_length=10, null=False, default=0)
+    name = models.CharField(max_length=255, null=False, unique=True)
+
+    class Meta:
+        db_table = 'stock_seat_office'
+        verbose_name = '游资关联营业部'
+        verbose_name_plural = verbose_name
+        ordering = ('-id',)

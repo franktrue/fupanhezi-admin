@@ -1,0 +1,33 @@
+from stock.models import StockSeat
+from dvadmin.utils.serializers import CustomModelSerializer
+from dvadmin.utils.viewset import CustomModelViewSet
+
+class StockSeatSerializer(CustomModelSerializer):
+    """
+    序列化器
+    """
+    class Meta:
+        model = StockSeat
+        fields = '__all__'
+
+class StockSeatCreateUpdateSerializer(CustomModelSerializer):
+    """
+    创建/更新时的列化器
+    """
+    class Meta:
+        model = StockSeat
+        fields = '__all__'
+
+class StockSeatViewSet(CustomModelViewSet):
+    """
+    list:查询
+    create:新增
+    update:修改
+    retrieve:单例
+    destroy:删除
+    """
+    queryset = StockSeat.objects.all()
+    serializer_class = StockSeatSerializer
+    create_serializer_class = StockSeatCreateUpdateSerializer
+    update_serializer_class = StockSeatCreateUpdateSerializer
+    filter_fields = ['name']

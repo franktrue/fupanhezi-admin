@@ -1,7 +1,12 @@
 <template>
   <d2-container :class="{ 'page-compact': crud.pageOptions.compact }">
     <template slot="header">龙虎榜</template>
-    <d2-crud-x ref="d2Crud" v-bind="_crudProps" v-on="_crudListeners">
+    <d2-crud-x
+      ref="d2Crud"
+      v-bind="_crudProps"
+      v-on="_crudListeners"
+      @officeItem="officeItem"
+    >
       <!-- 自动绑定参数与事件 -->
       <div slot="header">
         <crud-search
@@ -42,6 +47,14 @@
         <el-button type="primary" @click="fetchDataSubmit" :loading="loading">确定</el-button>
       </div>
     </el-dialog>
+    <el-drawer :visible.sync="drawer" :size="1000">
+      <div slot="title">
+        <span>营业部记录</span>
+        <el-tag size="small" style="margin-left: 10px">{{ subjectRow.name }}</el-tag>
+      </div>
+    <office-item style="margin-top: 80px; margin-left: 10px" :subjectRow="subjectRow">
+    </office-item>
+    </el-drawer>
   </d2-container>
 </template>
 
@@ -50,8 +63,10 @@ import dayjs from 'dayjs'
 import { crudOptions } from './crud' // 上文的crudOptions配置
 import { d2CrudPlus } from 'd2-crud-plus'
 import { AddObj, GetList, UpdateObj, DelObj, FetchData } from './api' // 查询添加修改删除的http请求接口
+import OfficeItem from '@/views/stock/lhb/item'
 export default {
   name: 'stockLhb',
+  components: { OfficeItem },
   mixins: [d2CrudPlus.crud], // 最核心部分，继承d2CrudPlus.crud
   data() {
     const today = dayjs().format('YYYY-MM-DD')
@@ -65,7 +80,9 @@ export default {
         trade_date: [
           { required: true, message: '必填项' }
         ]
-      }
+      },
+      drawer: false,
+      subjectRow: {}
     }
   },
   methods: {
@@ -86,6 +103,10 @@ export default {
           that.$message.error('表单校验失败，请检查')
         }
       })
+    },
+    officeItem (scope) {
+      this.drawer = true
+      this.subjectRow = scope.row
     },
     getCrudOptions () {
       return crudOptions(this)
