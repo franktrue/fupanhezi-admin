@@ -121,6 +121,14 @@ export const crudOptions = (vm) => {
         title: '使用者ID',
         key: 'user_id',
         type: 'input',
+        search: {
+          disabled: false,
+          component: {
+            props: {
+              clearable: true
+            }
+          }
+        },
         form: {
           component: {
             show: false

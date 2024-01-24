@@ -81,11 +81,6 @@ export default {
               type: 'dotted',
               width: 1
             }
-          },
-          formatter: params => {
-            const param1 = params[0]
-            const param2 = params[1]
-            return `<div style="padding: 8px;"><div style="color: #333;">${param1.name}</div><div style="color: #FFA500;">${param1.seriesName}:${param1.value} 元</div><div style="color: #FFA500;">${param2.seriesName}:${param2.value} 次</div></div>`
           }
         },
         legend: {
@@ -148,6 +143,11 @@ export default {
             symbol: 'circle',
             symbolSize: 6,
             smooth: true,
+            tooltip: {
+              valueFormatter: function (value) {
+                return value.toFixed(2) + '元';
+              }
+            },
             lineStyle: {
               color: 'rgba(38,204,164, 0.8)',
               width: 2
@@ -185,6 +185,11 @@ export default {
             symbol: 'circle',
             smooth: true,
             symbolSize: 6,
+            tooltip: {
+              valueFormatter: function (value) {
+                return value + '笔';
+              }
+            },
             lineStyle: {
               color: 'rgba(0,90,164, 0.8)',
               width: 2
