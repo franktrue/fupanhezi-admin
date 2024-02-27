@@ -45,14 +45,13 @@ export const crudOptions = (vm) => {
       },
       width: 280,
       fixed: 'right',
-      custom: [{
-        text: '关联营业部',
-        type: 'success',
-        size: 'small',
-        icon: 'el-icon-folder',
-        emit: 'seatOffice'
-      }]
-
+      // custom: [{
+      //   text: '关联营业部',
+      //   type: 'success',
+      //   size: 'small',
+      //   icon: 'el-icon-folder',
+      //   emit: 'seatOffice'
+      // }]
     },
     indexRow: { // 或者直接传true,不显示title，不居中
       title: '序号',
@@ -82,7 +81,6 @@ export const crudOptions = (vm) => {
         title: '席位名称',
         key: 'name',
         sortable: true,
-        treeNode: true, // 设置为树形列
         search: {
           disabled: false,
           component: {
@@ -107,6 +105,58 @@ export const crudOptions = (vm) => {
             class: { yxtInput: true }
           }
 
+        }
+      },
+      // {
+      //   title: '简称',
+      //   key: 'short_name',
+      //   sortable: true,
+      //   search: {
+      //     disabled: false,
+      //     component: {
+      //       props: {
+      //         clearable: true
+      //       }
+      //     }
+      //   },
+      //   minWidth: 180,
+      //   type: 'input',
+      //   form: {
+      //     component: {
+      //       props: {
+      //         clearable: true
+      //       },
+      //       placeholder: '请输入简称'
+      //     }
+      //   }
+      // },
+      {
+        title: '关联营业部',
+        key: 'offices',
+        sortable: true,
+        search: {
+          disabled: false,
+          component: {
+            props: {
+              clearable: true
+            }
+          }
+        },
+        minWidth: 180,
+        type: 'textarea',
+        form: {
+          rules: [ // 表单校验规则
+            { required: true, message: '关联营业部必填项' }
+          ],
+          component: {
+            placeholder: '请输入内容',
+            showWordLimit: true,
+            maxlength: '1000',
+            props: {
+              type: 'textarea'
+            }
+          },
+          helper: "请使用“/”隔开"
         }
       }
     ].concat(vm.commonEndColumns())
