@@ -142,9 +142,7 @@ export const crudOptions = (vm) => {
           }
         },
         form: {
-          component: {
-            show: false
-          }
+          disabled: true
         }
       },
       {
@@ -165,7 +163,8 @@ export const crudOptions = (vm) => {
           component: {
             show: false
           }
-        }
+        },
+
       },
       {
         title: '注册方式',
