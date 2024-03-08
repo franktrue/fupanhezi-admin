@@ -58,3 +58,16 @@ export function QrcodeObj(obj) {
     data: obj
   })
 }
+
+/**
+ * 发送优惠券
+ * @param {*} obj
+ * @returns
+ */
+export function SendCoupon(obj) {
+  return request({
+    url: urlPrefix + 'send_coupon/',
+    method: 'post',
+    data: obj
+  })
+}

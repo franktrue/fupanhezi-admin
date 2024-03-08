@@ -15,10 +15,15 @@
           @submit="handleSearch"
         />
         <el-button-group>
-          <el-button size="small" type="primary" @click="addRow"
-            ><i class="el-icon-plus" /> 新增</el-button
-          >
-          <el-button size="small" type="success" :loading="loading" @click="dialogFormVisible = true"><i class="el-icon-qrcode" /> 小程序码</el-button>
+          <el-button size="small" type="primary" @click="addRow">
+            <i class="el-icon-plus" /> 新增
+          </el-button>
+          <el-button size="small" type="success" :loading="loading" @click="dialogFormVisible = true">
+            <i class="el-icon-qrcode" /> 小程序码
+          </el-button>
+          <el-button size="small" type="warning" :loading="loading" @click="dialogCouponFormVisible = true">
+            <i class="el-icon-present" /> 发送优惠券
+          </el-button>
         </el-button-group>
         <crud-toolbar v-bind="_crudToolbarProps" v-on="_crudToolbarListeners" />
       </div>
@@ -76,6 +81,38 @@
       :src="'data:image/png;base64,'+url"
       :fit="fit"></el-image>
     </el-dialog>
+
+    <el-dialog
+      :visible.sync="dialogCouponFormVisible"
+      :close-on-click-modal="false"
+      width="40%"
+    >
+      <template slot="title">
+        发送优惠券
+      </template>
+
+      <el-form :model="couponForm" ref="couponForm" :rules="couponFormRules">
+        <el-form-item label="优惠券场景ID" prop="couponSceneId">
+          <el-input
+            v-model="couponForm.couponSceneId"
+          ></el-input>
+          <span>请输入优惠券指定场景ID，提示：不是优惠券ID</span>
+        </el-form-item>
+        <el-form-item label="用户ID" prop="userId">
+          <el-input
+            v-model="couponForm.userId"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogCouponFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="userCouponSubmit" :loading="loading">确定</el-button>
+      </div>
+      <el-image v-if="url.length > 0"
+      style="width: 100px; height: 100px"
+      :src="'data:image/png;base64,'+url"
+      :fit="fit"></el-image>
+    </el-dialog>
   </d2-container>
 </template>
 
@@ -92,6 +129,7 @@ export default {
   data () {
     return {
       dialogFormVisible: false,
+      dialogCouponFormVisible: false,
       loading: false,
       drawer: false,
       drawerWithdrawRecord: false,
@@ -104,6 +142,10 @@ export default {
         scene: [
           { required: true, message: '必填项' }
         ]
+      },
+      couponForm: {
+        couponSceneId: null,
+        userId: null
       },
       url: ""
     }
@@ -123,6 +165,22 @@ export default {
           })
         } else {
           that.$message.error('表单校验失败，请检查')
+        }
+      })
+    },
+    userCouponSubmit () {
+      this.$refs.couponForm.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          api.SendCoupon(this.couponForm).then(res => {
+            this.dialogCouponFormVisible = false
+            this.$message.success('优惠券发送成功')
+          }).catch(e => {
+            this.loading = false
+            this.$message.error(e.message)
+          })
+        } else {
+          this.$message.error('表单校验失败，请检查')
         }
       })
     },

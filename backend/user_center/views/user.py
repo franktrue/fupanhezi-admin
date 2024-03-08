@@ -7,9 +7,10 @@ from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from dvadmin.utils.json_response import DetailResponse, SuccessResponse
+from dvadmin.utils.json_response import DetailResponse, ErrorResponse
 from stock.utils.cache import delete_cache_by_key
 from user_center.services.qrocde import QrcodeService
+from coupon.services.coupon import CouponService
 from user_center.utils.core import identifierToUserId
 
 class MemberSerializer(CustomModelSerializer):
@@ -119,3 +120,14 @@ class UserViewSet(CustomModelViewSet):
         service = QrcodeService()
         data = service.unlimited(scene = scene, page = page)
         return DetailResponse(data=data, msg="成功")
+
+    # 发送优惠券
+    @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
+    def send_coupon(self, request, *args, **kwargs):
+        scene_id = request.data.get('couponSceneId')
+        user_id = request.data.get('userId')
+        service = CouponService()
+        result = service.send(scene_id=scene_id, user_id=user_id)
+        if result is None:
+            return ErrorResponse(data="", msg="发送失败，请检查输入信息")
+        return DetailResponse(data="", msg="成功")
