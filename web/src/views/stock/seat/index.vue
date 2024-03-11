@@ -21,7 +21,12 @@
             @click="addRow"
             ><i class="el-icon-plus" /> 新增</el-button
           >
-          <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchData" :loading="loading"><i class="el-icon-refresh" /> 同步数据</el-button>
+          <el-button size="small" type="warning" v-permission="'Fetch'" @click="fetchLatest" :loading="loading">
+            <i class="el-icon-refresh" /> 同步数据
+          </el-button>
+          <el-button size="small" type="info" v-permission="'Fetch'" @click="setCache" :loading="loading">
+            <i class="el-icon-s-grid" /> 缓存
+          </el-button>
         </el-button-group>
         <crud-toolbar
           :search.sync="crud.searchOptions.show"
@@ -60,6 +65,39 @@ export default {
     }
   },
   methods: {
+    fetchLatest() {
+      const that = this
+      this.$confirm('是否确认更新?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        that.loading = true
+        return api.FetchObj().then(res => {
+          that.loading = false
+          that.$message.success('操作成功')
+          that.handleSearch()
+        }).catch(e => {
+          that.loading = false
+        })
+      })
+    },
+    setCache() {
+      const that = this
+      this.$confirm('更新缓存?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        that.loading = true
+        return api.CacheObj().then(res => {
+          that.loading = false
+          that.$message.success('操作成功')
+        }).catch(e => {
+          that.loading = false
+        })
+      })
+    },
     seatOffice (scope) {
       this.drawer = true
       this.subjectRow = scope.row

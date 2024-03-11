@@ -1,25 +1,14 @@
 export const crudOptions = (vm) => {
   return {
-    pagination: false,
     pageOptions: {
       compact: true
     },
     options: {
-      rowKey: true,
-      rowId: 'id',
-      height: '100%', // 表格高度100%, 使用toolbar必须设置
-      highlightCurrentRow: false,
-      // defaultExpandAll: true,
-      // expandAll: true,
-      treeConfig: {
-        transform: true,
-        rowField: 'id',
-        parentField: 'parent',
-        expandAll: true,
-        hasChild: 'hasChild',
-        lazy: true,
-        loadMethod: vm.loadContentMethod
-      }
+        tableType: "vxe-table",
+        rowKey: true, // 必须设置，true or false
+        rowId: "id",
+        height: "100%", // 表格高度100%, 使用toolbar必须设置
+        highlightCurrentRow: false
     },
     rowHandle: {
       view: {
@@ -133,9 +122,9 @@ export const crudOptions = (vm) => {
       {
         title: '关联营业部',
         key: 'offices',
-        sortable: true,
+        sortable: false,
         search: {
-          disabled: false,
+          disabled: true,
           component: {
             props: {
               clearable: true
@@ -156,9 +145,13 @@ export const crudOptions = (vm) => {
               type: 'textarea'
             }
           },
-          helper: "请使用“/”隔开"
+          helper: "请使用“,”隔开"
         }
       }
-    ].concat(vm.commonEndColumns())
+    ].concat(vm.commonEndColumns({
+      description: {
+        showTable: true
+      }
+    }))
   }
 }

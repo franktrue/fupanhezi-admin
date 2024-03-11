@@ -57,3 +57,4 @@ pymysql==0.9.3
 wechatpayv3==1.2.39
 cos-python-sdk-v5==1.9.25
 wechatpy==1.8.18
+tushare==1.4.3

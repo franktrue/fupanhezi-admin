@@ -53,3 +53,11 @@ export function FetchObj () {
     method: 'post'
   })
 }
+
+// 缓存
+export function CacheObj () {
+  return request({
+    url: urlPrefix + 'cache/',
+    method: 'post'
+  })
+}
