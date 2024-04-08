@@ -1,4 +1,4 @@
-from stock.models import StockHistory, StockLhb
+from stock.models import StockHistory, StockLhb, StockLhbItem
 from stock.utils.db import get_engine
 from stock.utils.date import is_trade_date
 from django_redis import get_redis_connection
@@ -20,14 +20,17 @@ class StockLhbService():
                 '龙虎榜卖出额', '龙虎榜成交额', '市场总成交额', '净买额占总成交比', '成交额占总成交比', '换手率', '流通市值', '上榜原因']]
             df.columns = ["serial", "stock_code", "stock_name", "interpretation", "close", "close_pe", "lhb_net_buy_amo", "lhb_buy_amo", "lhb_sell_amo", "lhb_amo", "market_total_amo", "net_buy_amo_pe", "amo_pe", "hs_rate", "circulate_market_value", "rank_reson"]
             df["date"] = trade_date
+            StockLhb.objects.filter(date=trade_date.strftime("%Y-%m-%d")).delete()
             df.to_sql(name=self.table_name, con=self.engine, if_exists="append", index=False)
-
+            # 防止重复，先归零
+            StockHistory.objects.filter(date=trade_date.strftime("%Y-%m-%d")).update(
+                is_lhb = 0
+            )
             redis_conn = get_redis_connection('default')
             cacheFupanheziStockHistoryIdPrefix = "cache:fupanhezi:stockHistory:id:"
             df2 = pd.DataFrame()
             # 去重
             df.drop_duplicates(subset="stock_code")
-
             service = StockSeatService()
             for row in df.itertuples():
                 # 更新数据中的涨停板
@@ -75,5 +78,6 @@ class StockLhbService():
                 "sell_rate": 0,
                 "buy_rate": 0
             }, inplace=True)
+            StockLhbItem.objects.filter(date=trade_date).delete()
             df2.to_sql(name="stock_lhb_item", con=self.engine, if_exists="append", index=False)
             self.engine.dispose()
