@@ -241,8 +241,9 @@ class StockLhbItem(models.Model):
 # 游资席位
 class StockSeat(CoreModel):
     name = models.CharField(max_length=255, null=False, unique=True)
-    # short_name = models.CharField(max_length=32, null=False, default="")
+    short_name = models.CharField(max_length=32, null=False, default="")
     offices = models.CharField(max_length=1000, null=False)
+    sort = models.IntegerField(null=False, default=0)
 
     class Meta:
         db_table = 'stock_seat'

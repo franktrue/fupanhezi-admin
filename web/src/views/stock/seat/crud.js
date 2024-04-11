@@ -78,7 +78,6 @@ export const crudOptions = (vm) => {
             }
           }
         },
-        minWidth: 180,
         type: 'input',
         form: {
           rules: [ // 表单校验规则
@@ -96,29 +95,28 @@ export const crudOptions = (vm) => {
 
         }
       },
-      // {
-      //   title: '简称',
-      //   key: 'short_name',
-      //   sortable: true,
-      //   search: {
-      //     disabled: false,
-      //     component: {
-      //       props: {
-      //         clearable: true
-      //       }
-      //     }
-      //   },
-      //   minWidth: 180,
-      //   type: 'input',
-      //   form: {
-      //     component: {
-      //       props: {
-      //         clearable: true
-      //       },
-      //       placeholder: '请输入简称'
-      //     }
-      //   }
-      // },
+      {
+        title: '简称',
+        key: 'short_name',
+        sortable: true,
+        search: {
+          disabled: false,
+          component: {
+            props: {
+              clearable: true
+            }
+          }
+        },
+        type: 'input',
+        form: {
+          component: {
+            props: {
+              clearable: true
+            },
+            placeholder: '请输入简称'
+          }
+        }
+      },
       {
         title: '关联营业部',
         key: 'offices',
@@ -147,10 +145,27 @@ export const crudOptions = (vm) => {
           },
           helper: "请使用“,”隔开"
         }
-      }
+      },
+      {
+        title: '排序',
+        key: 'sort',
+        type: 'number',
+        sortable: 'custom',
+        form: {
+          value: 0,
+          component: {
+            props: {
+              clearable: true
+            }
+          }
+        }
+      },
     ].concat(vm.commonEndColumns({
       description: {
         showTable: true
+      },
+      update_datetime: {
+        showTable: false
       }
     }))
   }

@@ -15,20 +15,24 @@ class StockSeatService():
         pro = ts.pro_api()
         df = pro.hm_list()
         seats = []
+        # 先清空
+        names = StockSeat.objects.values_list('name', flat=True)
+        df = df[~df['name'].isin(names)]
         for v in df.itertuples():
             seat = StockSeat(
                 name = v.name,
+                short_name = v.name,
                 description = v.desc,
                 offices = v.orgs[1:-1].replace('"', ""),
+                sort = 0
             )
             seats.append(seat)
-        # 先清空
-        StockSeat.objects.all().delete()
-        # 插入最新
-        result = StockSeat.objects.bulk_create(seats)
-        # 更新缓存
-        self.setCache()
-        return result
+        if len(seats):
+            # 插入最新
+            result = StockSeat.objects.bulk_create(seats)
+            # 更新缓存
+            self.setCache()
+            return result
 
     # 获取对应席位
     def getByOffice(self, office):
