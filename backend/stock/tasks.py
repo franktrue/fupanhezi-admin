@@ -17,6 +17,7 @@ from stock.services.lhb import StockLhbService
 from stock.services.board import StockBoardService
 from stock.services.fenshi import StockFenshiService
 from stock.services.gnn import StockGnnService
+from stock.services.seat import StockSeatService
 from celery import shared_task
 import akshare as ak
 import datetime
@@ -55,6 +56,12 @@ def task__lhb():
     service = StockLhbService()
     service.fetch(today)
 
+# 更新席位
+@app.task
+def task__seats():
+    service = StockSeatService()
+    service.fetch()
+    
 # 每年1月1号更新交易日
 @app.task
 def task_trade_date():

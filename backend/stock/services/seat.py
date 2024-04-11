@@ -27,7 +27,7 @@ class StockSeatService():
                 sort = 0
             )
             seats.append(seat)
-        if len(seats):
+        if len(seats) > 0:
             # 插入最新
             result = StockSeat.objects.bulk_create(seats)
             # 更新缓存
