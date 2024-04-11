@@ -44,4 +44,4 @@ class StockSeatService():
         res = StockSeat.objects.all()
         for v in res:
             for i in v.offices.split(", "):
-                self.redis_conn.hset(self.cache_key, i, v.name)
+                self.redis_conn.hset(self.cache_key, i, v.name + '|' + v.short_name)
