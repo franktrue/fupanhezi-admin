@@ -2,7 +2,7 @@
 from django.db.models import Sum
 from django.http import QueryDict
 from rest_framework import serializers
-from user_center.models import User, UserReward, UserWithdrawRecord
+from user_center.models import User, UserReward, UserWithdrawRecord, UserAuth
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -77,6 +77,7 @@ class UserViewSet(CustomModelViewSet):
     update_serializer_class = MemberCreateUpdateSerializer
     filter_fields = ['id', 'parent_id', 'nickname', 'mobile', 'is_agent', 'platform']
     cache_key = "cache:fupanhezi:user:id:"
+    cache_auth_key = "cache:fupanhezi:userAuth:id:"
 
     def filter_queryset(self, queryset):
         query_params = self.request.query_params.copy()
@@ -107,6 +108,13 @@ class UserViewSet(CustomModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
+        UserReward.objects.filter(user_id=instance.id).delete()
+        auths = UserAuth.objects.filter(user_id=instance.id).all()
+        for auth in auths:
+            authKey = "{0}{1}".format(self.cache_auth_key, auth.id)
+            auth.delete()
+            delete_cache_by_key(authKey)
+
         key = "{0}{1}".format(self.cache_key, instance.id)
         instance.delete()
         delete_cache_by_key(key)

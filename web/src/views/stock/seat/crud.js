@@ -69,9 +69,7 @@ export const crudOptions = (vm) => {
       {
         title: '席位名称',
         key: 'name',
-        sortable: true,
         search: {
-          disabled: false,
           component: {
             props: {
               clearable: true
@@ -98,9 +96,7 @@ export const crudOptions = (vm) => {
       {
         title: '简称',
         key: 'short_name',
-        sortable: true,
         search: {
-          disabled: false,
           component: {
             props: {
               clearable: true
@@ -122,7 +118,6 @@ export const crudOptions = (vm) => {
         key: 'offices',
         sortable: false,
         search: {
-          disabled: true,
           component: {
             props: {
               clearable: true

@@ -34,7 +34,7 @@ class StockSeatViewSet(CustomModelViewSet):
     serializer_class = StockSeatSerializer
     create_serializer_class = StockSeatCreateUpdateSerializer
     update_serializer_class = StockSeatCreateUpdateSerializer
-    filter_fields = ['name']
+    filter_fields = ['name', 'offices']
 
     # 同步
     @action(methods=["POST"], detail=False, permission_classes=[IsAuthenticated])
