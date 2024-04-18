@@ -78,6 +78,6 @@ class StockLhbService():
                 "sell_rate": 0,
                 "buy_rate": 0
             }, inplace=True)
-            StockLhbItem.objects.filter(date=trade_date).delete()
+            StockLhbItem.objects.filter(date=trade_date.strftime("%Y-%m-%d")).delete()
             df2.to_sql(name="stock_lhb_item", con=self.engine, if_exists="append", index=False)
             self.engine.dispose()
