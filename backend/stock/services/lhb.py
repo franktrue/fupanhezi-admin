@@ -30,7 +30,7 @@ class StockLhbService():
             cacheFupanheziStockHistoryIdPrefix = "cache:fupanhezi:stockHistory:id:"
             df2 = pd.DataFrame()
             # 去重
-            df.drop_duplicates(subset="stock_code")
+            df = df.drop_duplicates(subset="stock_code")
             service = StockSeatService()
             for row in df.itertuples():
                 # 更新数据中的涨停板
