@@ -81,3 +81,8 @@ class StockLhbService():
             StockLhbItem.objects.filter(date=trade_date.strftime("%Y-%m-%d")).delete()
             df2.to_sql(name="stock_lhb_item", con=self.engine, if_exists="append", index=False)
             self.engine.dispose()
+            # 删除行情缓存
+            regex = "{0}:*:{0}".format("cache:fupanhezi:stockHistory:", trade_date.strftime("%Y-%m-%d"))
+            keys = redis_conn.keys(regex)
+            if keys:
+                redis_conn.delete(*keys)
