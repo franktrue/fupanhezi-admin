@@ -30,5 +30,5 @@ class StockNewsTagViewSet(CustomModelViewSet):
     serializer_class = StockNewsTagSerializer
     create_serializer_class = StockNewsTagCreateUpdateSerializer
     update_serializer_class = StockNewsTagCreateUpdateSerializer
-    filter_fields = ['name', 'desc', 'include_stocks']
+    filter_fields = ['news_id', 'name', 'desc', 'include_stocks']
 
