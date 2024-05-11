@@ -19,6 +19,8 @@ from stock.views.gnn_map import StockGnnMapViewSet
 from stock.views.api.config import StockConfigAPI
 from stock.views.seat import StockSeatViewSet
 from stock.views.seat_office import StockSeatOfficeViewSet
+from stock.views.news import StockNewsViewSet
+from stock.views.news_tag import StockNewsTagViewSet
 
 
 router = SimpleRouter()
@@ -38,6 +40,9 @@ router.register("api/stock/gnn_map", StockGnnMapViewSet)
 
 router.register("api/stock/seat", StockSeatViewSet)
 router.register("api/stock/seat_office", StockSeatOfficeViewSet)
+
+router.register("api/stock/news", StockNewsViewSet)
+router.register("api/stock/news_tag", StockNewsTagViewSet)
 
 
 urlpatterns = [

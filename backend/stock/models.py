@@ -253,7 +253,7 @@ class StockSeat(CoreModel):
 
 # 营业部
 class StockSeatOffice(CoreModel):
-    seat_id = models.IntegerField(max_length=10, null=False, default=0)
+    seat_id = models.IntegerField(null=False, default=0)
     name = models.CharField(max_length=255, null=False, unique=True)
 
     class Meta:
@@ -261,3 +261,30 @@ class StockSeatOffice(CoreModel):
         verbose_name = '游资关联营业部'
         verbose_name_plural = verbose_name
         ordering = ('-id',)
+# 消息
+class StockNews(CoreModel):
+    title = models.CharField(max_length=255, null=False, unique=True)
+    content = models.TextField(null=False, default="")
+    sort = models.IntegerField(default=0)
+    status = models.SmallIntegerField(default=0)
+
+    class Meta:
+        db_table = 'stock_news'
+        verbose_name = '消息面'
+        verbose_name_plural = verbose_name
+        ordering = ('-sort','-create_datetime')
+
+# 消息题材标签
+class StockNewsTag(CoreModel):
+    news_id = models.IntegerField(null=False)
+    name = models.CharField(max_length=255, null=False, default="")
+    desc = models.CharField(max_length=1000, null=False, default="")
+    include_stocks = models.TextField(null=False, default="")
+    sort = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'stock_news_tag'
+        verbose_name = '消息面题材标签'
+        verbose_name_plural = verbose_name
+        ordering = ('-sort','-create_datetime')
+        unique_together = ('news_id', 'name')

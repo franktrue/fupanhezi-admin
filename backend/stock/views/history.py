@@ -78,3 +78,9 @@ class StockHistoryViewSet(CustomModelViewSet):
         trade_date = StockTradeDate.objects.filter(trade_date__lt=datetime.date.today()).first()
         stocks = StockHistory.objects.filter(date=trade_date.trade_date).filter(Q(stock_code__startswith=keyword) | Q(stock_name__contains=keyword)).values("stock_code", "stock_name")
         return DetailResponse(data=stocks, msg="获取成功")
+    
+    @action(methods=["GET"], detail=False, permission_classes=[IsAuthenticated])
+    def dict(self, request, *args, **kwargs):
+        service = StockHistoryService()
+        data = service.dict()
+        return DetailResponse(data=data, msg="更新成功")

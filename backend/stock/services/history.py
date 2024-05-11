@@ -1,4 +1,4 @@
-from stock.models import StockHistory
+from stock.models import StockHistory, StockTradeDate
 from stock.utils.db import get_engine
 from stock.utils.date import is_trade_date
 import pywencai
@@ -85,3 +85,14 @@ class StockHistoryService():
                 auction_explain = row.auction_explain
             )
         
+    def dict(self):
+        trade_date = StockTradeDate.objects.filter(trade_date__lt=datetime.date.today()).first()
+        rows = StockHistory.objects.filter(date="2024-01-12").all()
+        data = []
+        for row in rows:
+            v = row.stock_code + " " + row.stock_name
+            data.append({
+                "value": v,
+                "label": v
+            })
+        return data
