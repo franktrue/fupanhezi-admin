@@ -6,6 +6,7 @@ from dvadmin.utils.json_response import DetailResponse
 from stock.services.board import StockBoardService
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from rest_framework import serializers
 
 class StockNewsSerializer(CustomModelSerializer):
     """
@@ -19,6 +20,8 @@ class StockNewsCreateUpdateSerializer(CustomModelSerializer):
     """
     创建/更新时的列化器
     """
+    board = serializers.CharField(required=False, allow_blank=True)
+    tags = serializers.CharField(required=False, allow_blank=True)
     class Meta:
         model = StockNews
         fields = '__all__'

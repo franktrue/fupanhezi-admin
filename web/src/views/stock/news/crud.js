@@ -87,23 +87,29 @@ export const crudOptions = vm => {
               rules: [{ required: true, message: '股票名称必填' }]
             }
           },
-          {
-            title: '类型',
-            key: 'type',
-            type: 'radio',
-            dict: {
-              data: vm.dictionary('news_type')
-            },
-            form: {
-              value: "topic",
-              component: {
-                props: {
-                  clearable: true
-                }
-              },
-              helper: "“题材”类型需完善后发布"
-            }
-          },
+          // {
+          //   title: '类型',
+          //   key: 'type',
+          //   type: 'radio',
+          //   dict: {
+          //     data: vm.dictionary('news_type')
+          //   },
+          //   form: {
+          //     value: "topic",
+          //     component: {
+          //       props: {
+          //         clearable: true
+          //       },
+          //       on:{ //除input change事件外，更多组件事件监听
+          //         change(event){
+          //           console.log(event.scope.form)
+          //           event.scope.form.board = null
+          //         }
+          //       },
+          //     },
+          //     helper: "“题材”类型需完善后发布"
+          //   }
+          // },
           {
             title: '板块',
             key: 'board',
@@ -118,24 +124,35 @@ export const crudOptions = vm => {
             },
             form: {
               component: {
-                show (context) {
-                  const { form } = context
-                  return form.type == "board"
-                },
+                // show (context) {
+                //   const { form } = context
+                //   return form.type == "board"
+                // },
                 props: {
                   elProps:{
                     filterable: true,
-                    multiple: false,
+                    multiple: true,
                     clearable: true
                   },
                 },
+              },
+            },
+            valueBuilder (row,key) {
+              if (row.board.length>0) {
+                row.board = row.board.split(",")
+              } else {
+                row.board = []
+              }
+            },
+            valueResolve (row,key) {
+              if (row.board) {
+                row.board = row.board.join(",")
               }
             },
           },
           {
             title: '标签',
             key: 'tags',
-            show: false,
             form: {
               component: {
                 props: {

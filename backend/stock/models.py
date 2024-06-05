@@ -267,9 +267,9 @@ class StockNews(CoreModel):
     content = models.TextField(null=False, default="")
     sort = models.IntegerField(default=0)
     status = models.SmallIntegerField(default=0)
-    type = models.CharField(max_length=32, null=False)
-    board = models.CharField(max_length=64, null=False, default="")
-    tags = models.CharField(max_length=255, null=False, default="")
+    type = models.CharField(max_length=32, null=False, default="topic")
+    board = models.CharField(max_length=255, null=False, default='')
+    tags = models.CharField(max_length=255, null=False, default='')
 
     class Meta:
         db_table = 'stock_news'
