@@ -40,6 +40,7 @@ def task__stock():
     # 更新概念指数数据
     service4 = StockBoardService()
     service4.fetch_history(trade_date=today)
+    service3.clear_board_sort_cache()
     if is_trade_date(today):
         # 更新完成，发送通知
         # App通知

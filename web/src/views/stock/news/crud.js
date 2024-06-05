@@ -88,6 +88,64 @@ export const crudOptions = vm => {
             }
           },
           {
+            title: '类型',
+            key: 'type',
+            type: 'radio',
+            dict: {
+              data: vm.dictionary('news_type')
+            },
+            form: {
+              value: "topic",
+              component: {
+                props: {
+                  clearable: true
+                }
+              },
+              helper: "“题材”类型需完善后发布"
+            }
+          },
+          {
+            title: '板块',
+            key: 'board',
+            show: false,
+            type: 'select',
+            dict: {
+              url(dict,{form,component}){
+                console.log(form)
+                return '/api/stock/news/boards/'
+              },
+              cache: false,
+            },
+            form: {
+              component: {
+                show (context) {
+                  const { form } = context
+                  return form.type == "board"
+                },
+                props: {
+                  elProps:{
+                    filterable: true,
+                    multiple: false,
+                    clearable: true
+                  },
+                },
+              }
+            },
+          },
+          {
+            title: '标签',
+            key: 'tags',
+            show: false,
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              },
+              helper: "请使用,隔开"
+            }
+          },
+          {
             title: '发布',
             key: 'status',
             type: 'dict-switch',

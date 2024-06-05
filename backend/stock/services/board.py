@@ -216,3 +216,19 @@ class StockBoardService():
                 )
                 model.save()
             
+    def getBoards(self):
+        data1 = StockBoardConcept.objects.all()
+        data2 = StockBoardIndustry.objects.all()
+        data = []
+        for row1 in data1:
+            data.append({
+                "value": row1.name,
+                "label": row1.name,
+            })
+
+        for row2 in data2:
+            data.append({
+                "value": row2.name,
+                "label": row2.name,
+            })
+        return data
