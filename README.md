@@ -14,7 +14,21 @@ fupanhezi基于django-vue-admin的pandas，akshare，pywencai，等框架开发�
 * 板块维护（概念+行业），含指数日K数据，可自定义板块
 
 ## 部署
-参考：[https://django-vue-admin.com](https://django-vue-admin.com)
+框架参考：[https://django-vue-admin.com](https://django-vue-admin.com)
+
+目前服务器使用手动部署
+部署目录：/mnt/data/wwwroot/fupanhezi/admin/
+
+部署命令
+```
+cd /mnt/data/wwwroot/fupanhezi/admin/
+# 使用对应分支
+git pull origin main
+
+# 执行自动部署脚本(会根据docker-compose.yml部署在docker容器上)
+./script.sh
+```
+
 
 ## 项目展示
 以下内容仅为客户端展示，不在本源码范围内
