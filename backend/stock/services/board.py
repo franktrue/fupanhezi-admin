@@ -30,8 +30,13 @@ class StockBoardService():
     
     # 更新成分股
     def update_cons(self, symbol, name, type):
-        df = ak.stock_board_cons_ths(symbol=symbol)
-        df = df[['代码', '名称']]
+        if type == "industry":
+            df=pywencai.get(question="所属行业包含{0}".format(name), loop=True)
+        else:
+            df=pywencai.get(question="所属概念包含{0}".format(name), loop=True)
+        if df.empty:
+            return
+        df = df[["code", "股票简称",]]
         df.columns = ['stock_code', 'stock_name']
         df['code'] = symbol
         df['board_name'] = name
@@ -139,7 +144,7 @@ class StockBoardService():
         if data is None:
             if "概念" not in name:
                 name += "概念"
-            df=pywencai.get(question="{0}成分股 真实流通市值".format(name))
+            df=pywencai.get(question="{0}成分股 真实流通市值".format(name), loop=True)
             if df.empty:
                 return data
             today = datetime.date.today()
