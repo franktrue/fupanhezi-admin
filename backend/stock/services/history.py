@@ -87,7 +87,7 @@ class StockHistoryService():
         
     def dict(self):
         trade_date = StockTradeDate.objects.filter(trade_date__lt=datetime.date.today()).first()
-        rows = StockHistory.objects.filter(date=trade_date).all()
+        rows = StockHistory.objects.filter(date=trade_date.trade_date).all()
         data = []
         for row in rows:
             v = row.stock_code + " " + row.stock_name
