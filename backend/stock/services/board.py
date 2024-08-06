@@ -6,6 +6,7 @@ from django.core.cache import cache
 import datetime
 import akshare as ak
 import pywencai
+import requests
 
 class StockBoardService():
     def __init__(self):
@@ -78,6 +79,12 @@ class StockBoardService():
         concepts = StockBoardConcept.objects.filter(code__startswith="7").all()
         for concept in concepts:
             self.calculate(trade_date, code=concept.code, name=concept.name)
+        # 指数更新完成，更新缓存
+        headers = {'Content-Type': 'application/json'}  
+        json = {"date": trade_date.strftime("%Y-%m-%d")}
+        requests.post("https://www.fupanhezi.com/stock/v1/board/column", json=json, headers=headers)
+
+        
 
     def calculate(self, date, code, name, type = "concept"):
         stocks = StockBoardMap.objects.filter(code=code, type=type).values_list("stock_code", flat=True)

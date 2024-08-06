@@ -35,5 +35,5 @@ class StockTradeDateService():
 
     def clear_board_sort_cache(self):
         latest_date = StockBoardHistory.objects.aggregate(date=Max('date'))['date']
-        r = "cache:fupanhezi:stockBoardMap:*{0}*".format(latest_date)
+        r = "cache:fupanhezi:stockBoardMap:boardCubes_*{0}*".format(latest_date)
         delete_cache_by_match(regex=r)
