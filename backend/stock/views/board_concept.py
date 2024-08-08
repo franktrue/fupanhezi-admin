@@ -1,4 +1,4 @@
-from stock.models import StockBoardConcept
+from stock.models import StockBoardConcept, StockBoardMap, StockBoardSub
 from dvadmin.utils.serializers import CustomModelSerializer
 from dvadmin.utils.viewset import CustomModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -62,3 +62,9 @@ class StockBoardConceptViewSet(CustomModelViewSet):
             update_board_cons.apply_async((row.code, row.name, 'concept'), countdown = 4*row.Index)
         return DetailResponse(data=[], msg="获取成功")
     
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        StockBoardMap.objects.filter(board_name=instance.name).delete()
+        StockBoardSub.objects.filter(parent_name=instance.name).delete()
+        instance.delete()
+        return DetailResponse(data=[], msg="删除成功")

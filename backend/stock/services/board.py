@@ -117,6 +117,8 @@ class StockBoardService():
         trade_date_str = trade_date.strftime("%Y%m%d")
         key = "stock_board_hot:{0}:{1}:{2}".format(name, trade_date_str, num)
         data = cache.get(key)
+        if data == "*":
+            return
         if data is None:
             if "概念" not in name:
                 name += "概念"
@@ -141,7 +143,11 @@ class StockBoardService():
             df.columns = ['code', 'name', 'open', 'high', 'low', 'close', 'closePe', 'vol', 'amo', 'hsRate', 'realHsRate', 'zsSz']
             df[['closePe', 'hsRate', 'realHsRate']] = df[['closePe', 'hsRate', 'realHsRate']].astype(float).applymap(lambda x: round(x, 2))
             data = df.to_dict("records")
-            cache.set(key, data, timeout=self.timeout)
+            if data is None:
+                # 防止穿透
+                cache.set(key, "*", timeout=1800)
+            else:
+                cache.set(key, data, timeout=self.timeout)
         return data
        
     # 指定板块成分股
