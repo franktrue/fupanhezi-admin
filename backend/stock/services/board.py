@@ -123,8 +123,8 @@ class StockBoardService():
             if "概念" not in name:
                 name += "概念"
             df=pywencai.get(question="{0}{1}成分股个股热度前{2}名 {0}成交量 {0}真实流通市值 {0}换手率及真实换手率 {0}收盘价涨幅".format(trade_date_str, name, num), loop=True)
-            if df.empty:
-                return data
+            if df is None or df.empty:
+                return None
             col_zh = [
                 "code", 
                 "股票简称",
@@ -158,8 +158,8 @@ class StockBoardService():
             if "概念" not in name:
                 name += "概念"
             df=pywencai.get(question="{0}成分股 真实流通市值".format(name), loop=True)
-            if df.empty:
-                return data
+            if df is None or df.empty:
+                return None
             today = datetime.date.today()
             trade_date_str = today.strftime("%Y%m%d")
             col_zh = [
