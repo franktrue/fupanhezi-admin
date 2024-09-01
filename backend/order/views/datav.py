@@ -38,7 +38,7 @@ class DataVViewSet(GenericViewSet):
         :param request:
         :return:
         """
-        order_total = OrderInfo.objects.filter(is_pay = "1").aggregate(total=Sum('payment_price'))
+        order_total = OrderInfo.objects.filter(is_pay = "1").exclude(status="10").aggregate(total=Sum('payment_price'))
         return DetailResponse(data={"order_total": round(order_total['total'], 2), }, msg="获取成功")
 
 
@@ -53,7 +53,7 @@ class DataVViewSet(GenericViewSet):
         day = 30
         today = datetime.datetime.today()
         seven_days_ago = today - datetime.timedelta(days=day)
-        orders = OrderInfo.objects.filter(create_datetime__gte=seven_days_ago, is_pay='1').annotate(day=TruncDay('create_datetime')).values('day').annotate(amount=Sum('payment_price'), pay_count=Count('id')).order_by('-day')
+        orders = OrderInfo.objects.filter(create_datetime__gte=seven_days_ago, is_pay='1').exclude(status="10").annotate(day=TruncDay('create_datetime')).values('day').annotate(amount=Sum('payment_price'), pay_count=Count('id')).order_by('-day')
         print(orders)
         result = []
         amount_dict = {ele.get('day').strftime('%Y-%m-%d'): ele.get('amount') for ele in orders}

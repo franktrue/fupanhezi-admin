@@ -41,12 +41,13 @@ def task__stock():
     service4 = StockBoardService()
     service4.fetch_history(trade_date=today)
     service3.clear_board_sort_cache()
+    
     if is_trade_date(today):
         # 更新完成，发送通知
         # App通知
         requests.get("https://fc-mp-4768bfcd-d34d-4c32-bc50-28036f034579.next.bspapp.com/data-update")
-        # 小程序通知
-        requests.get("https://www.fupanhezi.com/usercenter/v1/user/send-subscribe/data-update")
+        # 小程序通知，已下架
+        # requests.get("https://www.fupanhezi.com/usercenter/v1/user/send-subscribe/data-update")
 
     
 # 工作日18:05收盘后运行

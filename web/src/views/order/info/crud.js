@@ -117,7 +117,10 @@ export const crudOptions = vm => {
               disabled: false
             },
             dict:  {
-              data: vm.dictionary('button_whether_number')
+              data: [
+                {value: "1", label: "是"},
+                {value: "0", label: "否"}
+              ]
             },
             form: {
               component: {
@@ -250,7 +253,10 @@ export const crudOptions = vm => {
                   clearable: true
                 }
               }
-            }
+            },// 提交时,处理数据
+            valueResolve (row, col) {
+              row.update_datetime = new Date()
+            },
           }
       ]
   };

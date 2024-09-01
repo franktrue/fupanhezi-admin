@@ -25,6 +25,7 @@ class OrderInfoCreateUpdateSerializer(CustomModelSerializer):
     """
     创建/更新时的列化器
     """
+    remark = serializers.CharField(required=False, allow_blank=True)
     class Meta:
         model = OrderInfo
         fields = '__all__'
