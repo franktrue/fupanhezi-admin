@@ -59,17 +59,21 @@ class StockHistoryService():
             "竞价未匹配量[{0}]".format(trade_date_str),
             "竞价异动类型[{0}]".format(trade_date_str),
             "竞价异动说明[{0}]".format(trade_date_str),
+            "主力资金流向[{0}]".format(trade_date_str),
+            "资金流向[{0}]".format(trade_date_str)
         ]
-        auction = pywencai.get(question="{0}竞价金额".format(trade_date_str), loop=True)
+        auction = pywencai.get(question="{0}竞价金额 主力资金流向 资金流向".format(trade_date_str), loop=True)
         auction = auction[col_name]
-        auction.columns = ['stock_code', 'auction_amo', 'auction_vol', 'auction_no_match_amo', 'auction_no_match_vol', 'auction_type', 'auction_explain']
+        auction.columns = ['stock_code', 'auction_amo', 'auction_vol', 'auction_no_match_amo', 'auction_no_match_vol', 'auction_type', 'auction_explain', 'major_money_flow', 'money_flow']
         auction.fillna({
             'auction_amo': 0, 
             'auction_vol': 0, 
             'auction_no_match_amo': 0, 
             'auction_no_match_vol':0, 
             'auction_type': '', 
-            'auction_explain': ''
+            'auction_explain': '',
+            'major_money_flow': 0,
+            'money_flow': 0
         }, inplace=True)
         return auction.set_index('stock_code')
 

@@ -60,6 +60,8 @@ class StockHistory(models.Model):
     z_sz = models.DecimalField(max_digits=20, decimal_places=2, verbose_name='总市值', default=0.00)
     lt_sz = models.DecimalField(max_digits=20, decimal_places=2, verbose_name='流通市值', default=0.00)
     pe = models.FloatField(max_length=10, verbose_name='市盈率', default=0.00)
+    major_money_flow = models.DecimalField(max_digits=20, decimal_places=2, null=False)
+    money_flow = models.DecimalField(max_digits=20, decimal_places=2, null=False)
 
     class Meta:
         db_table = 'stock_history'

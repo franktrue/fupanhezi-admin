@@ -429,6 +429,36 @@ export const crudOptions = vm => {
             }
           },
           {
+            title: '主力资金流向',
+            key: 'major_money_flow',
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
+            title: '资金流向',
+            key: 'money_flow',
+            type: 'number',
+            formatter: (row, column, cellValue) => {
+              return vm.$util.num2human(cellValue)
+            },
+            form: {
+              component: {
+                props: {
+                  clearable: true
+                }
+              }
+            }
+          },
+          {
             title: '是否龙虎榜',
             key: 'is_lhb',
             type: 'radio',
